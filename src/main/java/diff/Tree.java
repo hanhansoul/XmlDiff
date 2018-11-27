@@ -6,7 +6,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +14,10 @@ import java.util.List;
  */
 public class Tree {
     private Document document;
-    public Node root;
+    public int root;
     public int size;
+    public List<Node> sequence;
+    public List<Integer> keyRoots;
 
     public Tree(String fileName) throws DocumentException {
         initialization(fileName);
@@ -23,10 +25,10 @@ public class Tree {
 
     private void initialization(String fileName) throws DocumentException {
         document = xmlFileInput(fileName);
-        root = build(document.getRootElement());
-        root.isKeyRoot = true;
+        sequence = new ArrayList<>();
+        keyRoots = new ArrayList<>();
         size = 0;
-        nodeLabel(root);
+        build(document.getRootElement());
     }
 
     private Document xmlFileInput(String fileName) throws DocumentException {
@@ -38,29 +40,16 @@ public class Tree {
     private Node build(Element element) {
         Node node = new Node(element);
         List<Element> elementList = element.elements();
-        if (elementList == null || elementList.size() == 0) {
-            node.leftMostNode = node;
-        } else {
-            for (Element ele : elementList) {
-                Node child = build(ele);
-                if (node.children == null) {
-                    node.children = new LinkedList<>();
-                    node.leftMostNode = child.leftMostNode;
-                    child.isKeyRoot = false;
-                } else {
-                    node.isKeyRoot = true;
+        if (elementList != null && elementList.size() > 0) {
+            for (int i = 0; i < elementList.size(); i++) {
+                Node childNode = build(elementList.get(i));
+                if (i > 0) {
+                    keyRoots.add(childNode.id);
                 }
-                node.size += child.size;
-                node.children.add(child);
             }
         }
+        node.id = ++size;
+        sequence.add(node);
         return node;
-    }
-
-    private void nodeLabel(Node root) {
-        for (Node node : root.children) {
-            nodeLabel(node);
-        }
-        root.id = ++size;
     }
 }
