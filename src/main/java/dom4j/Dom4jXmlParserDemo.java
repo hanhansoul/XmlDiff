@@ -1,5 +1,6 @@
 package dom4j;
 
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
@@ -17,24 +18,33 @@ public class Dom4jXmlParserDemo {
         try {
             Document document = reader.read(file);
             Element root = document.getRootElement();
-            List<People> peopleList = new ArrayList<>();
+//            List<People> peopleList = new ArrayList<>();
             for (Iterator<Element> iterator = root.elementIterator(); iterator.hasNext(); ) {
-                People people = new People();
+//                People people = new People();
                 Element element = iterator.next();
-                people.setId(element.attribute("id").getValue());
                 for (Iterator<Element> childIterator = element.elementIterator(); childIterator.hasNext(); ) {
                     Element childElement = childIterator.next();
-                    if (childElement.getName().equals("Name")) {
-                        people.setEnglishName(childElement.attribute("en").getValue());
-                    } else if (childElement.getName().equals("Age")) {
-                        people.setAge(childElement.getText());
-                    }
+                    System.out.println(childElement.getName());
                 }
-                peopleList.add(people);
+//                for (Iterator<Attribute> attributeIterator = element.attributeIterator(); attributeIterator.hasNext(); ) {
+//                    Attribute attribute = attributeIterator.next();
+//                    System.out.println(attribute.getName());
+//                    System.out.println(attribute.getValue());
+//                }
+//                people.setId(element.attribute("id").getValue());
+//                for (Iterator<Element> childIterator = element.elementIterator(); childIterator.hasNext(); ) {
+//                    Element childElement = childIterator.next();
+//                    if (childElement.getName().equals("Name")) {
+//                        people.setEnglishName(childElement.attribute("en").getValue());
+//                    } else if (childElement.getName().equals("Age")) {
+//                        people.setAge(childElement.getText());
+//                    }
+//                }
+//                peopleList.add(people);
             }
-            for (People p : peopleList) {
-                System.out.println(p);
-            }
+//            for (People p : peopleList) {
+//                System.out.println(p);
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

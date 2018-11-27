@@ -33,11 +33,7 @@ public class Parser {
     }
 
     public void handleElement() {
-        try {
-//            StringBuffer tagName = readBeginTagName();
-        } catch (IteratorStopException e) {
-            System.err.println("over");
-        }
+
     }
 
     public void handleAttribute() {
@@ -101,7 +97,7 @@ public class Parser {
         }
         skipSpaces();
         while (reader.hasNext() && reader.peek() != '/') {
-            readAttributeName();
+
         }
         System.err.println("format error");
         throw new IteratorStopException();
