@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="36d17170-2398-4976-9963-9b0f86164d41" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/Node.java" afterPath="$PROJECT_DIR$/src/main/java/diff/Node.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/Tree.java" afterPath="$PROJECT_DIR$/src/main/java/diff/Tree.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -781,7 +779,7 @@
       <updated>1543195286965</updated>
       <workItem from="1543195288384" duration="23056000" />
       <workItem from="1543279424262" duration="22728000" />
-      <workItem from="1543321473951" duration="11627000" />
+      <workItem from="1543321473951" duration="11663000" />
     </task>
     <task id="LOCAL-00001" summary="存档备份。并不需要树状结构，只需要树结构的后序遍历序列。">
       <created>1543330151041</created>
@@ -790,11 +788,18 @@
       <option name="project" value="LOCAL" />
       <updated>1543330151041</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="生成后序遍历序列">
+      <created>1543337296224</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1543337296224</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57411000" />
+    <option name="totallyTimeSpent" value="57447000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -839,7 +844,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="存档备份。并不需要树状结构，只需要树结构的后序遍历序列。" />
-    <option name="LAST_COMMIT_MESSAGE" value="存档备份。并不需要树状结构，只需要树结构的后序遍历序列。" />
+    <MESSAGE value="生成后序遍历序列" />
+    <option name="LAST_COMMIT_MESSAGE" value="生成后序遍历序列" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
