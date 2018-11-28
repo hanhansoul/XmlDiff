@@ -44,33 +44,45 @@ public class XmlDiff {
         T[0][0] = 0;
         Node leftNode = leftTree.sequence[left];
         Node rightNode = rightTree.sequence[right];
+
+//        System.out.println(left + " " + right + ": ");
         for (int i = leftNode.leftMostNode; i <= left; i++) {
-            T[i][0] = T[i - 1][0] + opValue(i, 0);
+            T[i][0] = i - 1 < leftNode.leftMostNode ? opValue(i, 0) : T[i - 1][0] + opValue(i, 0);
+//            System.out.println(i + " " + 0 + ": " + T[i][0]);
         }
         for (int j = rightNode.leftMostNode; j <= right; j++) {
-            T[0][j] = T[0][j - 1] + opValue(0, j);
+            T[0][j] = j - 1 < rightNode.leftMostNode ? opValue(0, j) : T[0][j - 1] + opValue(0, j);
+//            System.out.println(0 + " " + j + ": " + T[0][j]);
         }
+
         for (int i = leftNode.leftMostNode; i <= left; i++) {
             for (int j = rightNode.leftMostNode; j <= right; j++) {
                 if (leftTree.sequence[i].leftMostNode == leftNode.leftMostNode &&
                         rightTree.sequence[j].leftMostNode == rightNode.leftMostNode) {
+                    int ix = i - 1 < leftNode.leftMostNode ? 0 : i - 1;
+                    int jx = j - 1 < rightNode.leftMostNode ? 0 : j - 1;
                     F[i][j] = T[i][j] = Math.min(
-                            T[i - 1][j] + opValue(i, 0), Math.min(
-                                    T[i][j - 1] + opValue(0, j),
-                                    T[i - 1][j - 1] + opValue(i, j)));
+                            T[ix][j] + opValue(i, 0), Math.min(
+                                    T[i][jx] + opValue(0, j),
+                                    T[ix][jx] + opValue(i, j)));
+//                    System.out.println(i + " " + j + ": " + T[i][j]);
                 } else {
+                    int ix = i - 1 < leftNode.leftMostNode ? 0 : i - 1;
+                    int jx = j - 1 < rightNode.leftMostNode ? 0 : j - 1;
+                    int iy = leftTree.sequence[i].leftMostNode - 1 < leftNode.leftMostNode ?
+                            0 : leftTree.sequence[i].leftMostNode - 1;
+                    int jy = rightTree.sequence[j].leftMostNode - 1 < rightNode.leftMostNode ?
+                            0 : rightTree.sequence[j].leftMostNode - 1;
                     T[i][j] = Math.min(Math.min(
-                            T[i - 1][j] + opValue(i - 1, j),
-                            T[i][j - 1] + opValue(i, j - 1)),
-                            T[leftTree.sequence[i].leftMostNode - 1][rightTree.sequence[j].leftMostNode - 1] + F[i][j]);
+                            T[ix][j] + opValue(i, 0),
+                            T[i][jx] + opValue(0, j)),
+                            T[iy][jy] + F[i][j]);
+//                    System.out.println(i + " " + j + ": " + T[i][j]);
                 }
             }
         }
-        fillZero(T);
-//        System.out.println(T[3][2]);
-        if (left == 6 && right == 6) {
-            outputF(left, right);
-        }
+//        System.out.println();
+//        fillZero(T);
     }
 
     public void solve() throws DocumentException {
@@ -82,21 +94,25 @@ public class XmlDiff {
         System.out.println(F[leftTree.rootId][rightTree.rootId]);
     }
 
-    private void outputF(int x, int y) {
+    private void outputT(int x, int y) {
         for (int i = 1; i <= x; i++) {
             for (int j = 1; j <= y; j++) {
-                System.out.print(F[i][j] + " ");
+                System.out.print(T[i][j] + " ");
             }
             System.out.println();
         }
     }
 
     public static void main(String[] args) throws DocumentException {
+        long beginTime = System.currentTimeMillis();
         XmlDiff xmlDiff = new XmlDiff();
-        xmlDiff.initialization("data/left.xml", "data/right.xml");
+        xmlDiff.initialization("data/CSCA350-353000-00M01-01-X_2_20180901.xml",
+                "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
 //        xmlDiff.leftTree.keyRootsTraversal();
 //        System.out.println();
 //        xmlDiff.rightTree.keyRootsTraversal();
         xmlDiff.solve();
+        long endTime = System.currentTimeMillis();
+        System.out.println((endTime - beginTime) / 1000);
     }
 }
