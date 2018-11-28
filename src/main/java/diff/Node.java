@@ -7,14 +7,19 @@ import org.dom4j.Element;
  */
 public class Node {
     public int id;
-    private Element element;
+    public Element element;
     public int leftMostNode;
     public Operation operation;
 
-    public Node(Element element) {
-        this.element = element;
-        leftMostNode = 0;
+    public Node() {
+        element = null;
+        id = leftMostNode = 0;
         operation = null;
     }
 
+    public Node(int id, Element element, int leftMostNode) {
+        this.id = id;
+        this.element = element;
+        this.leftMostNode = leftMostNode;
+    }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PeopleList>
+    <People>
+        <Name></Name>
+        <Age></Age>
+    </People>
+    <People>
+        <Name></Name>
+        <Age></Age>
+        <Date></Date>
+    </People>
+    <People>
+        <Name></Name>
+        <Age></Age>
+    </People>
+    <People>
+        <Name></Name>
+        <Age></Age>
+    </People>
+</PeopleList>
