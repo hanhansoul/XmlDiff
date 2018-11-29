@@ -78,7 +78,7 @@ public class Tree {
 
     public void sequenceTraversal() {
         for (int i = 1; i < sequence.length; i++) {
-            System.out.println(sequence[i].id + ": " + sequence[i].element.getName());
+            System.out.println(sequence[i].id + ": " + sequence[i].getElement().getName());
         }
     }
 

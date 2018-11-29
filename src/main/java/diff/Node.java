@@ -7,7 +7,7 @@ import org.dom4j.Element;
  */
 public class Node {
     public int id;
-    public Element element;
+    private Element element;
     public int leftMostNode;
     public Operation operation;
 
@@ -21,5 +21,9 @@ public class Node {
         this.id = id;
         this.element = element;
         this.leftMostNode = leftMostNode;
+    }
+
+    public Element getElement() {
+        return element;
     }
 }

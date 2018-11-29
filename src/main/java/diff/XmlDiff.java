@@ -3,8 +3,13 @@ package diff;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
-public class XmlDiff {
+import static diff.XmlDiffHelper.fillZero;
 
+public class XmlDiff {
+    private final int ELEMENT_NAME_DIFF_VAL = 10;
+    private final int ELEMENT_ATTRIBUTE_DIFF_VAL = 1;
+    private final int ELEMENT_TEXT_DIFF_VAL = 1;
+    private final int ELEMENT_MISSING_VAL = 10;
     private Tree leftTree;
     private Tree rightTree;
     private int[][] F;  // permanent array
@@ -19,24 +24,32 @@ public class XmlDiff {
         fillZero(T);
     }
 
-    private void fillZero(int[][] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = 0; j < arr[i].length; j++) {
-                arr[i][j] = 0;
-            }
+    private int opValue(int left, int right) throws OpValueElementNullException {
+        if (left == 0 && right == 0) {
+            throw new OpValueElementNullException();
         }
-    }
-
-    private int opValue(int left, int right) {
-        Element leftElement = leftTree.sequence[left].element;
-        Element rightElement = rightTree.sequence[right].element;
-        int res;
-        if (leftElement != null && rightElement != null && leftElement.getName().equals(rightElement.getName())) {
-            res = 0;
+        if (left == 0 || right == 0) {
+            return ELEMENT_MISSING_VAL;
+        }
+        Element leftElement = leftTree.sequence[left].getElement();
+        Element rightElement = rightTree.sequence[right].getElement();
+        if (leftElement == null || rightElement == null) {
+            throw new OpValueElementNullException();
+        }
+        if (!leftElement.getName().equals(rightElement.getName())) {
+            return ELEMENT_NAME_DIFF_VAL;
         } else {
-            res = 1;
+            int value = 0;
+
+            return value;
         }
-        return res;
+
+//        int res;
+//        if (leftElement != null && rightElement != null && leftElement.getName().equals(rightElement.getName())) {
+//            res = 0;
+//        } else {
+//            res = 1;
+//        }
     }
 
     private void compute(int left, int right) {
@@ -94,23 +107,11 @@ public class XmlDiff {
         System.out.println(F[leftTree.rootId][rightTree.rootId]);
     }
 
-    private void outputT(int x, int y) {
-        for (int i = 1; i <= x; i++) {
-            for (int j = 1; j <= y; j++) {
-                System.out.print(T[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
     public static void main(String[] args) throws DocumentException {
         long beginTime = System.currentTimeMillis();
         XmlDiff xmlDiff = new XmlDiff();
         xmlDiff.initialization("data/CSCA350-353000-00M01-01-X_2_20180901.xml",
                 "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
-//        xmlDiff.leftTree.keyRootsTraversal();
-//        System.out.println();
-//        xmlDiff.rightTree.keyRootsTraversal();
         xmlDiff.solve();
         long endTime = System.currentTimeMillis();
         System.out.println((endTime - beginTime) / 1000);
