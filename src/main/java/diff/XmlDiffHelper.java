@@ -18,4 +18,16 @@ public class XmlDiffHelper {
             System.out.println();
         }
     }
+
+    public static OperationValue min(OperationValue... opvs) {
+        OperationValue minValue = null;
+        for (OperationValue value : opvs) {
+            if (minValue == null) {
+                minValue = value;
+            } else if (minValue.compareTo(value) > 0) {
+                minValue = value;
+            }
+        }
+        return minValue;
+    }
 }
