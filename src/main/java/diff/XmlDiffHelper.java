@@ -1,6 +1,15 @@
 package diff;
 
+import org.dom4j.Attribute;
+import org.dom4j.tree.DefaultAttribute;
+import org.dom4j.util.UserDataAttribute;
+import sun.plugin.dom.core.Attr;
+
+import java.util.HashSet;
+import java.util.Set;
+
 public class XmlDiffHelper {
+
     public static void fillZero(int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[i].length; j++) {
@@ -8,7 +17,6 @@ public class XmlDiffHelper {
             }
         }
     }
-
 
     public static void outputArray(int[][] T, int x, int y) {
         for (int i = 1; i <= x; i++) {
@@ -29,5 +37,33 @@ public class XmlDiffHelper {
             }
         }
         return minValue;
+    }
+
+    public static Set<Attribute> retainAll() {
+        return null;
+    }
+
+    public static Set<Attribute> addAll() {
+        return null;
+    }
+
+    public static Set<Attribute> removeAll(Set<Attribute> set1, Set<Attribute> set2) {
+        Set<Attribute> result = new HashSet<>(set1);
+        if (set1.size() > set2.size()) {
+
+        } else {
+
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        Set<Attribute> set1 = new HashSet<>();
+        Set<Attribute> set2 = new HashSet<>();
+        set1.add(new DefaultAttribute("a", "a"));
+        set2.add(new DefaultAttribute("a", "a"));
+        System.out.println(set1.removeAll(set2));
+//        Attribute a = new DefaultAttribute("a", "a");
+//        Attribute b = new DefaultAttribute("a", "a");
     }
 }

@@ -1,5 +1,7 @@
 package diff;
 
+import org.dom4j.Element;
+
 public class OperationValue implements Comparable {
     public int elementNameDiffValue;
     public int elementAttributesDiffValue;
