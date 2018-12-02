@@ -39,24 +39,6 @@ public class XmlDiffHelper {
         return minValue;
     }
 
-    public static Set<Attribute> retainAll() {
-        return null;
-    }
-
-    public static Set<Attribute> addAll() {
-        return null;
-    }
-
-    public static Set<Attribute> removeAll(Set<Attribute> set1, Set<Attribute> set2) {
-        Set<Attribute> result = new HashSet<>(set1);
-        if (set1.size() > set2.size()) {
-
-        } else {
-
-        }
-        return null;
-    }
-
     public static void main(String[] args) {
         Set<Attribute> set1 = new HashSet<>();
         Set<Attribute> set2 = new HashSet<>();

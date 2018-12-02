@@ -1,10 +1,9 @@
 package diff;
 
-import org.dom4j.Attribute;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
-import java.util.*;
+import java.util.Map;
 
 public class XmlDiff {
     private final OperationValue ELEMENT_ZERO_DIFF_VAL = new OperationValue(0, 0, 0);
@@ -32,8 +31,10 @@ public class XmlDiff {
         if (left == 0 || right == 0) {
             return ELEMENT_NAME_DIFF_VAL;
         }
-        Element leftElement = leftTree.sequence[left].getElement();
-        Element rightElement = rightTree.sequence[right].getElement();
+        Node leftNode = leftTree.sequence[left];
+        Node rightNode = rightTree.sequence[right];
+        Element leftElement = leftNode.element;
+        Element rightElement = rightNode.element;
         if (leftElement == null || rightElement == null) {
             throw new OpValueElementNullException();
         }
@@ -41,37 +42,41 @@ public class XmlDiff {
             return ELEMENT_NAME_DIFF_VAL;
         } else {
             // TODO
-            OperationValue value = null;
-
-            Set<Attribute> leftAttributeSet = new HashSet<>();
-            Set<Attribute> rightAttributeSet = new HashSet<>();
-            Map<String, String> leftAttributeMap = new HashMap<>();
-            Map<String, String> rightAttributeMap = new HashMap<>();
-            for (Iterator<Attribute> iterator = leftElement.attributeIterator(); iterator.hasNext(); ) {
-                Attribute attribute = iterator.next();
-                leftAttributeSet.add(iterator.next());
+            int attributeDiffValue = 0;
+            Map<String, String> leftAttributeMap = leftNode.attributesMap;
+            Map<String, String> rightAttributeMap = rightNode.attributesMap;
+            if (leftAttributeMap.size() < rightAttributeMap.size()) {
+                for (Map.Entry entry : leftAttributeMap.entrySet()) {
+                    if (!(rightAttributeMap.containsKey(entry.getKey()) &&
+                            rightAttributeMap.get(entry.getKey()).equals(entry.getValue()))) {
+                        attributeDiffValue++;
+                    }
+                }
+            } else {
+                for (Map.Entry entry : rightAttributeMap.entrySet()) {
+                    if (!(leftAttributeMap.containsKey(entry.getKey()) &&
+                            leftAttributeMap.get(entry.getKey()).equals(entry.getValue()))) {
+                        attributeDiffValue++;
+                    }
+                }
             }
-            for (Iterator<Attribute> iterator = rightElement.attributeIterator(); iterator.hasNext(); ) {
-                Attribute attribute = iterator.next();
-                rightAttributeSet.add(iterator.next());
-            }
 
-//            Map<String, String> leftAttributeMap = new TreeMap<>();
-//            Iterator<Attribute> iterator = leftElement.attributeIterator();
-//            while (iterator.hasNext()) {
-//                Attribute attribute = iterator.next();
-//                leftAttributeMap.put(attribute.getName(), attribute.getValue());
-//            }
-//            iterator = rightElement.attributeIterator();
-//            while (iterator.hasNext()) {
-//                Attribute attribute = iterator.next();
-//                if (leftAttributeMap.containsKey(attribute.getName()) && leftAttributeMap.get(attribute.getName()).equals(attribute.getValue())) {
-//
-//                } else {
-//
-//                }
-//            }
-            return value;
+            String[] leftText = leftNode.text;
+            String[] rightText = rightNode.text;
+            int[][] D = new int[leftText.length + 1][rightText.length + 1];
+            D[0][0] = 0;
+            for (int i = 1; i < leftText.length; i++) {
+                for (int j = 1; j < rightText.length; j++) {
+                    if (leftText[i].equals(rightText[j])) {
+                        D[i][j] = D[i - 1][j - 1] + 1;
+                    } else {
+                        D[i][j] = Math.max(D[i - 1][j], D[i][j - 1]);
+                    }
+                }
+            }
+            int textDiffValue = leftText.length + rightText.length - 2 * D[leftText.length - 1][leftText.length - 1];
+
+            return new OperationValue(0, attributeDiffValue, textDiffValue);
         }
 
     }
