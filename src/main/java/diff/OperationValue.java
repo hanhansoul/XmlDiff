@@ -1,5 +1,5 @@
 package diff;
 
 public interface OperationValue extends Comparable {
-    OperationValue add(OperationValue opv);
+    OperationValue add(int px, int py, OperationValue opv);
 }

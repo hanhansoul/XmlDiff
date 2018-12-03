@@ -8,6 +8,32 @@ import java.util.Set;
 
 public class XmlDiffHelper {
 
+    public static OperationValue min(OperationValue... values) {
+        OperationValue minValue = null;
+        for (OperationValue value : values) {
+            if (minValue == null) {
+                minValue = value;
+            } else if (minValue.compareTo(value) > 0) {
+                minValue = value;
+            }
+        }
+        return minValue;
+    }
+
+
+//    public static OperationValue min(OperationValue... values) {
+//        OperationValue minValue = null;
+//        for (OperationValue value : values) {
+//            if (minValue == null) {
+//                minValue = value;
+//            } else if (minValue.compareTo(value) > 0) {
+//                minValue = value;
+//            }
+//        }
+//        return minValue;
+//    }
+
+
     public static void fillZero(int[][] arr) {
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[i].length; j++) {
@@ -25,17 +51,6 @@ public class XmlDiffHelper {
         }
     }
 
-    public static OperationValue min(OperationValue... opvs) {
-        OperationValue minValue = null;
-        for (OperationValue value : opvs) {
-            if (minValue == null) {
-                minValue = value;
-            } else if (minValue.compareTo(value) > 0) {
-                minValue = value;
-            }
-        }
-        return minValue;
-    }
 
     public static void main(String[] args) {
         Set<Attribute> set1 = new HashSet<>();

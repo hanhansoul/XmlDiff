@@ -39,7 +39,10 @@ public class Tree {
         buildTree(rootNode);
 
         buildPostOrderSequence(rootNode);
-        keyRoots[++keyRootsIndex] = rootNode.id;
+        rootId = keyRoots[++keyRootsIndex] = rootNode.id;
+
+//        sequenceTraversal();
+//        leftMostNodeTraversal();
     }
 
     private Document xmlFileInput(String fileName) throws DocumentException {
