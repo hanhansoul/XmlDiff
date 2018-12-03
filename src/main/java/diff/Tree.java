@@ -14,12 +14,15 @@ import java.util.List;
  */
 public class Tree {
     private Document document;
+
+    public Node rootNode;
+    public Node[] nodeSequence;
+    public int[] keyRoots;
+    public int sequenceIndex;
+    public int keyRootsIndex;
+
     public int rootId;
     public int size;
-    public Node[] sequence;
-    public int sequenceIndex;
-    public int[] keyRoots;
-    public int keyRootsIndex;
 
     public Tree(String fileName) throws DocumentException {
         initialization(fileName);
@@ -28,12 +31,15 @@ public class Tree {
     private void initialization(String fileName) throws DocumentException {
         document = xmlFileInput(fileName);
         size = elementCount(document.getRootElement());
-        sequence = new Node[size + 1];
-        sequence[0] = new Node();
+        nodeSequence = new Node[size + 1];
         keyRoots = new int[size + 1];
         sequenceIndex = keyRootsIndex = 0;
-        Node node = build(document.getRootElement());
-        rootId = keyRoots[++keyRootsIndex] = node.id;
+
+        rootNode = new Node(document.getRootElement(), null);
+        buildTree(rootNode);
+
+        buildPostOrderSequence(rootNode);
+        keyRoots[++keyRootsIndex] = rootNode.id;
     }
 
     private Document xmlFileInput(String fileName) throws DocumentException {
@@ -53,44 +59,55 @@ public class Tree {
         return res;
     }
 
-    private Node build(Element element) {
-        int leftMostNode = 0;
-        Node node;
-        List<Element> elementList = element.elements();
+    private void buildTree(Node root) {
+        List<Element> elementList = root.element.elements();
         if (elementList == null || elementList.size() == 0) {
-            leftMostNode = ++sequenceIndex;
-            node = new Node(sequenceIndex, element, leftMostNode);
-            sequence[sequenceIndex] = node;
+            root.children = null;
         } else {
-            for (int i = 0; i < elementList.size(); i++) {
-                Node childNode = build(elementList.get(i));
+            root.children = new ArrayList<>(elementList.size());
+            for (Element element : elementList) {
+                Node node = new Node(element, root);
+                root.children.add(node);
+                buildTree(node);
+            }
+        }
+    }
+
+    private void buildPostOrderSequence(Node root) {
+        List<Node> nodeList = root.children;
+        if (nodeList == null || nodeList.size() == 0) {
+            root.id = root.leftMostNodeId = ++sequenceIndex;
+            nodeSequence[sequenceIndex] = root;
+        } else {
+            for (int i = 0; i < nodeList.size(); i++) {
+                Node childNode = nodeList.get(i);
+                buildPostOrderSequence(childNode);
                 if (i > 0) {
                     keyRoots[++keyRootsIndex] = childNode.id;
                 } else {
-                    leftMostNode = childNode.leftMostNode;
+                    root.leftMostNodeId = childNode.leftMostNodeId;
                 }
             }
-            node = new Node(++sequenceIndex, element, leftMostNode);
-            sequence[sequenceIndex] = node;
+            root.id = ++sequenceIndex;
+            nodeSequence[sequenceIndex] = root;
         }
-        return node;
     }
 
     public void sequenceTraversal() {
-        for (int i = 1; i < sequence.length; i++) {
-            System.out.println(sequence[i].id + ": " + sequence[i].getElement().getName());
+        for (int i = 1; i < nodeSequence.length; i++) {
+            System.out.println(nodeSequence[i].id + ": " + nodeSequence[i].element.getName());
         }
     }
 
     public void leftMostNodeTraversal() {
-        for (int i = 1; i < sequence.length; i++) {
-            System.out.println(sequence[i].id + ": " + sequence[i].leftMostNode);
+        for (int i = 1; i < nodeSequence.length; i++) {
+            System.out.println(nodeSequence[i].id + ": " + nodeSequence[i].leftMostNodeId);
         }
     }
 
     public void keyRootsTraversal() {
         for (int i = 1; i <= keyRootsIndex; i++) {
-            System.out.println(keyRoots[i] + " " + sequence[keyRoots[i]].id);
+            System.out.println(keyRoots[i] + " " + nodeSequence[keyRoots[i]].id);
         }
     }
 

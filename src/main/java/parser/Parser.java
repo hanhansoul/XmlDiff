@@ -1,8 +1,7 @@
 package parser;
 
-import Entity.Element;
+import entity.Element;
 
-import java.util.Map;
 import java.util.Set;
 
 public class Parser {

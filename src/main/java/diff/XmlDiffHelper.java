@@ -2,8 +2,6 @@ package diff;
 
 import org.dom4j.Attribute;
 import org.dom4j.tree.DefaultAttribute;
-import org.dom4j.util.UserDataAttribute;
-import sun.plugin.dom.core.Attr;
 
 import java.util.HashSet;
 import java.util.Set;
