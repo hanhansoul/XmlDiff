@@ -49,11 +49,12 @@ public class XmlDiff {
                     permanentArr[i][j] = temporaryArr[i][j] = XmlDiffHelper.min(
                             temporaryArr[ix][j].add(ix, j, opValue(leftChildNode, null)),      // 删除节点i
                             temporaryArr[i][jx].add(i, jx, opValue(null, rightChildNode)),      // 增加节点j
-                            temporaryArr[ix][jx].add(ix, jx, opValue(leftChildNode, rightChildNode)));  // 将节点i修改为节点j
-                    System.out.println(i + " " + j + ": " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).value + " " +
+                            temporaryArr[ix][jx].add(ix, jx, opValue(leftChildNode, rightChildNode)));   // 将节点i修改为节点j
+                    System.out.println("1: " + i + " " + j + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevY);
+                            ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).op + " -> " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).value);
                 } else {
                     int ix = i - 1 < leftNode.leftMostNodeId ? 0 : i - 1;
                     int jx = j - 1 < rightNode.leftMostNodeId ? 0 : j - 1;
@@ -67,10 +68,11 @@ public class XmlDiff {
                             temporaryArr[ix][j].add(ix, j, opValue(leftChildNode, null)),
                             temporaryArr[i][jx].add(i, jx, opValue(null, rightChildNode)),
                             temporaryArr[iy][jy].add(iy, jy, permanentArr[i][j]));
-                    System.out.println(i + " " + j + ": " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).value + " " +
+                    System.out.println("2: " + i + " " + j + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevY);
+                            ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).op + " -> " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).value);
                 }
             }
         }
@@ -102,7 +104,7 @@ public class XmlDiff {
         if (v == null) {
             return;
         }
-        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY);
+        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.op);
         backtrace((SimpleOperationValue) permanentArr[v.prevX][v.prevY]);
     }
 

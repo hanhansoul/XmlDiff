@@ -6,5 +6,6 @@ package diff;
 public enum OperationEnum {
     INSERT,
     DELETE,
-    CHANGE
+    CHANGE,
+    UNCHANGE
 }

@@ -20,7 +20,6 @@ public class XmlDiffHelper {
         return minValue;
     }
 
-
 //    public static OperationValue min(OperationValue... values) {
 //        OperationValue minValue = null;
 //        for (OperationValue value : values) {
