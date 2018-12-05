@@ -86,11 +86,21 @@ public class XmlOperationValue implements OperationValue {
         }
     }
 
+//    @Override
+//    public OperationValue add(int px, int py, OperationValue opv) {
+//        XmlOperationValue value = (XmlOperationValue) opv;
+//        return new XmlOperationValue(this.elementNameDiffValue + value.elementNameDiffValue,
+//                this.elementAttributesDiffValue + value.elementAttributesDiffValue,
+//                this.elementTextDiffValue + value.elementTextDiffValue);
+//    }
+
     @Override
-    public OperationValue add(int px, int py, OperationValue opv) {
-        XmlOperationValue value = (XmlOperationValue) opv;
-        return new XmlOperationValue(this.elementNameDiffValue + value.elementNameDiffValue,
-                this.elementAttributesDiffValue + value.elementAttributesDiffValue,
-                this.elementTextDiffValue + value.elementTextDiffValue);
+    public OperationValue add(Operation op, int cx, int cy) {
+        return null;
+    }
+
+    @Override
+    public OperationValue add(OperationValue opv, int cx, int cy) {
+        return null;
     }
 }

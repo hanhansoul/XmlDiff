@@ -2,99 +2,92 @@ package diff;
 
 import org.dom4j.Element;
 
+/**
+ * OperationValue
+ * 属性：
+ * 1. 前驱节点编号
+ * 2. 当前递推值
+ * 3. 当前操作类型
+ * 4. 当前操作节点内容
+ * 5. 当前节点编号
+ * <p>
+ * 方法：
+ * 1. add()：在计算递推式时，前驱OperationValue对象添加一个操作得到并返回当前OperationValue对象
+ * 2. opValue()：给定两个节点，返回一个操作类型
+ * 3. compareTo()：比较两个OperationValue对象值大小，以便递推时取出最小值
+ */
 public class SimpleOperationValue implements OperationValue {
-    public int prevX;
-    public int prevY;
-    public OperationEnum op;
-    public Node opFirstNode, opSecondNode;
-
     public int value;
-//    public static final SimpleOperationValue SIMPLE_OPERATION_DIFF_VALUE = new SimpleOperationValue(1);
-//    public static final SimpleOperationValue SIMPLE_OPERATION_EQUAL_VALUE = new SimpleOperationValue(0);
+    public int prevX, prevY;
+    public int curX, curY;
+    public Operation operation;
 
-    public SimpleOperationValue() {
-        this.value = 0;
-        this.prevX = 0;
-        this.prevY = 0;
-        this.op = OperationEnum.UNCHANGE;
+    static class SimpleOperation extends Operation {
+
+        public SimpleOperation(OperationEnum op, Node opFirstNode, Node opSecondNode) {
+            this.value = op == OperationEnum.UNCHANGE ? 0 : 1;
+            this.op = op;
+            this.opFirstNode = opFirstNode;
+            this.opSecondNode = opSecondNode;
+        }
+
+        public SimpleOperation(int value, OperationEnum op, Node opFirstNode, Node opSecondNode) {
+            this.value = value;
+            this.op = op;
+            this.opFirstNode = opFirstNode;
+            this.opSecondNode = opSecondNode;
+        }
     }
 
-    public SimpleOperationValue(int value) {
+    public SimpleOperationValue(int value, int prevX, int prevY, int curX, int curY,
+                                Operation operation) {
         this.value = value;
-        this.prevX = 0;
-        this.prevY = 0;
-        this.op = OperationEnum.UNCHANGE;
-    }
-
-//    public SimpleOperationValue(int prevX, int prevY, int value) {
-//        this.prevX = prevX;
-//        this.prevY = prevY;
-//        this.value = value;
-//    }
-
-    public SimpleOperationValue(int prevX, int prevY, OperationEnum op, int value) {
         this.prevX = prevX;
         this.prevY = prevY;
-        this.op = op;
-        this.value = value;
+        this.curX = curX;
+        this.curY = curY;
+        this.operation = operation;
     }
 
-    /**
-     * 执行了op操作，操作变化的节点为opFirstNode与opSecondNode。
-     */
-    public SimpleOperationValue(Node opFirstNode, Node opSecondNode, OperationEnum op, int value) {
-        this.prevX = 0;
-        this.prevY = 0;
-        this.op = op;
-        this.opFirstNode = opFirstNode;
-        this.opSecondNode = opSecondNode;
-        this.value = value;
+    public SimpleOperationValue() {
+        prevX = prevY = 0;
+        curX = curY = 0;
+        value = 0;
+        operation = null;
     }
-
-    //    @Override
-//    public OperationValue add(OperationValue opv) {
-//        return new SimpleOperationValue(value + ((SimpleOperationValue) opv).value);
-////        return new SimpleOperationValue(value + ((SimpleOperationValue) opv).value);
-//    }
 
     @Override
-    public OperationValue add(int px, int py, OperationValue opv) {
-        return new SimpleOperationValue(px, py, ((SimpleOperationValue) opv).op, value + ((SimpleOperationValue) opv).value);
+    public OperationValue add(Operation op, int cx, int cy) {
+        return new SimpleOperationValue(value + op.value, curX, curY, cx, cy, op);
     }
 
-    public static OperationValue opValue(Node leftNode, Node rightNode) throws OpValueElementNullException {
-        if (leftNode == null && rightNode == null) {
-            throw new OpValueElementNullException();
-        }
-        if (leftNode == null) {
-            return new SimpleOperationValue(null, rightNode, OperationEnum.INSERT, 1);
-        } else if (rightNode == null) {
-            return new SimpleOperationValue(leftNode, null, OperationEnum.DELETE, 1);
-        }
-        Element leftElement = leftNode.element;
-        Element rightElement = rightNode.element;
-        if (!leftElement.getName().equals(rightElement.getName())) {
-            return new SimpleOperationValue(leftNode, rightNode, OperationEnum.CHANGE, 1);
-        } else {
-            return new SimpleOperationValue(null, null, OperationEnum.UNCHANGE, 0);
-        }
-//        if (!leftElement.getName().equals(rightElement.getName()) ||
-//                leftNode.attributesMap.size() != rightNode.attributesMap.size() ||
-//                !leftElement.getText().equals(rightElement.getText())) {
-//            return SIMPLE_OPERATION_DIFF_VALUE;
-//        } else {
-//            for (Map.Entry entry : leftNode.attributesMap.entrySet()) {
-//                if (!rightNode.attributesMap.containsKey(entry.getKey()) ||
-//                        !rightNode.attributesMap.get(entry.getKey()).equals(entry.getValue())) {
-//                    return SIMPLE_OPERATION_DIFF_VALUE;
-//                }
-//            }
-//        }
-//        return SIMPLE_OPERATION_EQUAL_VALUE;
+    @Override
+    public OperationValue add(OperationValue opv, int cx, int cy) {
+        SimpleOperationValue sopv = (SimpleOperationValue) opv;
+        return add(new SimpleOperation(value + sopv.value, OperationEnum.UNCHANGE, null, null), cx, cy);
     }
 
     @Override
     public int compareTo(Object o) {
         return this.value - ((SimpleOperationValue) o).value;
     }
+
+    public static Operation opValue(Node leftNode, Node rightNode) throws OpValueElementNullException {
+        if (leftNode == null && rightNode == null) {
+            throw new OpValueElementNullException();
+        }
+        if (leftNode == null) {
+            return new SimpleOperation(OperationEnum.INSERT, null, rightNode);
+        } else if (rightNode == null) {
+            return new SimpleOperation(OperationEnum.DELETE, leftNode, null);
+        }
+        Element leftElement = leftNode.element;
+        Element rightElement = rightNode.element;
+        if (!leftElement.getName().equals(rightElement.getName())) {
+            return new SimpleOperation(OperationEnum.CHANGE, leftNode, rightNode);
+        } else {
+            return new SimpleOperation(OperationEnum.UNCHANGE, null, null);
+        }
+    }
+
 }

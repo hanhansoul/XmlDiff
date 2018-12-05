@@ -10,7 +10,6 @@ public class XmlDiff {
     private Tree rightTree;
     private OperationValue[][] permanentArr;  // permanent array
     private OperationValue[][] temporaryArr;  // temporary array
-    private PreviousOperation[][] previousOpArr;
 
     private void initialization(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new Tree(leftFileName);
@@ -18,8 +17,6 @@ public class XmlDiff {
         permanentArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
         temporaryArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
         temporaryArr[0][0] = new SimpleOperationValue();
-
-        previousOpArr = new PreviousOperation[leftTree.size + 1][rightTree.size + 1];
     }
 
     private void compute(int left, int right) throws OpValueElementNullException {
@@ -29,55 +26,62 @@ public class XmlDiff {
         Node rightNode = rightTree.nodeSequence[right];
 //        System.out.println(left + " " + right + ": ");
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
-            temporaryArr[i][0] = i - 1 < leftNode.leftMostNodeId ? opValue(leftNode, null) :
-                    temporaryArr[i - 1][0].add(i - 1, 0, opValue(leftNode, null));
+            temporaryArr[i][0] = i - 1 < leftNode.leftMostNodeId ?
+                    temporaryArr[0][0].add(opValue(leftNode, null), i, 0) :
+                    temporaryArr[i - 1][0].add(opValue(leftNode, null), i, 0);
 //            System.out.println(i + " " + 0 + ": " + temporaryArr[i][0]);
         }
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
-            temporaryArr[0][j] = j - 1 < rightNode.leftMostNodeId ? opValue(null, rightNode) :
-                    temporaryArr[0][j - 1].add(0, j - 1, opValue(null, rightNode));
+            temporaryArr[0][j] = j - 1 < rightNode.leftMostNodeId ?
+                    temporaryArr[0][0].add(opValue(null, rightNode), 0, j) :
+                    temporaryArr[0][j - 1].add(opValue(null, rightNode), 0, j);
 //            System.out.println(0 + " " + j + ": " + temporaryArr[0][j]);
         }
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             for (int j = rightNode.leftMostNodeId; j <= right; j++) {
                 if (leftTree.nodeSequence[i].leftMostNodeId == leftNode.leftMostNodeId &&
                         rightTree.nodeSequence[j].leftMostNodeId == rightNode.leftMostNodeId) {
-                    int ix = i - 1 < leftNode.leftMostNodeId ? 0 : i - 1;
-                    int jx = j - 1 < rightNode.leftMostNodeId ? 0 : j - 1;
+                    int ix = checkIndexMargin(i, leftNode);
+                    int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
                     permanentArr[i][j] = temporaryArr[i][j] = XmlDiffHelper.min(
-                            temporaryArr[ix][j].add(ix, j, opValue(leftChildNode, null)),      // 删除节点i
-                            temporaryArr[i][jx].add(i, jx, opValue(null, rightChildNode)),      // 增加节点j
-                            temporaryArr[ix][jx].add(ix, jx, opValue(leftChildNode, rightChildNode)));   // 将节点i修改为节点j
+                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),      // 删除节点i
+                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),      // 增加节点j
+                            temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j));    // 将节点i修改为节点j
                     System.out.println("1: " + i + " " + j + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).op + " -> " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).operation.op + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).value);
                 } else {
-                    int ix = i - 1 < leftNode.leftMostNodeId ? 0 : i - 1;
-                    int jx = j - 1 < rightNode.leftMostNodeId ? 0 : j - 1;
-                    int iy = leftTree.nodeSequence[i].leftMostNodeId - 1 < leftNode.leftMostNodeId ?
-                            0 : leftTree.nodeSequence[i].leftMostNodeId - 1;
-                    int jy = rightTree.nodeSequence[j].leftMostNodeId - 1 < rightNode.leftMostNodeId ?
-                            0 : rightTree.nodeSequence[j].leftMostNodeId - 1;
+                    int ix = checkIndexMargin(i, leftNode);
+                    int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
+                    int iy = checkNodeIndexMargin(leftChildNode, leftNode);
+                    int jy = checkNodeIndexMargin(rightChildNode, rightNode);
                     temporaryArr[i][j] = XmlDiffHelper.min(
-                            temporaryArr[ix][j].add(ix, j, opValue(leftChildNode, null)),
-                            temporaryArr[i][jx].add(i, jx, opValue(null, rightChildNode)),
-                            temporaryArr[iy][jy].add(iy, jy, permanentArr[i][j]));
+                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),
+                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),
+                            temporaryArr[iy][jy].add(permanentArr[i][j], i, j));
                     System.out.println("2: " + i + " " + j + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).op + " -> " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).operation.op + " -> " +
                             ((SimpleOperationValue) temporaryArr[i][j]).value);
                 }
             }
         }
         System.out.println();
-//        fillZero(temporaryArr);
+    }
+
+    private int checkIndexMargin(int index, Node ancestorNode) {
+        return index - 1 < ancestorNode.leftMostNodeId ? 0 : index - 1;
+    }
+
+    private int checkNodeIndexMargin(Node childNode, Node ancestorNode) {
+        return childNode.leftMostNodeId - 1 < ancestorNode.leftMostNodeId ? 0 : childNode.leftMostNodeId - 1;
     }
 
     public void solve() throws DocumentException, OpValueElementNullException {
@@ -104,7 +108,7 @@ public class XmlDiff {
         if (v == null) {
             return;
         }
-        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.op);
+        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
         backtrace((SimpleOperationValue) permanentArr[v.prevX][v.prevY]);
     }
 
