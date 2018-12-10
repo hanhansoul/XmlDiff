@@ -20,12 +20,11 @@ public class Node {
     public Node father;
     public List<Node> children;
 
-    public Operation operation;
+    public Operation op;
 
     public Node() {
         element = null;
         id = leftMostNodeId = 0;
-        operation = null;
         attributesMap = new HashMap<>(0);
         text = null;
         children = null;

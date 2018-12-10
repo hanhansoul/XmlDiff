@@ -1,8 +1,9 @@
 package diff;
 
+import diff.simple.SimpleOperationValue;
 import org.dom4j.DocumentException;
 
-import static diff.SimpleOperationValue.opValue;
+import static diff.simple.SimpleOperationValue.opValue;
 
 public class XmlDiff {
 
@@ -108,8 +109,12 @@ public class XmlDiff {
         if (v == null) {
             return;
         }
-        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
-        backtrace((SimpleOperationValue) permanentArr[v.prevX][v.prevY]);
+        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
+                ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
+        if (v.prevX == 0 && v.prevY == 0) {
+            return;
+        }
+        backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }
 
     public static void main(String[] args) throws DocumentException, OpValueElementNullException {

@@ -4,7 +4,7 @@ import org.dom4j.Element;
 
 import java.util.Map;
 
-public class XmlOperationValue implements OperationValue {
+public class XmlOperationValue extends OperationValue {
     public int elementNameDiffValue;
     public int elementAttributesDiffValue;
     public int elementTextDiffValue;
