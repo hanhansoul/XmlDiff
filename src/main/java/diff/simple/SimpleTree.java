@@ -1,5 +1,8 @@
-package diff;
+package diff.simple;
 
+import diff.Node;
+import diff.simple.SimpleNode;
+import diff.xml.XmlNode;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -7,12 +10,13 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Administrator on 2018/11/27 0027.
  */
-public class Tree {
+public class SimpleTree {
     private Document document;
 
     public Node rootNode;
@@ -24,7 +28,7 @@ public class Tree {
     public int rootId;
     public int size;
 
-    public Tree(String fileName) throws DocumentException {
+    public SimpleTree(String fileName) throws DocumentException {
         initialization(fileName);
     }
 
@@ -35,7 +39,7 @@ public class Tree {
         keyRoots = new int[size + 1];
         sequenceIndex = keyRootsIndex = 0;
 
-        rootNode = new Node(document.getRootElement(), null);
+        rootNode = new SimpleNode(document.getRootElement(), null);
         buildTree(rootNode);
 
         buildPostOrderSequence(rootNode);
@@ -68,8 +72,9 @@ public class Tree {
             root.children = null;
         } else {
             root.children = new ArrayList<>(elementList.size());
+//            root.children = new LinkedList<>();
             for (Element element : elementList) {
-                Node node = new Node(element, root);
+                Node node = new SimpleNode(element, root);
                 root.children.add(node);
                 buildTree(node);
             }
@@ -93,6 +98,20 @@ public class Tree {
             }
             root.id = ++sequenceIndex;
             nodeSequence[sequenceIndex] = root;
+        }
+    }
+
+    public int buildPreOrderSequenceFromPostOrderSequence(int rootIndex, int leftBorder, int rightBorder) {
+        Node node = nodeSequence[rootIndex];
+        int leftMostNodeId = node.leftMostNodeId;
+        return 0;
+    }
+
+    public void buildDiffOutput(Node leftNode, Node rightNode) {
+        if (leftNode.op != null || rightNode != null) {
+
+        } else {
+
         }
     }
 

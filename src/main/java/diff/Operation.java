@@ -6,5 +6,4 @@ package diff;
 public abstract class Operation {
     public int value;
     public OperationEnum op;
-    public Node opFirstNode, opSecondNode;
 }

@@ -1,19 +1,21 @@
 package diff;
 
+import diff.simple.SimpleOperationValue;
+import diff.simple.SimpleTree;
 import org.dom4j.DocumentException;
 
-import static diff.SimpleOperationValue.opValue;
+import static diff.simple.SimpleOperationValue.opValue;
 
 public class XmlDiff {
 
-    private Tree leftTree;
-    private Tree rightTree;
-    private OperationValue[][] permanentArr;  // permanent array
-    private OperationValue[][] temporaryArr;  // temporary array
+    private SimpleTree leftTree;
+    private SimpleTree rightTree;
+    private OperationValue[][] permanentArr;
+    private OperationValue[][] temporaryArr;
 
     private void initialization(String leftFileName, String rightFileName) throws DocumentException {
-        leftTree = new Tree(leftFileName);
-        rightTree = new Tree(rightFileName);
+        leftTree = new SimpleTree(leftFileName);
+        rightTree = new SimpleTree(rightFileName);
         permanentArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
         temporaryArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
         temporaryArr[0][0] = new SimpleOperationValue();
@@ -21,6 +23,7 @@ public class XmlDiff {
 
     private void compute(int left, int right) throws OpValueElementNullException {
         System.out.println(left + " " + right);
+//        temporaryArr[0][0] = new XmlOperationValue(0, 0, 0);
         Node leftNode = leftTree.nodeSequence[left];
         Node rightNode = rightTree.nodeSequence[right];
 //        System.out.println(left + " " + right + ": ");
@@ -58,8 +61,8 @@ public class XmlDiff {
                     int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
-                    int iy = checkChildNodeIndexMargin(leftChildNode, leftNode);
-                    int jy = checkChildNodeIndexMargin(rightChildNode, rightNode);
+                    int iy = checkNodeIndexMargin(leftChildNode, leftNode);
+                    int jy = checkNodeIndexMargin(rightChildNode, rightNode);
                     temporaryArr[i][j] = XmlDiffHelper.min(
                             temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),
                             temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),
@@ -79,7 +82,7 @@ public class XmlDiff {
         return index - 1 < ancestorNode.leftMostNodeId ? 0 : index - 1;
     }
 
-    private int checkChildNodeIndexMargin(Node childNode, Node ancestorNode) {
+    private int checkNodeIndexMargin(Node childNode, Node ancestorNode) {
         return childNode.leftMostNodeId - 1 < ancestorNode.leftMostNodeId ? 0 : childNode.leftMostNodeId - 1;
     }
 
@@ -107,9 +110,22 @@ public class XmlDiff {
         if (v == null) {
             return;
         }
-        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
+        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
+                ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
         if (v.prevX == 0 && v.prevY == 0) {
             return;
+        }
+        if (v.operation.op == OperationEnum.INSERT) {
+            rightTree.nodeSequence[v.curY].counterpartId = v.curX;
+            rightTree.nodeSequence[v.curY].op = OperationEnum.INSERT;
+        } else if (v.operation.op == OperationEnum.DELETE) {
+            leftTree.nodeSequence[v.curX].counterpartId = v.curY;
+            leftTree.nodeSequence[v.curX].op = OperationEnum.DELETE;
+        } else if (v.operation.op == OperationEnum.CHANGE) {
+            leftTree.nodeSequence[v.curX].counterpartId = v.curY;
+            rightTree.nodeSequence[v.curY].counterpartId = v.curX;
+            leftTree.nodeSequence[v.curX].op = OperationEnum.CHANGE;
+            rightTree.nodeSequence[v.curY].op = OperationEnum.CHANGE;
         }
         backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }

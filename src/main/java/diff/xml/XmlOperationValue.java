@@ -1,10 +1,14 @@
-package diff;
+package diff.xml;
 
+import diff.Node;
+import diff.OpValueElementNullException;
+import diff.Operation;
+import diff.OperationValue;
 import org.dom4j.Element;
 
 import java.util.Map;
 
-public class XmlOperationValue implements OperationValue {
+public class XmlOperationValue extends OperationValue {
     public int elementNameDiffValue;
     public int elementAttributesDiffValue;
     public int elementTextDiffValue;
@@ -38,7 +42,7 @@ public class XmlOperationValue implements OperationValue {
         }
     }
 
-    public static OperationValue opValue(Node leftNode, Node rightNode) throws OpValueElementNullException {
+    public static OperationValue opValue(XmlNode leftNode, XmlNode rightNode) throws OpValueElementNullException {
         // TODO
         Element leftElement = leftNode.element;
         Element rightElement = rightNode.element;
