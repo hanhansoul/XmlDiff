@@ -64,7 +64,7 @@ public class SimpleOperationValue implements OperationValue {
     @Override
     public OperationValue add(OperationValue opv, int cx, int cy) {
         SimpleOperationValue sopv = (SimpleOperationValue) opv;
-        return add(new SimpleOperation(value + sopv.value, OperationEnum.UNCHANGE, null, null), cx, cy);
+        return add(new SimpleOperation(sopv.value, OperationEnum.UNCHANGE, null, null), cx, cy);
     }
 
     @Override

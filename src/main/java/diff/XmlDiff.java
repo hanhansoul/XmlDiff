@@ -21,7 +21,6 @@ public class XmlDiff {
 
     private void compute(int left, int right) throws OpValueElementNullException {
         System.out.println(left + " " + right);
-//        temporaryArr[0][0] = new XmlOperationValue(0, 0, 0);
         Node leftNode = leftTree.nodeSequence[left];
         Node rightNode = rightTree.nodeSequence[right];
 //        System.out.println(left + " " + right + ": ");
@@ -59,8 +58,8 @@ public class XmlDiff {
                     int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
-                    int iy = checkNodeIndexMargin(leftChildNode, leftNode);
-                    int jy = checkNodeIndexMargin(rightChildNode, rightNode);
+                    int iy = checkChildNodeIndexMargin(leftChildNode, leftNode);
+                    int jy = checkChildNodeIndexMargin(rightChildNode, rightNode);
                     temporaryArr[i][j] = XmlDiffHelper.min(
                             temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),
                             temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),
@@ -80,7 +79,7 @@ public class XmlDiff {
         return index - 1 < ancestorNode.leftMostNodeId ? 0 : index - 1;
     }
 
-    private int checkNodeIndexMargin(Node childNode, Node ancestorNode) {
+    private int checkChildNodeIndexMargin(Node childNode, Node ancestorNode) {
         return childNode.leftMostNodeId - 1 < ancestorNode.leftMostNodeId ? 0 : childNode.leftMostNodeId - 1;
     }
 
@@ -108,8 +107,11 @@ public class XmlDiff {
         if (v == null) {
             return;
         }
-        System.out.println("current: " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
-        backtrace((SimpleOperationValue) permanentArr[v.prevX][v.prevY]);
+        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value + ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
+        if (v.prevX == 0 && v.prevY == 0) {
+            return;
+        }
+        backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }
 
     public static void main(String[] args) throws DocumentException, OpValueElementNullException {
