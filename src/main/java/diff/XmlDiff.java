@@ -4,6 +4,8 @@ import diff.simple.SimpleOperationValue;
 import diff.simple.SimpleTree;
 import org.dom4j.DocumentException;
 
+import java.util.Iterator;
+
 import static diff.simple.SimpleOperationValue.opValue;
 
 public class XmlDiff {
@@ -128,6 +130,33 @@ public class XmlDiff {
             rightTree.nodeSequence[v.curY].op = OperationEnum.CHANGE;
         }
         backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
+    }
+
+    public void diffOutput(Node leftNode, Node rightNode) {
+//        Node leftNode = leftTree.nodeSequence[leftIndex];
+//        Node rightNode = rightTree.nodeSequence[rightIndex];
+        Iterator<Node> leftIterator = leftNode.children.iterator();
+        Iterator<Node> rightIterator = rightNode.children.iterator();
+        while (true) {
+            if (leftIterator.hasNext()) {
+                leftIterator.next();
+            }
+            if (rightIterator.hasNext()) {
+                rightIterator.next();
+            }
+        }
+
+        if (leftNode.op == null && rightNode.op == null) {
+            // TODO 正常输出leftNode和rightNode节点操作
+        } else if (leftNode.op == OperationEnum.DELETE) {
+            // TODO 输出删除leftNode节点操作
+            diffOutput(, rightNode);
+        } else if (rightNode.op == OperationEnum.INSERT) {
+
+        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+
+        }
+
     }
 
     public static void main(String[] args) throws DocumentException, OpValueElementNullException {

@@ -21,8 +21,10 @@ public class SimpleTree {
 
     public Node rootNode;
     public Node[] nodeSequence;
+    public Node[] nodePreOrderSequence;
     public int[] keyRoots;
     public int sequenceIndex;
+    public int preOrderSequenceIndex;
     public int keyRootsIndex;
 
     public int rootId;
@@ -39,12 +41,16 @@ public class SimpleTree {
         keyRoots = new int[size + 1];
         sequenceIndex = keyRootsIndex = 0;
 
+        nodeSequence = new Node[size + 1];
+        preOrderSequenceIndex = 0;
+
         rootNode = new SimpleNode(document.getRootElement(), null);
         buildTree(rootNode);
 
         buildPostOrderSequence(rootNode);
         rootId = keyRoots[++keyRootsIndex] = rootNode.id;
 
+        buildPreOrderSequence(rootNode);
 //        sequenceTraversal();
 //        leftMostNodeTraversal();
     }
@@ -101,10 +107,11 @@ public class SimpleTree {
         }
     }
 
-    public int buildPreOrderSequenceFromPostOrderSequence(int rootIndex, int leftBorder, int rightBorder) {
-        Node node = nodeSequence[rootIndex];
-        int leftMostNodeId = node.leftMostNodeId;
-        return 0;
+    public void buildPreOrderSequence(Node root) {
+        nodePreOrderSequence[++preOrderSequenceIndex] = root;
+        for (Node node : root.children) {
+            buildPostOrderSequence(node);
+        }
     }
 
     public void buildDiffOutput(Node leftNode, Node rightNode) {
