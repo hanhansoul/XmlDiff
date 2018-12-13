@@ -1,6 +1,7 @@
 package diff;
 
 import org.dom4j.Attribute;
+import org.dom4j.Element;
 import org.dom4j.tree.DefaultAttribute;
 
 import java.util.HashSet;

@@ -1,9 +1,6 @@
 package dom4j;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
+import org.dom4j.*;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -33,9 +30,11 @@ public class Dom4jWriteXmlFileDemo {
 //        format.setEncoding("utf-8");
 //        XMLWriter xw = new XMLWriter(fw, format);
 //        xw.write(document);
+        Attribute attribute = author1.attribute("name");
         OutputFormat format = OutputFormat.createPrettyPrint();
         XMLWriter writer = new XMLWriter(format);
-        writer.write(root);
+//        writer.write(root);
+        writer.write(author1.getText());
         writer.close();
     }
 
@@ -61,6 +60,6 @@ public class Dom4jWriteXmlFileDemo {
     }
 
     public static void main(String[] args) throws IOException, DocumentException {
-        test3();
+        test2();
     }
 }

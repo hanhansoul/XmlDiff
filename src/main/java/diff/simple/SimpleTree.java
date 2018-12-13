@@ -1,8 +1,6 @@
 package diff.simple;
 
 import diff.Node;
-import diff.simple.SimpleNode;
-import diff.xml.XmlNode;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -10,7 +8,6 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -53,6 +50,7 @@ public class SimpleTree {
         buildPostOrderSequence(rootNode);
         rootId = keyRoots[++keyRootsIndex] = rootNode.id;
 
+        nodePreOrderSequence = new Node[size + 1];
         buildPreOrderSequence(rootNode, 0);
 //        sequenceTraversal();
 //        leftMostNodeTraversal();
@@ -113,6 +111,9 @@ public class SimpleTree {
     public void buildPreOrderSequence(Node root, int depth) {
         root.depth = depth;
         nodePreOrderSequence[++preOrderSequenceIndex] = root;
+        if (root.children == null) {
+            return;
+        }
         for (Node node : root.children) {
             buildPreOrderSequence(node, depth + 1);
         }

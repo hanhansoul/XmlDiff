@@ -4,6 +4,8 @@ import diff.simple.SimpleOperationValue;
 import diff.simple.SimpleTree;
 import org.dom4j.DocumentException;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Iterator;
 
 import static diff.simple.SimpleOperationValue.opValue;
@@ -14,6 +16,27 @@ public class XmlDiff {
     private SimpleTree rightTree;
     private OperationValue[][] permanentArr;
     private OperationValue[][] temporaryArr;
+
+    public StringBuilder leftOutput = new StringBuilder();
+    public StringBuilder rightOutput = new StringBuilder();
+
+    private final String[] TAB_STRINGS = new String[50];
+    private final String OUTPUT_START = "<pre>";
+    private final String OUTPUT_END = "</pre>";
+    private final String DIV_START = "<span style='display:inline-block;min-width:100%;'>";
+    private final String DIV_END = "</span>";
+    private final String BR = "<br />";
+
+    private final String DELETE_DIV_START = "<span style='background-color:red;display:inline-block;min-width:100%;'>";
+    private final String INSERT_DIV_START = "<span style='background-color:green;display:inline-block;min-width:100%;'>";
+    private final String CHANGE_DIV_START = "<span style='background-color:blue;display:inline-block;min-width:100%;'>";
+
+    public XmlDiff() {
+        TAB_STRINGS[0] = "";
+        for (int i = 1; i < 50; i++) {
+            TAB_STRINGS[i] = TAB_STRINGS[i - 1] + "   ";
+        }
+    }
 
     private void initialization(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new SimpleTree(leftFileName);
@@ -132,121 +155,98 @@ public class XmlDiff {
         backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }
 
-    public StringBuilder leftOutput = new StringBuilder();
-    public StringBuilder rightOutput = new StringBuilder();
-
-    public void output() {
-        int leftIndex = 1;
-        int rightIndex = 1;
-        while (true) {
-            Node leftNode = leftTree.nodePreOrderSequence[leftIndex];
-            Node rightNode = rightTree.nodePreOrderSequence[rightIndex];
-            int depth = Math.max(leftNode.depth, rightNode.depth);
-            if (leftNode.op == null && rightNode.op == null ||
-                    leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
-                // TODO 正常输出leftNode和rightNode节点操作
-                // ...
-                leftOutput
-                leftIndex++;
-                rightIndex++;
-            } else if (leftNode.op == OperationEnum.DELETE) {
-                // TODO 输出删除leftNode节点操作
-                // ...
-                leftIndex++;
-            } else if (rightNode.op == OperationEnum.INSERT) {
-                rightIndex++;
-            } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
-                leftIndex++;
-                rightIndex++;
-            }
+    public void preOrderOutput() {
+        Node[] nodes = leftTree.nodePreOrderSequence;
+        for (int i = 1; i < nodes.length; i++) {
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op);
+        }
+        System.out.println();
+        nodes = rightTree.nodePreOrderSequence;
+        for (int i = 1; i < nodes.length; i++) {
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op);
         }
     }
 
-    public void dfs(Node leftRoot, Node rightRoot) {
+    public void resultOutput() throws IOException {
+        leftOutput.append(OUTPUT_START);
+        rightOutput.append(OUTPUT_START);
+        dfs(1, 1);
+        leftOutput.append(OUTPUT_END);
+        rightOutput.append(OUTPUT_END);
+        System.out.println(leftOutput);
+        System.out.println();
+        System.out.println(rightOutput);
+        FileWriter writer = new FileWriter("data/output1.html");
+        writer.write(String.valueOf(leftOutput));
+        writer.flush();
+        writer.close();
+        writer = new FileWriter("data/output2.html");
+        writer.write(String.valueOf(rightOutput));
+        writer.flush();
+        writer.close();
+    }
 
-        if (leftRoot == null || rightRoot == null) {
+    public void dfs(int leftIndex, int rightIndex) {
+        Node leftNode = leftIndex < leftTree.nodePreOrderSequence.length ?
+                leftTree.nodePreOrderSequence[leftIndex] : null;
+        Node rightNode = rightIndex < rightTree.nodePreOrderSequence.length ?
+                rightTree.nodePreOrderSequence[rightIndex] : null;
+        int depth;
+
+        if (leftNode == null && rightNode == null) {
             return;
+        } else if (leftNode == null) {
+            depth = leftNode.depth;
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex);
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+        } else if (rightNode == null) {
+            depth = rightNode.depth;
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex, rightIndex + 1);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
         }
 
-        Iterator<Node> leftChildIterator = leftRoot.children != null ? leftRoot.children.iterator() : null;
-        Iterator<Node> rightChildIterator = rightRoot.children != null ? rightRoot.children.iterator() : null;
-
-        Node leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
-        Node rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
-
-        while (true) {
-
-            if (leftNode.op == null && rightNode.op == null) {
-                // TODO 正常输出leftNode和rightNode节点操作
-                // ...
-                dfs(leftNode, rightNode);
-            } else if (leftNode.op == OperationEnum.DELETE) {
-                // TODO 输出删除leftNode节点操作
-                // ...
-                leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
-                dfs(leftNode, rightNode);
-            } else if (rightRoot.op == OperationEnum.INSERT) {
-
-                rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
-                dfs(leftNode, rightNode);
-            } else if (leftRoot.op == OperationEnum.CHANGE && rightRoot.op == OperationEnum.CHANGE) {
-
-                leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
-                rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
-                dfs(leftNode, rightNode);
-            }
-
+        depth = Math.max(leftNode.depth, rightNode.depth);
+        if (leftNode.op == null && rightNode.op == null ||
+                leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex + 1);
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        } else if (leftNode.op == OperationEnum.DELETE) {
+            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex);
+            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
+        } else if (rightNode.op == OperationEnum.INSERT) {
+            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
+            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex, rightIndex + 1);
+            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
+            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex + 1);
+            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
         }
-
     }
 
-    public void diffOutput(Node leftRoot, Iterator<Node> leftIterator, Node rightRoot, Iterator<Node> rightIterator) {
-//        Node leftNode = leftTree.nodeSequence[leftIndex];
-//        Node rightNode = rightTree.nodeSequence[rightIndex];
-//        Iterator<Node> leftIterator = leftRoot.children.iterator();
-//        Iterator<Node> rightIterator = rightRoot.children.iterator();
-        if (leftRoot == null || rightRoot == null) {
-
-        }
-        if (leftRoot.op == null && rightRoot.op == null) {
-            // TODO 正常输出leftNode和rightNode节点操作
-            // ...
-            leftOutput.append(leftRoot.element.getName());
-            rightOutput.append(rightRoot.element.getName());
-
-
-            Node leftNode = leftIterator.hasNext() ? leftIterator.next() : null;
-            Node rightNode = rightIterator.hasNext() ? rightIterator.next() : null;
-
-            Iterator<Node> leftChildIterator = leftIterator == null && leftRoot.children != null ? leftRoot.children.iterator() : null;
-            Iterator<Node> rightChildIterator = rightIterator == null && rightRoot.children != null ? rightRoot.children.iterator() : null;
-
-            if (leftNode != null && rightNode != null) {
-
-            }
-
-            leftOutput.append(leftRoot.element.getName());
-            rightOutput.append(rightRoot.element.getName());
-        } else if (leftRoot.op == OperationEnum.DELETE) {
-            // TODO 输出删除leftNode节点操作
-            // ...
-
-        } else if (rightRoot.op == OperationEnum.INSERT) {
-
-        } else if (leftRoot.op == OperationEnum.CHANGE && rightRoot.op == OperationEnum.CHANGE) {
-
-        }
-
-
-    }
-
-    public static void main(String[] args) throws DocumentException, OpValueElementNullException {
+    public static void main(String[] args) throws DocumentException, OpValueElementNullException, IOException {
         long beginTime = System.currentTimeMillis();
         XmlDiff xmlDiff = new XmlDiff();
 //        xmlDiff.initialization("data/CSCA350-353000-00M01-01-X_2_20180901.xml",
 //                "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
         xmlDiff.initialization("data/left.xml", "data/right.xml");
         xmlDiff.solve();
+//        xmlDiff.preOrderOutput();
+        xmlDiff.resultOutput();
+//        System.out.println(xmlDiff.leftOutput);
+//        System.out.println(xmlDiff.rightOutput);
         long endTime = System.currentTimeMillis();
 //        System.out.println((endTime - beginTime) / 1000);
     }
