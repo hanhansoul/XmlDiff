@@ -132,30 +132,111 @@ public class XmlDiff {
         backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }
 
-    public void diffOutput(Node leftNode, Node rightNode) {
+    public StringBuilder leftOutput = new StringBuilder();
+    public StringBuilder rightOutput = new StringBuilder();
+
+    public void output() {
+        int leftIndex = 1;
+        int rightIndex = 1;
+        while (true) {
+            Node leftNode = leftTree.nodePreOrderSequence[leftIndex];
+            Node rightNode = rightTree.nodePreOrderSequence[rightIndex];
+            int depth = Math.max(leftNode.depth, rightNode.depth);
+            if (leftNode.op == null && rightNode.op == null ||
+                    leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
+                // TODO 正常输出leftNode和rightNode节点操作
+                // ...
+                leftOutput
+                leftIndex++;
+                rightIndex++;
+            } else if (leftNode.op == OperationEnum.DELETE) {
+                // TODO 输出删除leftNode节点操作
+                // ...
+                leftIndex++;
+            } else if (rightNode.op == OperationEnum.INSERT) {
+                rightIndex++;
+            } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+                leftIndex++;
+                rightIndex++;
+            }
+        }
+    }
+
+    public void dfs(Node leftRoot, Node rightRoot) {
+
+        if (leftRoot == null || rightRoot == null) {
+            return;
+        }
+
+        Iterator<Node> leftChildIterator = leftRoot.children != null ? leftRoot.children.iterator() : null;
+        Iterator<Node> rightChildIterator = rightRoot.children != null ? rightRoot.children.iterator() : null;
+
+        Node leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
+        Node rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
+
+        while (true) {
+
+            if (leftNode.op == null && rightNode.op == null) {
+                // TODO 正常输出leftNode和rightNode节点操作
+                // ...
+                dfs(leftNode, rightNode);
+            } else if (leftNode.op == OperationEnum.DELETE) {
+                // TODO 输出删除leftNode节点操作
+                // ...
+                leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
+                dfs(leftNode, rightNode);
+            } else if (rightRoot.op == OperationEnum.INSERT) {
+
+                rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
+                dfs(leftNode, rightNode);
+            } else if (leftRoot.op == OperationEnum.CHANGE && rightRoot.op == OperationEnum.CHANGE) {
+
+                leftNode = leftChildIterator.hasNext() ? leftChildIterator.next() : null;
+                rightNode = rightChildIterator.hasNext() ? rightChildIterator.next() : null;
+                dfs(leftNode, rightNode);
+            }
+
+        }
+
+    }
+
+    public void diffOutput(Node leftRoot, Iterator<Node> leftIterator, Node rightRoot, Iterator<Node> rightIterator) {
 //        Node leftNode = leftTree.nodeSequence[leftIndex];
 //        Node rightNode = rightTree.nodeSequence[rightIndex];
-        Iterator<Node> leftIterator = leftNode.children.iterator();
-        Iterator<Node> rightIterator = rightNode.children.iterator();
-        while (true) {
-            if (leftIterator.hasNext()) {
-                leftIterator.next();
-            }
-            if (rightIterator.hasNext()) {
-                rightIterator.next();
-            }
-        }
+//        Iterator<Node> leftIterator = leftRoot.children.iterator();
+//        Iterator<Node> rightIterator = rightRoot.children.iterator();
+        if (leftRoot == null || rightRoot == null) {
 
-        if (leftNode.op == null && rightNode.op == null) {
+        }
+        if (leftRoot.op == null && rightRoot.op == null) {
             // TODO 正常输出leftNode和rightNode节点操作
-        } else if (leftNode.op == OperationEnum.DELETE) {
-            // TODO 输出删除leftNode节点操作
-            diffOutput(, rightNode);
-        } else if (rightNode.op == OperationEnum.INSERT) {
+            // ...
+            leftOutput.append(leftRoot.element.getName());
+            rightOutput.append(rightRoot.element.getName());
 
-        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+
+            Node leftNode = leftIterator.hasNext() ? leftIterator.next() : null;
+            Node rightNode = rightIterator.hasNext() ? rightIterator.next() : null;
+
+            Iterator<Node> leftChildIterator = leftIterator == null && leftRoot.children != null ? leftRoot.children.iterator() : null;
+            Iterator<Node> rightChildIterator = rightIterator == null && rightRoot.children != null ? rightRoot.children.iterator() : null;
+
+            if (leftNode != null && rightNode != null) {
+
+            }
+
+            leftOutput.append(leftRoot.element.getName());
+            rightOutput.append(rightRoot.element.getName());
+        } else if (leftRoot.op == OperationEnum.DELETE) {
+            // TODO 输出删除leftNode节点操作
+            // ...
+
+        } else if (rightRoot.op == OperationEnum.INSERT) {
+
+        } else if (leftRoot.op == OperationEnum.CHANGE && rightRoot.op == OperationEnum.CHANGE) {
 
         }
+
 
     }
 

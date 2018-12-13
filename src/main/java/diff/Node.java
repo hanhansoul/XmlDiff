@@ -19,6 +19,8 @@ public abstract class Node {
     public int counterpartId;
     public OperationEnum op;
 
+    public int depth;
+
     public Node() {
         element = null;
         id = leftMostNodeId = 0;
