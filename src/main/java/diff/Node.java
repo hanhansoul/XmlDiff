@@ -9,28 +9,31 @@ import java.util.*;
  */
 public abstract class Node {
     public int id;
-    public int fatherId;    // father.id
     public int leftMostNodeId;
 
     public Element element;
-    public Node father;
+    public Map<String, String> attributesMap;
+    public String[] text;
+
+//    public Node father;
     public List<Node> children;
 
     public int counterpartId;
     public OperationEnum op;
 
     public int depth;
+    public int rightMostNodeId;
 
     public Node() {
         element = null;
         id = leftMostNodeId = 0;
         children = null;
-        father = null;
+//        father = null;
     }
 
     public Node(Element element, Node father) {
         this.element = element;
-        this.father = father;
+//        this.father = father;
     }
 
 }

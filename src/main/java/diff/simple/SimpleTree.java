@@ -112,11 +112,13 @@ public class SimpleTree {
         root.depth = depth;
         nodePreOrderSequence[++preOrderSequenceIndex] = root;
         if (root.children == null) {
+            root.rightMostNodeId = preOrderSequenceIndex;
             return;
         }
         for (Node node : root.children) {
             buildPreOrderSequence(node, depth + 1);
         }
+        root.rightMostNodeId = preOrderSequenceIndex;
     }
 
     public void sequenceTraversal() {

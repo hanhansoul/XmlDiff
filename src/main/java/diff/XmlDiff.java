@@ -1,5 +1,6 @@
 package diff;
 
+import diff.simple.SimpleDiffOutput;
 import diff.simple.SimpleOperationValue;
 import diff.simple.SimpleTree;
 import org.dom4j.DocumentException;
@@ -131,7 +132,7 @@ public class XmlDiff {
         backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
     }
 
-    public void backtrace(SimpleOperationValue v) {
+    private void backtrace(SimpleOperationValue v) {
         if (v == null) {
             return;
         }
@@ -158,12 +159,12 @@ public class XmlDiff {
     public void preOrderOutput() {
         Node[] nodes = leftTree.nodePreOrderSequence;
         for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op);
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
         }
         System.out.println();
         nodes = rightTree.nodePreOrderSequence;
         for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op);
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
         }
     }
 
@@ -243,10 +244,11 @@ public class XmlDiff {
 //                "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
         xmlDiff.initialization("data/left.xml", "data/right.xml");
         xmlDiff.solve();
-//        xmlDiff.preOrderOutput();
-        xmlDiff.resultOutput();
+        xmlDiff.preOrderOutput();
+        new SimpleDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree).resultOutput();
 //        System.out.println(xmlDiff.leftOutput);
 //        System.out.println(xmlDiff.rightOutput);
+//        xmlDiff.resultOutput();
         long endTime = System.currentTimeMillis();
 //        System.out.println((endTime - beginTime) / 1000);
     }

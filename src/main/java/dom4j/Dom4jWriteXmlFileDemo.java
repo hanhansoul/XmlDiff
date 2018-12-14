@@ -60,6 +60,6 @@ public class Dom4jWriteXmlFileDemo {
     }
 
     public static void main(String[] args) throws IOException, DocumentException {
-        test2();
+        test1();
     }
 }

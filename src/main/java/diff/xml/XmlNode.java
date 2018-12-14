@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 public class XmlNode extends Node {
-    public Map<String, String> attributesMap;
-    public String[] text;
+
 
     public XmlNode() {
         super();
