@@ -108,6 +108,40 @@ public class SimpleDiffOutput {
         sb.append(SPAN_END);
     }
 
+    private void outputDfs(StringBuilder sb, Node mainNode, Iterator<Node> auxIterator) {
+        Node auxNode = auxIterator.next();
+        if (mainNode.op == null && auxNode.op == null ||
+                mainNode.op == OperationEnum.UNCHANGE && auxNode.op == OperationEnum.UNCHANGE) {
+            elementStartOutput(sb, mainNode, OperationEnum.UNCHANGE);
+            for (Node child : mainNode.children) {
+                outputDfs(sb, child, auxIterator);
+            }
+            elementEndOutput(sb, mainNode, OperationEnum.UNCHANGE);
+        } else if (mainNode.op == OperationEnum.DELETE) {
+            elementStartOutput(sb, null, OperationEnum.DELETE);
+            for (Node child : mainNode.children) {
+                outputDfs(sb, child, auxIterator);
+            }
+            elementEndOutput(sb, null, OperationEnum.DELETE);
+        } else if (auxNode.op == OperationEnum.INSERT) {
+            elementStartOutput(sb, auxNode, OperationEnum.INSERT);
+            for (Node child : mainNode.children) {
+                outputDfs(sb, child, auxIterator);
+            }
+//            outputDfs(leftIndex, mainRoot, rightIndex + 1, auxNode);
+            elementEndOutput(sb, auxNode, OperationEnum.INSERT);
+        } else if (mainNode.op == OperationEnum.CHANGE && auxNode.op == OperationEnum.CHANGE) {
+            elementStartOutput(sb, auxNode, OperationEnum.CHANGE);
+            for (Node child : mainNode.children) {
+                outputDfs(sb, child, auxIterator);
+            }
+//            outputDfs(leftIndex + 1, mainRoot, rightIndex + 1, auxNode);
+            elementEndOutput(sb, auxNode, OperationEnum.CHANGE);
+        }
+
+
+    }
+
     private void outputDfs(Node leftRoot, Iterator<Node> leftIterator, Node rightRoot, Iterator<Node> rightIterator) {
 
         if (leftRoot.op == null && rightRoot.op == null ||
