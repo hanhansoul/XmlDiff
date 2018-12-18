@@ -19,7 +19,7 @@ public class XmlNode extends Node {
     }
 
     public XmlNode(Element element, Node father) {
-        super(element, father);
+        super(element);
         List<Attribute> attributes = element.attributes();
         if (attributes != null) {
             this.attributesMap = new HashMap<>();

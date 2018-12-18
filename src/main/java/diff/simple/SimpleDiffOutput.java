@@ -6,8 +6,7 @@ import org.dom4j.Element;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class SimpleDiffOutput {
     private SimpleTree leftTree;
@@ -108,40 +107,65 @@ public class SimpleDiffOutput {
         sb.append(SPAN_END);
     }
 
-    private void outputDfs(StringBuilder sb, Node mainNode, Iterator<Node> auxIterator) {
-        Node auxNode = auxIterator.next();
+    private int auxIndex;
+    private boolean isLeftMain;
+
+    /**
+     * error
+     *
+     * @param sb
+     * @param mainNode
+     * @param st
+     */
+    private void outputDfs(StringBuilder sb, Node mainNode, SimpleTree st) {
+        Node auxNode = st.nodePreOrderSequence[auxIndex];
+
         if (mainNode.op == null && auxNode.op == null ||
                 mainNode.op == OperationEnum.UNCHANGE && auxNode.op == OperationEnum.UNCHANGE) {
             elementStartOutput(sb, mainNode, OperationEnum.UNCHANGE);
-            for (Node child : mainNode.children) {
-                outputDfs(sb, child, auxIterator);
+            if (mainNode.children != null) {
+                for (Node node : mainNode.children) {
+                    ++auxIndex;
+                    outputDfs(sb, node, st);
+                }
             }
             elementEndOutput(sb, mainNode, OperationEnum.UNCHANGE);
-        } else if (mainNode.op == OperationEnum.DELETE) {
-            elementStartOutput(sb, null, OperationEnum.DELETE);
-            for (Node child : mainNode.children) {
-                outputDfs(sb, child, auxIterator);
+        } else if (isLeftMain && mainNode.op == OperationEnum.DELETE || !isLeftMain && auxNode.op == OperationEnum.DELETE) {
+//        } else if (isLeftMain && mainNode.op == OperationEnum.DELETE) {
+            elementStartOutput(sb, mainNode, OperationEnum.DELETE);
+            if (mainNode.children != null) {
+                for (Node node : mainNode.children) {
+                    outputDfs(sb, node, st);
+                }
             }
-            elementEndOutput(sb, null, OperationEnum.DELETE);
-        } else if (auxNode.op == OperationEnum.INSERT) {
-            elementStartOutput(sb, auxNode, OperationEnum.INSERT);
-            for (Node child : mainNode.children) {
-                outputDfs(sb, child, auxIterator);
-            }
-//            outputDfs(leftIndex, mainRoot, rightIndex + 1, auxNode);
-            elementEndOutput(sb, auxNode, OperationEnum.INSERT);
+            elementEndOutput(sb, mainNode, OperationEnum.DELETE);
+        } else if (isLeftMain && auxNode.op == OperationEnum.INSERT || !isLeftMain && mainNode.op == OperationEnum.INSERT) {
+//        } else if (isLeftMain && auxNode.op == OperationEnum.INSERT) {
+            elementStartOutput(sb, null, OperationEnum.INSERT);
+            ++auxIndex;
+            outputDfs(sb, mainNode, st);
+            elementEndOutput(sb, null, OperationEnum.INSERT);
         } else if (mainNode.op == OperationEnum.CHANGE && auxNode.op == OperationEnum.CHANGE) {
-            elementStartOutput(sb, auxNode, OperationEnum.CHANGE);
-            for (Node child : mainNode.children) {
-                outputDfs(sb, child, auxIterator);
+            elementStartOutput(sb, mainNode, OperationEnum.CHANGE);
+            if (mainNode.children != null) {
+                for (Node node : mainNode.children) {
+                    ++auxIndex;
+                    outputDfs(sb, node, st);
+                }
             }
-//            outputDfs(leftIndex + 1, mainRoot, rightIndex + 1, auxNode);
-            elementEndOutput(sb, auxNode, OperationEnum.CHANGE);
+            elementEndOutput(sb, mainNode, OperationEnum.CHANGE);
         }
-
 
     }
 
+    /**
+     * error
+     *
+     * @param leftRoot
+     * @param leftIterator
+     * @param rightRoot
+     * @param rightIterator
+     */
     private void outputDfs(Node leftRoot, Iterator<Node> leftIterator, Node rightRoot, Iterator<Node> rightIterator) {
 
         if (leftRoot.op == null && rightRoot.op == null ||
@@ -173,6 +197,14 @@ public class SimpleDiffOutput {
 
     }
 
+    /**
+     * error
+     *
+     * @param leftIndex
+     * @param leftRoot
+     * @param rightIndex
+     * @param rightRoot
+     */
     private void outputDfs(int leftIndex, Node leftRoot, int rightIndex, Node rightRoot) {
         Node leftNode = leftIndex < leftTree.nodePreOrderSequence.length ?
                 leftTree.nodePreOrderSequence[leftIndex] : null;
@@ -221,10 +253,85 @@ public class SimpleDiffOutput {
         }
     }
 
+    private void elementOutput(StringBuilder sb, SimpleOutputNode outputNode, OperationEnum op) {
+        if (outputNode == null) {
+            elementStartOutput(sb, null, op);
+            return;
+        }
+        if (!outputNode.isEndTag) {
+            elementStartOutput(sb, outputNode.node, op);
+        } else {
+            elementEndOutput(sb, outputNode.node, op);
+        }
+    }
+
+    private void output() {
+        LinkedList<SimpleOutputNode> leftList = leftTree.nodeOutputSequence;
+        LinkedList<SimpleOutputNode> rightList = rightTree.nodeOutputSequence;
+
+        Iterator<SimpleOutputNode> leftIterator = leftList.iterator();
+        Iterator<SimpleOutputNode> rightIterator = rightList.iterator();
+
+        SimpleOutputNode leftOutputNode = null;
+        SimpleOutputNode rightOutputNode = null;
+        Node leftNode = null;
+        Node rightNode = null;
+        boolean leftNext = true;
+        boolean rightNext = true;
+
+        while (true) {
+
+            if (leftIterator.hasNext() && rightIterator.hasNext()) {
+                if (leftNext) {
+                    leftOutputNode = leftIterator.next();
+                    leftNode = leftOutputNode.node;
+                }
+                if (rightNext) {
+                    rightOutputNode = rightIterator.next();
+                    rightNode = rightOutputNode.node;
+                }
+                if ((leftNode.op == null || leftNode.op == OperationEnum.UNCHANGE) &&
+                        (rightNode.op == null || rightNode.op == OperationEnum.UNCHANGE)) {
+                    elementOutput(leftOutput, leftOutputNode, OperationEnum.UNCHANGE);
+                    elementOutput(rightOutput, rightOutputNode, OperationEnum.UNCHANGE);
+                    leftNext = rightNext = true;
+                } else if (leftNode.op == OperationEnum.DELETE) {
+                    elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
+                    elementOutput(rightOutput, null, OperationEnum.DELETE);
+                    leftNext = true;
+                    rightNext = false;
+                } else if (rightNode.op == OperationEnum.INSERT) {
+                    elementOutput(leftOutput, null, OperationEnum.INSERT);
+                    elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
+                    leftNext = false;
+                    rightNext = true;
+                } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+                    elementOutput(leftOutput, leftOutputNode, OperationEnum.CHANGE);
+                    elementOutput(rightOutput, rightOutputNode, OperationEnum.CHANGE);
+                    leftNext = rightNext = true;
+                }
+            } else if (leftIterator.hasNext()) {
+                leftOutputNode = leftIterator.next();
+                elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
+            } else if (rightIterator.hasNext()) {
+                rightOutputNode = rightIterator.next();
+                elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
+            } else {
+                return;
+            }
+        }
+    }
+
     public void resultOutput() throws IOException {
         leftOutput.append(OUTPUT_START);
         rightOutput.append(OUTPUT_START);
-        outputDfs(1, leftTree.rootNode, 1, rightTree.rootNode);
+//        auxIndex = 1;
+//        isLeftMain = true;
+//        outputDfs(leftOutput, leftTree.rootNode, rightTree);
+//        auxIndex = 1;
+//        isLeftMain = false;
+//        outputDfs(rightOutput, rightTree.rootNode, leftTree);
+        output();
         leftOutput.append(OUTPUT_END);
         rightOutput.append(OUTPUT_END);
         System.out.println(leftOutput);

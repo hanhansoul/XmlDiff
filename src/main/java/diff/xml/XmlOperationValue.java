@@ -99,12 +99,12 @@ public class XmlOperationValue extends OperationValue {
 //    }
 
     @Override
-    public OperationValue add(Operation op, int cx, int cy) {
+    public OperationValue add(Operation op, int cx, int cy, boolean isFromPermanentArr) {
         return null;
     }
 
     @Override
-    public OperationValue add(OperationValue opv, int cx, int cy) {
+    public OperationValue add(OperationValue opv, int cx, int cy, boolean isFromPermanentArr) {
         return null;
     }
 }
