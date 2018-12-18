@@ -8,6 +8,7 @@ import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class SimpleTree {
     public Node[] nodePreOrderSequence;
     public int preOrderSequenceIndex;
 
+    public LinkedList<SimpleOutputNode> nodeOutputSequence;
+
     public int rootId;
     public int size;
 
@@ -44,16 +47,19 @@ public class SimpleTree {
         nodeSequence = new Node[size + 1];
         preOrderSequenceIndex = 0;
 
-        rootNode = new SimpleNode(document.getRootElement(), null);
+        rootNode = new SimpleNode(document.getRootElement());
         buildTree(rootNode);
 
         buildPostOrderSequence(rootNode);
         rootId = keyRoots[++keyRootsIndex] = rootNode.id;
 
-        nodePreOrderSequence = new Node[size + 1];
-        buildPreOrderSequence(rootNode, 0);
+//        nodePreOrderSequence = new Node[size + 1];
+//        buildPreOrderSequence(rootNode, 0);
 //        sequenceTraversal();
 //        leftMostNodeTraversal();
+
+        nodeOutputSequence = new LinkedList<>();
+        buildNodeOutputSequence(rootNode, 0);
     }
 
     private Document xmlFileInput(String fileName) throws DocumentException {
@@ -81,7 +87,7 @@ public class SimpleTree {
             root.children = new ArrayList<>(elementList.size());
 //            root.children = new LinkedList<>();
             for (Element element : elementList) {
-                Node node = new SimpleNode(element, root);
+                Node node = new SimpleNode(element);
                 root.children.add(node);
                 buildTree(node);
             }
@@ -119,6 +125,17 @@ public class SimpleTree {
             buildPreOrderSequence(node, depth + 1);
         }
         root.rightMostNodeId = preOrderSequenceIndex;
+    }
+
+    private void buildNodeOutputSequence(Node root, int depth) {
+        root.depth = depth;
+        nodeOutputSequence.add(new SimpleOutputNode(root, false));
+        if (root.children != null) {
+            for (Node node : root.children) {
+                buildNodeOutputSequence(node, depth + 1);
+            }
+        }
+        nodeOutputSequence.add(new SimpleOutputNode(root, true));
     }
 
     public void sequenceTraversal() {

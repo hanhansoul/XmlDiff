@@ -2,16 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="36d17170-2398-4976-9963-9b0f86164d41" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOutputNode.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/output1.html" afterPath="$PROJECT_DIR$/data/output1.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/output2.html" afterPath="$PROJECT_DIR$/data/output2.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/Node.java" afterPath="$PROJECT_DIR$/src/main/java/diff/Node.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/OperationValue.java" afterPath="$PROJECT_DIR$/src/main/java/diff/OperationValue.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/XmlDiff.java" afterPath="$PROJECT_DIR$/src/main/java/diff/XmlDiff.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java" afterPath="$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java" afterPath="$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/dom4j/Dom4jWriteXmlFileDemo.java" afterPath="$PROJECT_DIR$/src/main/java/dom4j/Dom4jWriteXmlFileDemo.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java" afterPath="$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -24,31 +27,15 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.13965885">
+    <splitter split-orientation="horizontal" split-proportion="0.68823165">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="input.xml" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/input.xml">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="XmlDiff.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="XmlDiff.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="368">
-                  <caret line="165" column="48" lean-forward="true" selection-start-line="165" selection-start-column="48" selection-end-line="165" selection-end-column="48" />
+                <state relative-caret-position="131">
+                  <caret line="94" column="71" lean-forward="false" selection-start-line="94" selection-start-column="53" selection-end-line="94" selection-end-column="71" />
                   <folding>
-                    <element signature="method#initialization#0;class#XmlDiff#0" expanded="false" />
-                    <element signature="method#compute#0;class#XmlDiff#0" expanded="false" />
-                    <element signature="method#checkIndexMargin#0;class#XmlDiff#0" expanded="false" />
-                    <element signature="method#checkNodeIndexMargin#0;class#XmlDiff#0" expanded="false" />
-                    <element signature="method#solve#0;class#XmlDiff#0" expanded="false" />
-                    <element signature="method#backtrace#0;class#XmlDiff#0" expanded="false" />
                     <element signature="method#resultOutput#0;class#XmlDiff#0" expanded="false" />
                     <element signature="method#dfs#0;class#XmlDiff#0" expanded="false" />
                   </folding>
@@ -56,64 +43,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SimpleTree.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java">
+          <file leaf-file-name="left1.xml" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/data/left1.xml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-231">
-                  <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="24" />
-                  <folding>
-                    <element signature="method#postorderTraversal#0;class#SimpleTree#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="output1.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/output1.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="55" lean-forward="false" selection-start-line="0" selection-start-column="55" selection-end-line="0" selection-end-column="55" />
-                  <folding>
-                    <element signature="n#style#0;n#span#1;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#2;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#3;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#4;n#pre#0;n#!!top" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="output2.html" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/data/output2.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="0">
-                  <caret line="0" column="481" lean-forward="false" selection-start-line="0" selection-start-column="481" selection-end-line="0" selection-end-column="481" />
-                  <folding>
-                    <element signature="n#style#0;n#span#0;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#1;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#2;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#3;n#pre#0;n#!!top" expanded="true" />
-                    <element signature="n#style#0;n#span#4;n#pre#0;n#!!top" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="left.xml" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/left.xml">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="42">
-                  <caret line="2" column="4" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="right.xml" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/data/right.xml">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="63">
-                  <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
+                <state relative-caret-position="399">
+                  <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
@@ -123,50 +57,42 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="XMLWriter.class" pinned="false" current-in-tab="false">
-            <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/io/XMLWriter.class">
+          <file leaf-file-name="SimpleOperationValue.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="178">
-                  <caret line="644" column="15" lean-forward="false" selection-start-line="644" selection-start-column="11" selection-end-line="644" selection-end-column="15" />
-                  <folding>
-                    <element signature="method#writeDocType#1;class#XMLWriter#0" expanded="false" />
-                    <element signature="method#writeComment#0;class#XMLWriter#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="Dom4jWriteXmlFileDemo.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/dom4j/Dom4jWriteXmlFileDemo.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="682">
-                  <caret line="62" column="16" lean-forward="true" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
+                <state relative-caret-position="756">
+                  <caret line="52" column="63" lean-forward="true" selection-start-line="52" selection-start-column="63" selection-end-line="52" selection-end-column="63" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Node.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/main/java/diff/Node.java">
+          <file leaf-file-name="right1.xml" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/data/right1.xml">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="304">
-                  <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+                <state relative-caret-position="210">
+                  <caret line="10" column="12" lean-forward="true" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SimpleDiffOutput.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java">
+          <file leaf-file-name="OperationValue.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/diff/OperationValue.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="640">
-                  <caret line="133" column="77" lean-forward="true" selection-start-line="133" selection-start-column="77" selection-end-line="133" selection-end-column="77" />
-                  <folding>
-                    <element signature="imports" expanded="true" />
-                    <element signature="method#SimpleDiffOutput#0;class#SimpleDiffOutput#0" expanded="false" />
-                    <element signature="method#elementStartOutput#0;class#SimpleDiffOutput#0" expanded="false" />
-                    <element signature="method#elementEndOutput#0;class#SimpleDiffOutput#0" expanded="false" />
-                  </folding>
+                <state relative-caret-position="441">
+                  <caret line="21" column="35" lean-forward="false" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="SimpleOperation.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperation.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="394">
+                  <caret line="23" column="11" lean-forward="false" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -187,28 +113,12 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>equals</find>
-      <find>equal</find>
-      <find>removeAll</find>
-      <find>add(</find>
-      <find>Simple</find>
-      <find>equ</find>
-      <find>INSERT</find>
-      <find>SimpleOperationValue(</find>
-      <find>simpleOperationValue</find>
-      <find>SimpleOperationValueNew</find>
-      <find>SimpleOperation</find>
-      <find>opFirstNode</find>
-      <find>c</find>
-      <find>cur</find>
-      <find>curX</find>
       <find>SimpleOperationValue</find>
       <find>leftMostNodeId</find>
       <find>rightSimpleTree</find>
       <find>List&lt;Node&gt;</find>
       <find>children</find>
       <find>DIV_END</find>
-      <find>pre</find>
       <find>writeElementContent</find>
       <find>writeNode</find>
       <find>write</find>
@@ -217,6 +127,22 @@
       <find>rootNode</find>
       <find>writeEmptyElementClose</find>
       <find>rightNode</find>
+      <find>leftRoot</find>
+      <find>leftOutput</find>
+      <find>outputDfs</find>
+      <find>buildPreOrderSequence</find>
+      <find>S</find>
+      <find>Simple</find>
+      <find>SimpleN</find>
+      <find>insert</find>
+      <find>iterator</find>
+      <find>SimpleNode</find>
+      <find>pre</find>
+      <find>prev</find>
+      <find>prevX</find>
+      <find>Permanent</find>
+      <find>permanentArr</find>
+      <find>permanentArr[3][3]</find>
     </findStrings>
     <replaceStrings>
       <replace>SimpleOperationValueNew</replace>
@@ -224,7 +150,12 @@
       <replace>span</replace>
       <replace>DIV_END + BR</replace>
       <replace>rightRoot</replace>
+      <replace>mainNode</replace>
+      <replace>sb</replace>
     </replaceStrings>
+    <dirStrings>
+      <dir>E:\development\XmlDiff\src\main\java\diff</dir>
+    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -262,28 +193,29 @@
         <option value="$PROJECT_DIR$/data/right.xml" />
         <option value="$PROJECT_DIR$/src/main/java/diff/NewSimpleOperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/SimpleOperationValueNew.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/OperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/SimpleOperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/OperationMove.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/XmlOperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/Tree.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/Operation.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/simple/Tree.java" />
         <option value="$PROJECT_DIR$/data/output.html" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/XmlDiffHelper.java" />
         <option value="$PROJECT_DIR$/src/main/java/dom4j/Dom4jWriteXmlFileDemo.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java" />
         <option value="$PROJECT_DIR$/data/output2.html" />
         <option value="$PROJECT_DIR$/data/output1.html" />
         <option value="$PROJECT_DIR$/data/left.xml" />
         <option value="$PROJECT_DIR$/src/main/java/diff/Node.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOutputNode.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java" />
-        <option value="$PROJECT_DIR$/src/main/java/diff/XmlDiff.java" />
         <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/XmlDiffHelper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/OperationValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java" />
+        <option value="$PROJECT_DIR$/src/main/java/diff/XmlDiff.java" />
       </list>
     </option>
   </component>
@@ -489,9 +421,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -686,6 +617,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1257,7 +1189,8 @@
       <workItem from="1544576478267" duration="15727000" />
       <workItem from="1544672601945" duration="7132000" />
       <workItem from="1544704924725" duration="11779000" />
-      <workItem from="1544749620708" duration="19946000" />
+      <workItem from="1544749620708" duration="20331000" />
+      <workItem from="1545008030224" duration="26907000" />
     </task>
     <task id="LOCAL-00001" summary="存档备份。并不需要树状结构，只需要树结构的后序遍历序列。">
       <created>1543330151041</created>
@@ -1284,7 +1217,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="245325000" />
+    <option name="totallyTimeSpent" value="272617000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1297,7 +1230,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1310,16 +1242,16 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.028169014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.65005416" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.23943663" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.027085591" sideWeight="0.8380744" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19501625" sideWeight="0.8380744" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.19083156" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13486141" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="BPMNPalette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3261105" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1455,14 +1387,42 @@
           <properties />
           <option name="timeStamp" value="36" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="i == 7 &amp;&amp; j == 6" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java</url>
+          <line>91</line>
+          <properties />
+          <option name="timeStamp" value="70" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="left == 14 &amp;&amp; right == 9" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java</url>
+          <line>50</line>
+          <properties />
+          <option name="timeStamp" value="71" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <condition expression="i == 7 &amp;&amp; j == 6" language="JAVA" />
+          <url>file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java</url>
+          <line>75</line>
+          <properties />
+          <option name="timeStamp" value="72" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="59" />
+      <option name="time" value="73" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
-        <watch expression="rightTree.keyRoots[1]" />
-        <watch expression="rightTree.keyRoots[2]" />
-        <watch expression="rightTree.keyRoots[3]" />
+        <watch expression="temporaryArr[ix][j]" language="JAVA" />
+        <watch expression="temporaryArr[i][jx]" language="JAVA" />
+        <watch expression="temporaryArr[iy][jy]" language="JAVA" />
+        <watch expression="temporaryArr[i][j]" language="JAVA" />
+        <watch expression="iy" language="JAVA" />
+        <watch expression="jy" language="JAVA" />
+        <watch expression="temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false)" language="JAVA" />
+        <watch expression="temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false)" language="JAVA" />
+        <watch expression="temporaryArr[iy][jy].add(permanentArr[i][j], i, j, true)" language="JAVA" />
+        <watch expression="permanentArr[i][j]" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -1471,29 +1431,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/dom/DOMAttribute.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="198" column="34" lean-forward="false" selection-start-line="198" selection-start-column="34" selection-end-line="198" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/bean/BeanAttribute.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/Attribute.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="7" column="21" lean-forward="true" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://E:/applications/java/jdk/src.zip!/java/util/HashSet.java" />
-    <entry file="jar://E:/applications/java/jdk/src.zip!/java/util/AbstractSet.java" />
     <entry file="jar://D:/Program Files/Java/jdk8/src.zip!/java/util/StringTokenizer.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/diff/OpValueElementNullException.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1529,14 +1466,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="11" column="36" lean-forward="true" selection-start-line="11" selection-start-column="36" selection-end-line="11" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/left1.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1598,22 +1527,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-336">
-          <caret line="54" column="39" lean-forward="true" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/OperationValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/diff/Operation.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -1626,15 +1539,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
           <caret line="8" column="12" lean-forward="false" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperation.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="18" column="43" lean-forward="false" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1645,31 +1549,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="48" column="73" lean-forward="false" selection-start-line="48" selection-start-column="73" selection-end-line="48" selection-end-column="73" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/Program Files/Java/jdk8/src.zip!/org/xml/sax/helpers/XMLFilterImpl.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/XmlDiffHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="9" column="28" lean-forward="false" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-          <folding>
-            <element signature="method#fillZero#0;class#XmlDiffHelper#0" expanded="false" />
-            <element signature="method#outputArray#0;class#XmlDiffHelper#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/dom4j/dom4j/2.1.1/dom4j-2.1.1.jar!/org/dom4j/Entity.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="7" column="17" lean-forward="false" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1685,7 +1569,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="73">
           <caret line="20" column="34" lean-forward="false" selection-start-line="20" selection-start-column="34" selection-end-line="20" selection-end-column="34" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1693,7 +1576,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
           <caret line="76" column="13" lean-forward="false" selection-start-line="76" selection-start-column="13" selection-end-line="76" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1701,21 +1583,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
           <caret line="164" column="28" lean-forward="false" selection-start-line="164" selection-start-column="28" selection-end-line="164" selection-end-column="28" />
-          <folding>
-            <element signature="e#3984#3985#0" expanded="true" />
-            <element signature="e#4030#4031#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="12" column="8" lean-forward="false" selection-start-line="12" selection-start-column="8" selection-end-line="12" selection-end-column="8" />
-          <folding>
-            <element signature="e#209#210#0" expanded="false" />
-            <element signature="e#247#248#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1735,89 +1602,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dom4j/Dom4jWriteXmlFileDemo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="682">
-          <caret line="62" column="16" lean-forward="true" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
+          <caret line="62" column="16" lean-forward="false" selection-start-line="62" selection-start-column="16" selection-end-line="62" selection-end-column="16" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/right.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="13" lean-forward="false" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="165" column="48" lean-forward="true" selection-start-line="165" selection-start-column="48" selection-end-line="165" selection-end-column="48" />
-          <folding>
-            <element signature="method#initialization#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#compute#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#checkIndexMargin#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#checkNodeIndexMargin#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#solve#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#backtrace#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#resultOutput#0;class#XmlDiff#0" expanded="false" />
-            <element signature="method#dfs#0;class#XmlDiff#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/output1.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="55" lean-forward="false" selection-start-line="0" selection-start-column="55" selection-end-line="0" selection-end-column="55" />
-          <folding>
-            <element signature="n#style#0;n#span#1;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#2;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#3;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#4;n#pre#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-231">
-          <caret line="18" column="24" lean-forward="false" selection-start-line="18" selection-start-column="16" selection-end-line="18" selection-end-column="24" />
-          <folding>
-            <element signature="method#postorderTraversal#0;class#SimpleTree#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/left.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="4" lean-forward="false" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/output2.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="481" lean-forward="false" selection-start-line="0" selection-start-column="481" selection-end-line="0" selection-end-column="481" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#2;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#3;n#pre#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#4;n#pre#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1825,30 +1614,231 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="178">
           <caret line="644" column="15" lean-forward="false" selection-start-line="644" selection-start-column="11" selection-end-line="644" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/output2.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="759" lean-forward="false" selection-start-line="0" selection-start-column="759" selection-end-line="0" selection-end-column="759" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/left.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="11" lean-forward="true" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/xml/XmlNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="258">
+          <caret line="23" column="33" lean-forward="true" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
           <folding>
-            <element signature="method#writeDocType#1;class#XMLWriter#0" expanded="false" />
-            <element signature="method#writeComment#0;class#XMLWriter#0" expanded="false" />
+            <element signature="e#131#132#0" expanded="true" />
+            <element signature="e#154#155#0" expanded="true" />
+            <element signature="e#196#197#0" expanded="true" />
+            <element signature="e#226#227#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://E:/applications/java/jdk/src.zip!/java/util/List.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7851">
+          <caret line="110" column="17" lean-forward="false" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://E:/applications/java/jdk/src.zip!/java/util/LinkedList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-204">
+          <caret line="865" column="20" lean-forward="true" selection-start-line="865" selection-start-column="20" selection-end-line="865" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://E:/applications/java/jdk/src.zip!/java/util/ListIterator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="193" column="18" lean-forward="true" selection-start-line="193" selection-start-column="4" selection-end-line="193" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/diff/Node.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="18" column="22" lean-forward="false" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
+        <state relative-caret-position="567">
+          <caret line="29" column="8" lean-forward="false" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+          <folding>
+            <element signature="e#616#617#0" expanded="false" />
+            <element signature="e#654#655#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOutputNode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="15" lean-forward="false" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/right.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="63">
+          <caret line="3" column="15" lean-forward="true" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleDiffOutput.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="133" column="77" lean-forward="true" selection-start-line="133" selection-start-column="77" selection-end-line="133" selection-end-column="77" />
+        <state relative-caret-position="-410">
+          <caret line="113" column="12" lean-forward="true" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
             <element signature="method#SimpleDiffOutput#0;class#SimpleDiffOutput#0" expanded="false" />
             <element signature="method#elementStartOutput#0;class#SimpleDiffOutput#0" expanded="false" />
             <element signature="method#elementEndOutput#0;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#elementTextOutput#0;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#outputDfs#0;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#outputDfs#1;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#outputDfs#2;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#elementOutput#0;class#SimpleDiffOutput#0" expanded="false" />
+            <element signature="method#output#0;class#SimpleDiffOutput#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1312">
+          <caret line="129" column="63" lean-forward="false" selection-start-line="129" selection-start-column="63" selection-end-line="129" selection-end-column="63" />
+          <folding>
+            <element signature="method#buildTree#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#buildPostOrderSequence#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#buildPreOrderSequence#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#buildNodeOutputSequence#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#sequenceTraversal#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#leftMostNodeTraversal#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#keyRootsTraversal#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#preorderTraversal#0;class#SimpleTree#0" expanded="false" />
+            <element signature="method#postorderTraversal#0;class#SimpleTree#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/XmlDiffHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="21" column="5" lean-forward="false" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
+          <folding>
+            <element signature="method#fillZero#0;class#XmlDiffHelper#0" expanded="false" />
+            <element signature="method#outputArray#0;class#XmlDiffHelper#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/xml/XmlOperationValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="98" column="7" lean-forward="true" selection-start-line="98" selection-start-column="7" selection-end-line="98" selection-end-column="7" />
+          <folding>
+            <element signature="e#4628#4629#0" expanded="false" />
+            <element signature="e#4655#4656#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/output1.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="118" lean-forward="true" selection-start-line="0" selection-start-column="118" selection-end-line="0" selection-end-column="118" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#2;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#3;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#4;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#5;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#6;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#7;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#8;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#9;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#10;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#11;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#12;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#13;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#14;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#15;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#16;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#17;n#pre#0;n#!!top" expanded="false" />
+            <element signature="n#style#0;n#span#18;n#pre#0;n#!!top" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperation.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="394">
+          <caret line="23" column="11" lean-forward="false" selection-start-line="23" selection-start-column="11" selection-end-line="23" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/OperationValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="21" column="35" lean-forward="false" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/simple/SimpleOperationValue.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="52" column="63" lean-forward="true" selection-start-line="52" selection-start-column="63" selection-end-line="52" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/right1.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="10" column="12" lean-forward="true" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/left1.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="19" column="13" lean-forward="true" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/diff/XmlDiff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="94" column="71" lean-forward="false" selection-start-line="94" selection-start-column="53" selection-end-line="94" selection-end-column="71" />
+          <folding>
+            <element signature="method#resultOutput#0;class#XmlDiff#0" expanded="false" />
+            <element signature="method#dfs#0;class#XmlDiff#0" expanded="false" />
           </folding>
         </state>
       </provider>

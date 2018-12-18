@@ -28,12 +28,10 @@ public abstract class Node {
         element = null;
         id = leftMostNodeId = 0;
         children = null;
-//        father = null;
     }
 
-    public Node(Element element, Node father) {
+    public Node(Element element) {
         this.element = element;
-//        this.father = father;
     }
 
 }

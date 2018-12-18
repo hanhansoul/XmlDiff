@@ -55,14 +55,14 @@ public class XmlDiff {
 //        System.out.println(left + " " + right + ": ");
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             temporaryArr[i][0] = i - 1 < leftNode.leftMostNodeId ?
-                    temporaryArr[0][0].add(opValue(leftNode, null), i, 0) :
-                    temporaryArr[i - 1][0].add(opValue(leftNode, null), i, 0);
+                    temporaryArr[0][0].add(opValue(leftNode, null), i, 0, false) :
+                    temporaryArr[i - 1][0].add(opValue(leftNode, null), i, 0, false);
 //            System.out.println(i + " " + 0 + ": " + temporaryArr[i][0]);
         }
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
             temporaryArr[0][j] = j - 1 < rightNode.leftMostNodeId ?
-                    temporaryArr[0][0].add(opValue(null, rightNode), 0, j) :
-                    temporaryArr[0][j - 1].add(opValue(null, rightNode), 0, j);
+                    temporaryArr[0][0].add(opValue(null, rightNode), 0, j, false) :
+                    temporaryArr[0][j - 1].add(opValue(null, rightNode), 0, j, false);
 //            System.out.println(0 + " " + j + ": " + temporaryArr[0][j]);
         }
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
@@ -74,14 +74,14 @@ public class XmlDiff {
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
                     permanentArr[i][j] = temporaryArr[i][j] = XmlDiffHelper.min(
-                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),      // 删除节点i
-                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),      // 增加节点j
-                            temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j));    // 将节点i修改为节点j
-                    System.out.println("1: " + i + " " + j + " -> " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).operation.op + " -> " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).value);
+                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),      // 删除节点i
+                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),      // 增加节点j
+                            temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j, false));    // 将节点i修改为节点j
+                    System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+                            ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
+                            ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
+                            ((SimpleOperationValue) temporaryArr[i][j]).operation.op);
                 } else {
                     int ix = checkIndexMargin(i, leftNode);
                     int jx = checkIndexMargin(j, rightNode);
@@ -90,14 +90,22 @@ public class XmlDiff {
                     int iy = checkNodeIndexMargin(leftChildNode, leftNode);
                     int jy = checkNodeIndexMargin(rightChildNode, rightNode);
                     temporaryArr[i][j] = XmlDiffHelper.min(
-                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j),
-                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j),
-                            temporaryArr[iy][jy].add(permanentArr[i][j], i, j));
-                    System.out.println("2: " + i + " " + j + " -> " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevX + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).prevY + " " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).operation.op + " -> " +
-                            ((SimpleOperationValue) temporaryArr[i][j]).value);
+                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),
+                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),
+                            temporaryArr[iy][jy].add(permanentArr[i][j], i, j, true));
+                    if (temporaryArr[i][j].isFromPermanentArr) {
+                        System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from permanentArr[" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).operation.op);
+                    } else {
+                        System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).operation.op);
+                    }
                 }
             }
         }
@@ -120,7 +128,7 @@ public class XmlDiff {
         }
         System.out.println();
         for (int i = 1; i <= leftTree.size; i++) {
-            for (int j = 1; j <= leftTree.size; j++) {
+            for (int j = 1; j <= rightTree.size; j++) {
                 System.out.print(((SimpleOperationValue) permanentArr[i][j]).value + " ");
             }
             System.out.println();
@@ -137,7 +145,7 @@ public class XmlDiff {
             return;
         }
         System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
-                ", prev: " + v.prevX + " " + v.prevY + ", op: " + v.operation.op);
+                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") + ", op: " + v.operation.op);
         if (v.prevX == 0 && v.prevY == 0) {
             return;
         }
@@ -242,9 +250,9 @@ public class XmlDiff {
         XmlDiff xmlDiff = new XmlDiff();
 //        xmlDiff.initialization("data/CSCA350-353000-00M01-01-X_2_20180901.xml",
 //                "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
-        xmlDiff.initialization("data/left.xml", "data/right.xml");
+        xmlDiff.initialization("data/left1.xml", "data/right1.xml");
         xmlDiff.solve();
-        xmlDiff.preOrderOutput();
+//        xmlDiff.preOrderOutput();
         new SimpleDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree).resultOutput();
 //        System.out.println(xmlDiff.leftOutput);
 //        System.out.println(xmlDiff.rightOutput);

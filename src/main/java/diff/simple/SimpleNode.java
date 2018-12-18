@@ -9,7 +9,7 @@ public class SimpleNode extends Node {
         super();
     }
 
-    public SimpleNode(Element element, Node father) {
-        super(element, father);
+    public SimpleNode(Element element) {
+        super(element);
     }
 }

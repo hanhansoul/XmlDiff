@@ -21,32 +21,37 @@ public class SimpleOperationValue extends OperationValue {
 
     public int value;
 
-    public SimpleOperationValue(int value, int prevX, int prevY, int curX, int curY,
-                                Operation operation) {
+    public SimpleOperationValue(
+            int value, int prevX, int prevY, int curX, int curY,
+            Operation operation, boolean isFromPermanentArr) {
+        super(prevX, prevY, isFromPermanentArr, curX, curY, operation);
         this.value = value;
-        this.prevX = prevX;
-        this.prevY = prevY;
-        this.curX = curX;
-        this.curY = curY;
-        this.operation = operation;
     }
+
+//    public SimpleOperationValue(int value, int prevX, int prevY, int curX, int curY,
+//                                Operation operation) {
+//        this.value = value;
+//        this.prevX = prevX;
+//        this.prevY = prevY;
+//        this.curX = curX;
+//        this.curY = curY;
+//        this.operation = operation;
+//    }
 
     public SimpleOperationValue() {
-        prevX = prevY = 0;
-        curX = curY = 0;
+        super();
         value = 0;
-        operation = null;
     }
 
     @Override
-    public OperationValue add(Operation op, int cx, int cy) {
-        return new SimpleOperationValue(value + op.value, curX, curY, cx, cy, op);
+    public OperationValue add(Operation op, int cx, int cy, boolean isFromPermanentArr) {
+        return new SimpleOperationValue(value + op.value, curX, curY, cx, cy, op, isFromPermanentArr);
     }
 
     @Override
-    public OperationValue add(OperationValue opv, int cx, int cy) {
+    public OperationValue add(OperationValue opv, int cx, int cy, boolean isFromPermanentArr) {
         SimpleOperationValue sopv = (SimpleOperationValue) opv;
-        return add(new SimpleOperation(sopv.value, OperationEnum.UNCHANGE), cx, cy);
+        return add(new SimpleOperation(sopv.value, OperationEnum.UNCHANGE), cx, cy, isFromPermanentArr);
     }
 
     @Override
