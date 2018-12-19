@@ -322,6 +322,8 @@ public class SimpleDiffOutput {
         }
     }
 
+
+
     public void resultOutput() throws IOException {
         leftOutput.append(OUTPUT_START);
         rightOutput.append(OUTPUT_START);
@@ -347,4 +349,105 @@ public class SimpleDiffOutput {
         writer.close();
     }
 
+    /*
+    public StringBuilder leftOutput = new StringBuilder();
+    public StringBuilder rightOutput = new StringBuilder();
+
+    private final String[] TAB_STRINGS = new String[50];
+    private final String OUTPUT_START = "<pre>";
+    private final String OUTPUT_END = "</pre>";
+    private final String DIV_START = "<span style='display:inline-block;min-width:100%;'>";
+    private final String DIV_END = "</span>";
+    private final String BR = "<br />";
+
+    private final String DELETE_DIV_START = "<span style='background-color:red;display:inline-block;min-width:100%;'>";
+    private final String INSERT_DIV_START = "<span style='background-color:green;display:inline-block;min-width:100%;'>";
+    private final String CHANGE_DIV_START = "<span style='background-color:blue;display:inline-block;min-width:100%;'>";
+
+    public void preOrderOutput() {
+        Node[] nodes = leftTree.nodePreOrderSequence;
+        for (int i = 1; i < nodes.length; i++) {
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
+        }
+        System.out.println();
+        nodes = rightTree.nodePreOrderSequence;
+        for (int i = 1; i < nodes.length; i++) {
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
+        }
+    }
+
+    public void resultOutput() throws IOException {
+        TAB_STRINGS[0] = "";
+        for (int i = 1; i < 50; i++) {
+            TAB_STRINGS[i] = TAB_STRINGS[i - 1] + "   ";
+        }
+        leftOutput.append(OUTPUT_START);
+        rightOutput.append(OUTPUT_START);
+        dfs(1, 1);
+        leftOutput.append(OUTPUT_END);
+        rightOutput.append(OUTPUT_END);
+        System.out.println(leftOutput);
+        System.out.println();
+        System.out.println(rightOutput);
+        FileWriter writer = new FileWriter("data/output1.html");
+        writer.write(String.valueOf(leftOutput));
+        writer.flush();
+        writer.close();
+        writer = new FileWriter("data/output2.html");
+        writer.write(String.valueOf(rightOutput));
+        writer.flush();
+        writer.close();
+    }
+
+    public void dfs(int leftIndex, int rightIndex) {
+        Node leftNode = leftIndex < leftTree.nodePreOrderSequence.length ?
+                leftTree.nodePreOrderSequence[leftIndex] : null;
+        Node rightNode = rightIndex < rightTree.nodePreOrderSequence.length ?
+                rightTree.nodePreOrderSequence[rightIndex] : null;
+        int depth;
+
+        if (leftNode == null && rightNode == null) {
+            return;
+        } else if (leftNode == null) {
+            depth = leftNode.depth;
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex);
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+        } else if (rightNode == null) {
+            depth = rightNode.depth;
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex, rightIndex + 1);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        }
+
+        depth = Math.max(leftNode.depth, rightNode.depth);
+        if (leftNode.op == null && rightNode.op == null ||
+                leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex + 1);
+            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        } else if (leftNode.op == OperationEnum.DELETE) {
+            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex);
+            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
+        } else if (rightNode.op == OperationEnum.INSERT) {
+            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
+            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex, rightIndex + 1);
+            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
+            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+            dfs(leftIndex + 1, rightIndex + 1);
+            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
+            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
+        }
+    }
+
+    */
 }

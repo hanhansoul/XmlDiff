@@ -18,25 +18,8 @@ public class XmlDiff {
     private OperationValue[][] permanentArr;
     private OperationValue[][] temporaryArr;
 
-    public StringBuilder leftOutput = new StringBuilder();
-    public StringBuilder rightOutput = new StringBuilder();
-
-    private final String[] TAB_STRINGS = new String[50];
-    private final String OUTPUT_START = "<pre>";
-    private final String OUTPUT_END = "</pre>";
-    private final String DIV_START = "<span style='display:inline-block;min-width:100%;'>";
-    private final String DIV_END = "</span>";
-    private final String BR = "<br />";
-
-    private final String DELETE_DIV_START = "<span style='background-color:red;display:inline-block;min-width:100%;'>";
-    private final String INSERT_DIV_START = "<span style='background-color:green;display:inline-block;min-width:100%;'>";
-    private final String CHANGE_DIV_START = "<span style='background-color:blue;display:inline-block;min-width:100%;'>";
 
     public XmlDiff() {
-        TAB_STRINGS[0] = "";
-        for (int i = 1; i < 50; i++) {
-            TAB_STRINGS[i] = TAB_STRINGS[i - 1] + "   ";
-        }
     }
 
     private void initialization(String leftFileName, String rightFileName) throws DocumentException {
@@ -57,13 +40,21 @@ public class XmlDiff {
             temporaryArr[i][0] = i - 1 < leftNode.leftMostNodeId ?
                     temporaryArr[0][0].add(opValue(leftNode, null), i, 0, false) :
                     temporaryArr[i - 1][0].add(opValue(leftNode, null), i, 0, false);
-//            System.out.println(i + " " + 0 + ": " + temporaryArr[i][0]);
+            System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
+                    ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
+                    ((SimpleOperationValue) temporaryArr[i][0]).prevX + "][" +
+                    ((SimpleOperationValue) temporaryArr[i][0]).prevY + "] through " +
+                    ((SimpleOperationValue) temporaryArr[i][0]).operation.op);
         }
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
             temporaryArr[0][j] = j - 1 < rightNode.leftMostNodeId ?
                     temporaryArr[0][0].add(opValue(null, rightNode), 0, j, false) :
                     temporaryArr[0][j - 1].add(opValue(null, rightNode), 0, j, false);
-//            System.out.println(0 + " " + j + ": " + temporaryArr[0][j]);
+            System.out.println("2: temporaryArr[" + 0 + "][" + j + "] = " +
+                    ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
+                    ((SimpleOperationValue) temporaryArr[0][j]).prevX + "][" +
+                    ((SimpleOperationValue) temporaryArr[0][j]).prevY + "] through " +
+                    ((SimpleOperationValue) temporaryArr[0][j]).operation.op);
         }
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             for (int j = rightNode.leftMostNodeId; j <= right; j++) {
@@ -77,7 +68,7 @@ public class XmlDiff {
                             temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),      // 删除节点i
                             temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),      // 增加节点j
                             temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j, false));    // 将节点i修改为节点j
-
+                    totalPermanent++;
                     System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
                             ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
                             ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
@@ -99,7 +90,8 @@ public class XmlDiff {
                                 ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
                                 ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
                                 ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
-                                ((SimpleOperationValue) temporaryArr[i][j]).operation.op + " is from permanentArr");
+                                ((SimpleOperationValue) temporaryArr[i][j]).operation.op +
+                                " is from permanentArr[" + i + "][" + j + "] = " + ((SimpleOperationValue) permanentArr[i][j]).value);
                     } else {
                         System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
                                 ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
@@ -121,7 +113,10 @@ public class XmlDiff {
         return childNode.leftMostNodeId - 1 < ancestorNode.leftMostNodeId ? 0 : childNode.leftMostNodeId - 1;
     }
 
+    private int totalPermanent = 0;
+
     public void solve() throws DocumentException, OpValueElementNullException {
+        // dfs(leftRoot, rightRoot);
         for (int i = 1; i <= leftTree.keyRootsIndex; i++) {
             for (int j = 1; j <= rightTree.keyRootsIndex; j++) {
                 compute(leftTree.keyRoots[i], rightTree.keyRoots[j]);
@@ -139,6 +134,7 @@ public class XmlDiff {
 
         System.out.println();
         backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
+        System.out.println(totalPermanent);
     }
 
     private void backtrace(SimpleOperationValue v) {
@@ -146,10 +142,12 @@ public class XmlDiff {
             return;
         }
         System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
-                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") + ", op: " + v.operation.op);
+                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
+                ", op: " + v.operation.op);
         if (v.prevX == 0 && v.prevY == 0) {
             return;
         }
+//        v.isFromPermanentArr
         if (v.operation.op == OperationEnum.INSERT) {
             rightTree.nodeSequence[v.curY].counterpartId = v.curX;
             rightTree.nodeSequence[v.curY].op = OperationEnum.INSERT;
@@ -163,87 +161,6 @@ public class XmlDiff {
             rightTree.nodeSequence[v.curY].op = OperationEnum.CHANGE;
         }
         backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
-    }
-
-    public void preOrderOutput() {
-        Node[] nodes = leftTree.nodePreOrderSequence;
-        for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
-        }
-        System.out.println();
-        nodes = rightTree.nodePreOrderSequence;
-        for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
-        }
-    }
-
-    public void resultOutput() throws IOException {
-        leftOutput.append(OUTPUT_START);
-        rightOutput.append(OUTPUT_START);
-        dfs(1, 1);
-        leftOutput.append(OUTPUT_END);
-        rightOutput.append(OUTPUT_END);
-        System.out.println(leftOutput);
-        System.out.println();
-        System.out.println(rightOutput);
-        FileWriter writer = new FileWriter("data/output1.html");
-        writer.write(String.valueOf(leftOutput));
-        writer.flush();
-        writer.close();
-        writer = new FileWriter("data/output2.html");
-        writer.write(String.valueOf(rightOutput));
-        writer.flush();
-        writer.close();
-    }
-
-    public void dfs(int leftIndex, int rightIndex) {
-        Node leftNode = leftIndex < leftTree.nodePreOrderSequence.length ?
-                leftTree.nodePreOrderSequence[leftIndex] : null;
-        Node rightNode = rightIndex < rightTree.nodePreOrderSequence.length ?
-                rightTree.nodePreOrderSequence[rightIndex] : null;
-        int depth;
-
-        if (leftNode == null && rightNode == null) {
-            return;
-        } else if (leftNode == null) {
-            depth = leftNode.depth;
-            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            dfs(leftIndex + 1, rightIndex);
-            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-        } else if (rightNode == null) {
-            depth = rightNode.depth;
-            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-            dfs(leftIndex, rightIndex + 1);
-            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        }
-
-        depth = Math.max(leftNode.depth, rightNode.depth);
-        if (leftNode.op == null && rightNode.op == null ||
-                leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
-            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-            dfs(leftIndex + 1, rightIndex + 1);
-            leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        } else if (leftNode.op == OperationEnum.DELETE) {
-            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
-            dfs(leftIndex + 1, rightIndex);
-            leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
-        } else if (rightNode.op == OperationEnum.INSERT) {
-            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
-            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-            dfs(leftIndex, rightIndex + 1);
-            leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
-            rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
-            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-            dfs(leftIndex + 1, rightIndex + 1);
-            leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
-            rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        }
     }
 
     public static void main(String[] args) throws DocumentException, OpValueElementNullException, IOException {
