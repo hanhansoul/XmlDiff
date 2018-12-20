@@ -28,7 +28,7 @@ public class SimpleTree {
     public Node[] nodePreOrderSequence;
     public int preOrderSequenceIndex;
 
-    public LinkedList<SimpleOutputNode> nodeOutputSequence;
+    public List<SimpleOutputNode> nodeOutputSequence;
 
     public int rootId;
     public int size;
@@ -43,8 +43,6 @@ public class SimpleTree {
         nodeSequence = new Node[size + 1];
         keyRoots = new int[size + 1];
         sequenceIndex = keyRootsIndex = 0;
-
-        nodeSequence = new Node[size + 1];
         preOrderSequenceIndex = 0;
 
         rootNode = new SimpleNode(document.getRootElement());
@@ -137,6 +135,7 @@ public class SimpleTree {
         }
         nodeOutputSequence.add(new SimpleOutputNode(root, true));
     }
+
 
     public void sequenceTraversal() {
         for (int i = 1; i < nodeSequence.length; i++) {

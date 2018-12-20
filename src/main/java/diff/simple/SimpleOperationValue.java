@@ -3,20 +3,6 @@ package diff.simple;
 import diff.*;
 import org.dom4j.Element;
 
-/**
- * OperationValue
- * 属性：
- * 1. 前驱节点编号
- * 2. 当前递推值
- * 3. 当前操作类型
- * 4. 当前操作节点内容
- * 5. 当前节点编号
- * <p>
- * 方法：
- * 1. add()：在计算递推式时，前驱OperationValue对象添加一个操作得到并返回当前OperationValue对象
- * 2. opValue()：给定两个节点，返回一个操作类型
- * 3. compareTo()：比较两个OperationValue对象值大小，以便递推时取出最小值
- */
 public class SimpleOperationValue extends OperationValue {
 
     public int value;
@@ -27,16 +13,6 @@ public class SimpleOperationValue extends OperationValue {
         super(prevX, prevY, isFromPermanentArr, curX, curY, operation);
         this.value = value;
     }
-
-//    public SimpleOperationValue(int value, int prevX, int prevY, int curX, int curY,
-//                                Operation operation) {
-//        this.value = value;
-//        this.prevX = prevX;
-//        this.prevY = prevY;
-//        this.curX = curX;
-//        this.curY = curY;
-//        this.operation = operation;
-//    }
 
     public SimpleOperationValue() {
         super();

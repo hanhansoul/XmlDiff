@@ -8,6 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
+import static diff.Constant.DEBUG;
+
 public class SimpleDiffOutput {
     private SimpleTree leftTree;
     private SimpleTree rightTree;
@@ -65,11 +67,12 @@ public class SimpleDiffOutput {
                     sb.append(entry.getValue());
                 }
             }
-            if (node.element.nodeCount() <= 0) {
-                sb.append("/&gt;");
-            } else {
-                sb.append("&gt;");
-            }
+            sb.append("&gt;");
+//            if (node.element.nodeCount() <= 0) {
+//                sb.append("/&gt;");
+//            } else {
+//                sb.append("&gt;");
+//            }
             sb.append(SPAN_END);
         }
     }
@@ -81,7 +84,8 @@ public class SimpleDiffOutput {
             sb.append(OP_SPAN_START[opIndex]);
             sb.append(" ");
             sb.append(SPAN_END);
-        } else if (node.element.nodeCount() > 0) {
+//        } else if (node.element.nodeCount() > 0) {
+        } else {
             int depth = node.depth;
             Element element = node.element;
             sb.append(BR);
@@ -92,6 +96,15 @@ public class SimpleDiffOutput {
             sb.append("&gt;");
             sb.append(SPAN_END);
         }
+    }
+
+
+    private void outputNodeOutputSequence() {
+        StringBuilder sb = new StringBuilder();
+        for (SimpleOutputNode node : rightTree.nodeOutputSequence) {
+            elementOutput(sb, node, OperationEnum.UNCHANGE);
+        }
+        System.out.println(sb);
     }
 
     private void elementTextOutput(StringBuilder sb, Node node, OperationEnum op) {
@@ -266,8 +279,8 @@ public class SimpleDiffOutput {
     }
 
     private void output() {
-        LinkedList<SimpleOutputNode> leftList = leftTree.nodeOutputSequence;
-        LinkedList<SimpleOutputNode> rightList = rightTree.nodeOutputSequence;
+        List<SimpleOutputNode> leftList = leftTree.nodeOutputSequence;
+        List<SimpleOutputNode> rightList = rightTree.nodeOutputSequence;
 
         Iterator<SimpleOutputNode> leftIterator = leftList.iterator();
         Iterator<SimpleOutputNode> rightIterator = rightList.iterator();
@@ -278,53 +291,67 @@ public class SimpleDiffOutput {
         Node rightNode = null;
         boolean leftNext = true;
         boolean rightNext = true;
+        int leftIndex = 0;
+        int rightIndex = 0;
+        int leftSize = leftList.size();
+        int rightSize = rightList.size();
 
         while (true) {
-
-            if (leftIterator.hasNext() && rightIterator.hasNext()) {
-                if (leftNext) {
-                    leftOutputNode = leftIterator.next();
-                    leftNode = leftOutputNode.node;
-                }
-                if (rightNext) {
-                    rightOutputNode = rightIterator.next();
-                    rightNode = rightOutputNode.node;
-                }
-                if ((leftNode.op == null || leftNode.op == OperationEnum.UNCHANGE) &&
-                        (rightNode.op == null || rightNode.op == OperationEnum.UNCHANGE)) {
-                    elementOutput(leftOutput, leftOutputNode, OperationEnum.UNCHANGE);
-                    elementOutput(rightOutput, rightOutputNode, OperationEnum.UNCHANGE);
-                    leftNext = rightNext = true;
-                } else if (leftNode.op == OperationEnum.DELETE) {
-                    elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
-                    elementOutput(rightOutput, null, OperationEnum.DELETE);
-                    leftNext = true;
-                    rightNext = false;
-                } else if (rightNode.op == OperationEnum.INSERT) {
-                    elementOutput(leftOutput, null, OperationEnum.INSERT);
-                    elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
-                    leftNext = false;
-                    rightNext = true;
-                } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
-                    elementOutput(leftOutput, leftOutputNode, OperationEnum.CHANGE);
-                    elementOutput(rightOutput, rightOutputNode, OperationEnum.CHANGE);
-                    leftNext = rightNext = true;
-                }
-            } else if (leftIterator.hasNext()) {
-                leftOutputNode = leftIterator.next();
-                elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
-            } else if (rightIterator.hasNext()) {
-                rightOutputNode = rightIterator.next();
-                elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
-            } else {
-                return;
+            if (leftIndex >= leftSize && rightIndex >= rightSize) {
+                break;
             }
+            if (leftNext && leftIterator.hasNext()) {
+                leftOutputNode = leftIterator.next();
+                leftNode = leftOutputNode.node;
+            }
+            if (rightNext && rightIterator.hasNext()) {
+                rightOutputNode = rightIterator.next();
+                rightNode = rightOutputNode.node;
+            }
+            if ((leftNode.op == null || leftNode.op == OperationEnum.UNCHANGE) &&
+                    (rightNode.op == null || rightNode.op == OperationEnum.UNCHANGE)) {
+                elementOutput(leftOutput, leftOutputNode, OperationEnum.UNCHANGE);
+                elementOutput(rightOutput, rightOutputNode, OperationEnum.UNCHANGE);
+                leftNext = rightNext = true;
+                leftIndex++;
+                rightIndex++;
+            } else if (leftNode.op == OperationEnum.DELETE) {
+                elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
+                elementOutput(rightOutput, null, OperationEnum.DELETE);
+                leftNext = true;
+                rightNext = false;
+                leftIndex++;
+            } else if (rightNode.op == OperationEnum.INSERT) {
+                elementOutput(leftOutput, null, OperationEnum.INSERT);
+                elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
+                leftNext = false;
+                rightNext = true;
+                rightIndex++;
+            } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+                elementOutput(leftOutput, leftOutputNode, OperationEnum.CHANGE);
+                elementOutput(rightOutput, rightOutputNode, OperationEnum.CHANGE);
+                leftNext = rightNext = true;
+                leftIndex++;
+                rightIndex++;
+            }
+//            if (leftIterator.hasNext() && rightIterator.hasNext()) {
+//
+//            } else if (leftIterator.hasNext()) {
+//                leftOutputNode = leftIterator.next();
+//                elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
+//            } else if (rightIterator.hasNext()) {
+//                rightOutputNode = rightIterator.next();
+//                elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
+//            } else {
+//                return;
+//            }
         }
     }
 
-
-
     public void resultOutput() throws IOException {
+        if (DEBUG) {
+            outputNodeOutputSequence();
+        }
         leftOutput.append(OUTPUT_START);
         rightOutput.append(OUTPUT_START);
 //        auxIndex = 1;
@@ -336,9 +363,11 @@ public class SimpleDiffOutput {
         output();
         leftOutput.append(OUTPUT_END);
         rightOutput.append(OUTPUT_END);
-        System.out.println(leftOutput);
-        System.out.println();
-        System.out.println(rightOutput);
+        if (DEBUG) {
+            System.out.println(leftOutput);
+            System.out.println();
+            System.out.println(rightOutput);
+        }
         FileWriter writer = new FileWriter("data/output1.html");
         writer.write(String.valueOf(leftOutput));
         writer.flush();
