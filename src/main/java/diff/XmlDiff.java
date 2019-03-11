@@ -226,16 +226,18 @@ public class XmlDiff {
     public static void main(String[] args) throws DocumentException, OpValueElementNullException, IOException {
         long beginTime = System.currentTimeMillis();
         XmlDiff xmlDiff = new XmlDiff();
-        xmlDiff.initialization("data/CSCA350-353000-00M01-01-X_2_20180901.xml",
-                "data/CSCA350-353000-00M01-01-X_3_20181001.xml");
+        xmlDiff.initialization("data/left.xml",
+                "data/right.xml");
 //        xmlDiff.initialization("data/left3.xml", "data/right3.xml");
         xmlDiff.solve();
 //        xmlDiff.preOrderOutput();
+        long solveTime = System.currentTimeMillis();
+        System.out.println((solveTime - beginTime) / 1000);
         new SimpleDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree).resultOutput();
 //        System.out.println(xmlDiff.leftOutput);
 //        System.out.println(xmlDiff.rightOutput);
 //        xmlDiff.resultOutput();
         long endTime = System.currentTimeMillis();
-//        System.out.println((endTime - beginTime) / 1000);
+        System.out.println((endTime - solveTime) / 1000);
     }
 }

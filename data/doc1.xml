@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE article [
+   <!ENTITY ent "foo">
+   <!ELEMENT article ANY>
+]>
+<article>
+<chapter>
+<section nr="1">
+<![CDATA[This is a CDATASection]]>
+<title name="title">
+</title><?processing instruction?>
+<paragraph>
+hello
+</paragraph>
+<!--comment-->
+<paragraph>howdy<word/><word>foobar&ent;foobar</word></paragraph>
+<paragraph>
+242424
+</paragraph>
+</section>
+</chapter>
+</article>

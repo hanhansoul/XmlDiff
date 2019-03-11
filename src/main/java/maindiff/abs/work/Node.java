@@ -1,32 +1,20 @@
-package diff;
+package maindiff.abs.work;
 
+import maindiff.util.OperationEnum;
 import org.dom4j.Element;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
-/**
- * Created by Administrator on 2018/11/27 0027.
- *
- * 树节点，包含XML节点信息
- */
 public abstract class Node {
     public int id;
     public int leftMostNodeId;
+    public List<Node> children;
 
     /**
      * 用于记录xml相关元素内容
      */
     public Element element;
-    public Map<String, String> attributesMap;
-    public String[] text;
-
-    /**
-     * 树节点的子节点
-     */
-//    public Node father;
-    public List<Node> children;
-
-    public int counterpartId;
     public OperationEnum op;
 
     /**

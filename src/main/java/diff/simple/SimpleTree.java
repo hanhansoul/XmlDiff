@@ -136,7 +136,6 @@ public class SimpleTree {
         nodeOutputSequence.add(new SimpleOutputNode(root, true));
     }
 
-
     public void sequenceTraversal() {
         for (int i = 1; i < nodeSequence.length; i++) {
             System.out.println(nodeSequence[i].id + ": " + nodeSequence[i].element.getName());
