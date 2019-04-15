@@ -150,7 +150,7 @@ public class XmlDiff {
             System.out.println();
         }
 
-//        backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
+        backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
         findPath(operationPaths[leftTree.rootId][rightTree.rootId]);
 
         if (DEBUG) {
@@ -208,7 +208,7 @@ public class XmlDiff {
         }
         System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
                 ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
-                ", op: " + v.operation.op);
+                ", operationType: " + v.operation.op);
         if (v == null || v.prevX == 0 && v.prevY == 0) {
             return;
         }
@@ -226,17 +226,12 @@ public class XmlDiff {
     public static void main(String[] args) throws DocumentException, OpValueElementNullException, IOException {
         long beginTime = System.currentTimeMillis();
         XmlDiff xmlDiff = new XmlDiff();
-        xmlDiff.initialization("data/left.xml",
-                "data/right.xml");
+        xmlDiff.initialization("data/left.xml", "data/right.xml");
 //        xmlDiff.initialization("data/left3.xml", "data/right3.xml");
         xmlDiff.solve();
-//        xmlDiff.preOrderOutput();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);
         new SimpleDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree).resultOutput();
-//        System.out.println(xmlDiff.leftOutput);
-//        System.out.println(xmlDiff.rightOutput);
-//        xmlDiff.resultOutput();
         long endTime = System.currentTimeMillis();
         System.out.println((endTime - solveTime) / 1000);
     }

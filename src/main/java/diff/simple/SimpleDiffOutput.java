@@ -144,7 +144,7 @@ public class SimpleDiffOutput {
             }
             elementEndOutput(sb, mainNode, OperationEnum.UNCHANGE);
         } else if (isLeftMain && mainNode.op == OperationEnum.DELETE || !isLeftMain && auxNode.op == OperationEnum.DELETE) {
-//        } else if (isLeftMain && mainNode.op == OperationEnum.DELETE) {
+//        } else if (isLeftMain && mainNode.operationType == OperationEnum.DELETE) {
             elementStartOutput(sb, mainNode, OperationEnum.DELETE);
             if (mainNode.children != null) {
                 for (Node node : mainNode.children) {
@@ -153,7 +153,7 @@ public class SimpleDiffOutput {
             }
             elementEndOutput(sb, mainNode, OperationEnum.DELETE);
         } else if (isLeftMain && auxNode.op == OperationEnum.INSERT || !isLeftMain && mainNode.op == OperationEnum.INSERT) {
-//        } else if (isLeftMain && auxNode.op == OperationEnum.INSERT) {
+//        } else if (isLeftMain && auxNode.operationType == OperationEnum.INSERT) {
             elementStartOutput(sb, null, OperationEnum.INSERT);
             ++auxIndex;
             outputDfs(sb, mainNode, st);
@@ -396,12 +396,12 @@ public class SimpleDiffOutput {
     public void preOrderOutput() {
         Node[] nodes = leftTree.nodePreOrderSequence;
         for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].operationType + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
         }
         System.out.println();
         nodes = rightTree.nodePreOrderSequence;
         for (int i = 1; i < nodes.length; i++) {
-            System.out.println(nodes[i].element.getName() + " " + nodes[i].op + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
+            System.out.println(nodes[i].element.getName() + " " + nodes[i].operationType + " " + nodes[i].depth + " " + nodes[i].rightMostNodeId);
         }
     }
 
@@ -450,26 +450,26 @@ public class SimpleDiffOutput {
         }
 
         depth = Math.max(leftNode.depth, rightNode.depth);
-        if (leftNode.op == null && rightNode.op == null ||
-                leftNode.op == OperationEnum.UNCHANGE && rightNode.op == OperationEnum.UNCHANGE) {
+        if (leftNode.operationType == null && rightNode.operationType == null ||
+                leftNode.operationType == OperationEnum.UNCHANGE && rightNode.operationType == OperationEnum.UNCHANGE) {
             leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
             rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
             dfs(leftIndex + 1, rightIndex + 1);
             leftOutput.append(DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
             rightOutput.append(DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        } else if (leftNode.op == OperationEnum.DELETE) {
+        } else if (leftNode.operationType == OperationEnum.DELETE) {
             leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
             rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
             dfs(leftIndex + 1, rightIndex);
             leftOutput.append(DELETE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
             rightOutput.append(DELETE_DIV_START + "  " + DIV_END + BR);
-        } else if (rightNode.op == OperationEnum.INSERT) {
+        } else if (rightNode.operationType == OperationEnum.INSERT) {
             leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
             rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
             dfs(leftIndex, rightIndex + 1);
             leftOutput.append(INSERT_DIV_START + "  " + DIV_END + BR);
             rightOutput.append(INSERT_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
-        } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+        } else if (leftNode.operationType == OperationEnum.CHANGE && rightNode.operationType == OperationEnum.CHANGE) {
             leftOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + leftNode.element.getName() + DIV_END + BR);
             rightOutput.append(CHANGE_DIV_START + TAB_STRINGS[depth] + rightNode.element.getName() + DIV_END + BR);
             dfs(leftIndex + 1, rightIndex + 1);

@@ -1,19 +1,27 @@
 package maindiff.xml.work;
 
 import maindiff.abs.output.Path;
-import maindiff.abs.work.AbstractDiff;
-import maindiff.abs.work.Node;
-import maindiff.abs.work.Operation;
-import maindiff.abs.work.OperationValue;
+import maindiff.abs.work.*;
 import maindiff.util.OpValueElementNullException;
+import maindiff.util.OperationEnum;
 import org.dom4j.DocumentException;
 
 public class XmlDiff extends AbstractDiff {
 
     @Override
-    protected void initialize(int left, int right) {
+    public void initialize(int left, int right) {
         temporaryArr = new XmlOperationValue[left][right];
         permanentArr = new XmlOperationValue[left][right];
+    }
+
+    @Override
+    public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum operationType) {
+        return null;
+    }
+
+    @Override
+    public Operation generateOperation(OperationValue arrValue, OperationValue permanentArrValue) {
+        return null;
     }
 
     @Override
@@ -37,7 +45,7 @@ public class XmlDiff extends AbstractDiff {
 //            return new XmlOperation();
 //        }
 //    }
-
+//
 //    @Override
 //    protected OperationValue min(OperationValue... values) {
 //        OperationValue minValue = null;
@@ -50,14 +58,6 @@ public class XmlDiff extends AbstractDiff {
 //        }
 //        return minValue;
 //    }
-
-    @Override
-    protected void findMinAndAssign(Node leftNode, Node rightNode,
-                                    int i, int j, int ix, int jx,
-                                    boolean b1, boolean b2, boolean b3) {
-
-    }
-
 
 
 }

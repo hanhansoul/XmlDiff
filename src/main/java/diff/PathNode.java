@@ -8,9 +8,6 @@ public abstract class PathNode {
     boolean isFromPermanent;
     int curX, curY;
 
-    public PathNode() {
-    }
-
     public PathNode(OperationValue opv) {
         this.isFromPermanent = opv.isFromPermanentArr;
         this.curX = opv.curX;

@@ -1,12 +1,11 @@
 package maindiff.abs.work;
 
-import static maindiff.util.Constant.DEBUG;
-
 import maindiff.abs.output.Path;
-import maindiff.abs.output.PathNode;
-import maindiff.util.OpValueElementNullException;
+import maindiff.simple.work.SimpleOperationValue;
 import maindiff.util.OperationEnum;
 import org.dom4j.DocumentException;
+
+import static maindiff.util.Constant.DEBUG;
 
 public abstract class AbstractDiff {
     protected Tree leftTree;
@@ -21,31 +20,52 @@ public abstract class AbstractDiff {
 
     public abstract void initialize(String leftFileName, String rightFileName) throws DocumentException;
 
-//    protected abstract Operation opValue(Node leftNode, Node rightNode) throws OpValueElementNullException;
+    /**
+     * permanentArr与temporaryArr数组初始化
+     */
+    public abstract void initialize(int left, int right);
 
-//    protected abstract void findMinAndAssign(Node leftNode, Node rightNode,
-//                                             int i, int j, int ix, int jx,
-//                                             boolean b1, boolean b2, boolean b3);
+    /**
+     * 生成中间操作对象进行比较，选取权值最小的赋值给转移方程。
+     * isFromPermanentArr始终为false
+     */
+    public abstract Operation generateOperation(OperationValue arrValue,
+                                                Node leftNode, Node rightNode,
+                                                OperationEnum operationType);
 
-    protected abstract void initialize(int left, int right);
+    /**
+     * 生成中间操作对象进行比较，选取权值最小的赋值给转移方程。
+     * isFromPermanentArr始终为true
+     */
+    public abstract Operation generateOperation(OperationValue arrValue,
+                                                OperationValue permanentArrValue);
 
-    protected void compute(int left, int right) throws OpValueElementNullException {
+    /**
+     * 核心计算方法
+     */
+    private void compute(int left, int right) {
         Node leftNode = leftTree.nodeSequence[left];
         Node rightNode = rightTree.nodeSequence[right];
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             if (i - 1 < leftNode.leftMostNodeId) {
+                /* temporaryArr[i][0] = temporaryArr[0][0] + operationType(DELETE, leftNode, null) */
                 temporaryArr[i][0].assign(temporaryArr[0][0], leftNode, null, i, 0, false);
             } else {
+                /* temporaryArr[i][0] = temporaryArr[i - 1][0] + operationType(DELETE, leftNode, null) */
                 temporaryArr[i][0].assign(temporaryArr[i - 1][0], leftNode, null, i, 0, false);
             }
         }
+
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
             if (j - 1 < rightNode.leftMostNodeId) {
+                /* temporaryArr[0][j] = temporaryArr[0][0] + operationType(ADD, null, rightNode) */
                 temporaryArr[0][j].assign(temporaryArr[0][0], null, rightNode, 0, j, false);
             } else {
+                /* temporaryArr[0][j] = temporaryArr[0][j - 1] + operationType(ADD, null, rightNode) */
                 temporaryArr[0][j].assign(temporaryArr[0][j - 1], null, rightNode, 0, j, false);
             }
         }
+
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             for (int j = rightNode.leftMostNodeId; j <= right; j++) {
                 if (leftTree.nodeSequence[i].leftMostNodeId == leftNode.leftMostNodeId &&
@@ -54,10 +74,23 @@ public abstract class AbstractDiff {
                     int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
-//                    permanentArr[i][j] = temporaryArr[i][j] = min(
-//                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),      // 删除节点i
-//                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),      // 增加节点j
-//                            temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j, false));    // 将节点i修改为节点j
+                    /*
+                    temporaryArr[ix][j] + operationType(DELETE, leftChildNode, null)
+                    temporaryArr[i][jX] + operationType(ADD, null, rightChildNode)
+                    temporaryArr[ix][j] + operationType(UPDATE, leftChildNode, rightChildNode)
+
+                    permanentArr[i][j] = temporaryArr[i][j] = min(
+                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),      // 删除节点i
+                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),      // 增加节点j
+                            temporaryArr[ix][jx].add(opValue(leftChildNode, rightChildNode), i, j, false));    // 将节点i修改为节点j
+                    */
+                    temporaryArr[i][j].findMinAndAssign(i, j,
+                            generateOperation(temporaryArr[ix][j], leftChildNode, null, OperationEnum.DELETE),
+                            generateOperation(temporaryArr[i][jx], null, rightChildNode, OperationEnum.INSERT),
+                            generateOperation(temporaryArr[ix][jx], leftChildNode, rightChildNode, OperationEnum.CHANGE)
+                    );
+                    permanentArr[i][j] = temporaryArr[i][j];
+
                     permanentNodePathTrace(permanentArr[i][j], i, j);
                 } else {
                     int ix = checkIndexMargin(i, leftNode);
@@ -66,24 +99,61 @@ public abstract class AbstractDiff {
                     Node rightChildNode = rightTree.nodeSequence[j];
                     int iy = checkNodeIndexMargin(leftChildNode, leftNode);
                     int jy = checkNodeIndexMargin(rightChildNode, rightNode);
-//                    temporaryArr[i][j] = min(
-//                            temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),
-//                            temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),
-//                            temporaryArr[iy][jy].add(permanentArr[i][j], i, j, true));
+                    /*
+                    temporaryArr[ix][j] + operationType(DELETE, leftChildNode, null)
+                    temporaryArr[i][jX] + operationType(ADD, null, rightChildNode)
+                    temporaryArr[ix][j] + operationType(UPDATE, leftChildNode, rightChildNode)
+
+                    temporaryArr[i][j] = min(
+                        temporaryArr[ix][j].add(opValue(leftChildNode, null), i, j, false),
+                        temporaryArr[i][jx].add(opValue(null, rightChildNode), i, j, false),
+                        temporaryArr[iy][jy].add(permanentArr[i][j], i, j, true));
+                    */
+                    temporaryArr[i][j].findMinAndAssign(i, j,
+                            generateOperation(temporaryArr[ix][j], leftChildNode, null, OperationEnum.DELETE),
+                            generateOperation(temporaryArr[i][jx], null, rightChildNode, OperationEnum.INSERT),
+                            generateOperation(temporaryArr[iy][jy], permanentArr[i][j])
+                    );
+                    if (DEBUG) {
+                        if (temporaryArr[i][j].isFromPermanentArr) {
+                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+                                    ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+                                    temporaryArr[i][j].prevX + "][" +
+                                    temporaryArr[i][j].prevY + "] through " +
+                                    temporaryArr[i][j].operationType +
+                                    " is from permanentArr[" + i + "][" + j + "] = " + ((SimpleOperationValue) permanentArr[i][j]).value)
+                            ;
+                        } else {
+                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+                                    ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+                                    temporaryArr[i][j].prevX + "][" +
+                                    temporaryArr[i][j].prevY + "] through " +
+                                    temporaryArr[i][j].operationType);
+                        }
+                    }
                 }
             }
         }
     }
 
+    /**
+     * compute()辅助方法
+     */
     private int checkIndexMargin(int index, Node ancestorNode) {
         return index - 1 < ancestorNode.leftMostNodeId ? 0 : index - 1;
     }
 
+    /**
+     * compute()辅助方法
+     */
     private int checkNodeIndexMargin(Node childNode, Node ancestorNode) {
         return childNode.leftMostNodeId - 1 < ancestorNode.leftMostNodeId ? 0 : childNode.leftMostNodeId - 1;
     }
 
-    public void solve() throws DocumentException, OpValueElementNullException {
+    /**
+     * 算法入口
+     */
+    public void solve() throws DocumentException {
         initialize(leftTree.size, rightTree.size);
         for (int i = 1; i <= leftTree.keyRootsIndex; i++) {
             for (int j = 1; j <= rightTree.keyRootsIndex; j++) {
@@ -101,50 +171,29 @@ public abstract class AbstractDiff {
         OperationValue prevNode = temporaryArr[curNode.prevX][curNode.prevY];
         permanentNodePathTrace(prevNode, nodeX, nodeY);
         if (operationPaths[nodeX][nodeY] == null) {
-            operationPaths[nodeX][nodeY] = new Path();
+//            operationPaths[nodeX][nodeY] = new Path();
         }
-        operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
+//        operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
     }
 
     private void findPath(Path path) {
-        if (path == null) {
-            return;
-        }
-        for (PathNode node : path.nodes) {
-            if (node.isFromPermanent) {
-                findPath(operationPaths[node.curX][node.curY]);
-            } else {
-                if (node.op == OperationEnum.INSERT) {
-                    rightTree.nodeSequence[node.curY].op = OperationEnum.INSERT;
-                } else if (node.op == OperationEnum.DELETE) {
-                    leftTree.nodeSequence[node.curX].op = OperationEnum.DELETE;
-                } else if (node.op == OperationEnum.CHANGE) {
-                    leftTree.nodeSequence[node.curX].op = OperationEnum.CHANGE;
-                    rightTree.nodeSequence[node.curY].op = OperationEnum.CHANGE;
-                }
-            }
-        }
-    }
-
-    private void backtrace(OperationValue v) {
-        if (v == null) {
-            return;
-        }
-        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
-                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
-                ", op: " + v.operation.op);
-        if (v == null || v.prevX == 0 && v.prevY == 0) {
-            return;
-        }
-        if (v.operation.op == OperationEnum.INSERT) {
-            rightTree.nodeSequence[v.curY].op = OperationEnum.INSERT;
-        } else if (v.operation.op == OperationEnum.DELETE) {
-            leftTree.nodeSequence[v.curX].op = OperationEnum.DELETE;
-        } else if (v.operation.op == OperationEnum.CHANGE) {
-            leftTree.nodeSequence[v.curX].op = OperationEnum.CHANGE;
-            rightTree.nodeSequence[v.curY].op = OperationEnum.CHANGE;
-        }
-        backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
+//        if (path == null) {
+//            return;
+//        }
+//        for (PathNode node : path.nodes) {
+//            if (node.isFromPermanent) {
+//                findPath(operationPaths[node.curX][node.curY]);
+//            } else {
+//                if (node.operationType == OperationEnum.INSERT) {
+//                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.INSERT;
+//                } else if (node.operationType == OperationEnum.DELETE) {
+//                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.DELETE;
+//                } else if (node.operationType == OperationEnum.CHANGE) {
+//                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.CHANGE;
+//                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.CHANGE;
+//                }
+//            }
+//        }
     }
 
     /*

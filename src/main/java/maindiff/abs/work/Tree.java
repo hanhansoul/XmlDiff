@@ -7,6 +7,7 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Tree {
@@ -20,21 +21,28 @@ public abstract class Tree {
     public int keyRootsIndex;
     public int[] keyRoots;
 
-//    public Node[] nodePreOrderSequence;
+    //    public Node[] nodePreOrderSequence;
     public int preOrderSequenceIndex;
-
-    public List<OutputNode> nodeOutputSequence;
 
     public int rootId;
     public int size;
 
-    protected Document xmlFileInput(String fileName) throws DocumentException {
+    public Tree(String fileName) throws DocumentException {
+        document = xmlFileInput(fileName);
+        size = elementCount(document.getRootElement());
+        nodeSequence = new Node[size + 1];
+        keyRoots = new int[size + 1];
+        sequenceIndex = keyRootsIndex = 0;
+        preOrderSequenceIndex = 0;
+    }
+
+    private Document xmlFileInput(String fileName) throws DocumentException {
         SAXReader reader = new SAXReader();
         File file = new File(fileName);
         return reader.read(file);
     }
 
-    protected int elementCount(Element element) {
+    private int elementCount(Element element) {
         List<Element> elementList = element.elements();
         int res = 1;
         if (elementList != null && elementList.size() > 0) {

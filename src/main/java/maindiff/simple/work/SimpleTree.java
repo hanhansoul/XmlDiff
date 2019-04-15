@@ -1,9 +1,8 @@
-package maindiff.xml.work;
+package maindiff.simple.work;
 
 import maindiff.abs.work.Node;
 import maindiff.abs.work.Tree;
 import maindiff.simple.output.SimpleOutputNode;
-import maindiff.xml.output.XmlOutputNode;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
@@ -11,14 +10,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class XmlTree extends Tree {
+public class SimpleTree extends Tree {
 
-    public List<XmlOutputNode> nodeOutputSequence;
+    public List<SimpleOutputNode> nodeOutputSequence;
 
-    public XmlTree(String fileName) throws DocumentException {
+    public SimpleTree(String fileName) throws DocumentException {
         super(fileName);
 
-        rootNode = new XmlNode(document.getRootElement());
+        rootNode = new SimpleNode(document.getRootElement());
         buildTree(rootNode);
 
         buildPostOrderSequence(rootNode);
@@ -36,7 +35,7 @@ public class XmlTree extends Tree {
         } else {
             root.children = new ArrayList<>(elementList.size());
             for (Element element : elementList) {
-                Node node = new XmlNode(element);
+                Node node = new SimpleNode(element);
                 root.children.add(node);
                 buildTree(node);
             }
@@ -46,12 +45,12 @@ public class XmlTree extends Tree {
     @Override
     protected void buildNodeOutputSequence(Node root, int depth) {
         root.depth = depth;
-        nodeOutputSequence.add(new XmlOutputNode(root, false));
+        nodeOutputSequence.add(new SimpleOutputNode(root, false));
         if (root.children != null) {
             for (Node node : root.children) {
                 buildNodeOutputSequence(node, depth + 1);
             }
         }
-        nodeOutputSequence.add(new XmlOutputNode(root, true));
+        nodeOutputSequence.add(new SimpleOutputNode(root, true));
     }
 }

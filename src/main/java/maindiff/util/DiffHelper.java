@@ -3,17 +3,6 @@ package maindiff.util;
 import maindiff.abs.work.OperationValue;
 
 public class DiffHelper {
-    public static OperationValue min(OperationValue... values) {
-        OperationValue minValue = null;
-        for (OperationValue value : values) {
-            if (minValue == null) {
-                minValue = value;
-            } else if (minValue.compareTo(value) > 0) {
-                minValue = value;
-            }
-        }
-        return minValue;
-    }
 
     public static void fillZero(int[][] arr) {
         for (int i = 0; i < arr.length; i++) {

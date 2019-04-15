@@ -23,6 +23,9 @@ public abstract class Node {
     public int depth;
     public int rightMostNodeId;
 
+    public Map<String, String> attributesMap;
+    public String[] text;
+
     public Node() {
         element = null;
         id = leftMostNodeId = 0;

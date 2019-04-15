@@ -2,6 +2,8 @@ package maindiff.abs.work;
 
 import maindiff.util.OperationEnum;
 
+import java.util.Comparator;
+
 /**
  * 表示单次操作的结果
  * <p>
@@ -17,40 +19,42 @@ import maindiff.util.OperationEnum;
  * 1. add()：在计算递推式时，前驱OperationValue对象添加一个操作得到并返回当前OperationValue对象
  * 3. compareTo()：比较两个OperationValue对象值大小，以便递推时取出最小值
  */
-public abstract class OperationValue implements Comparable {
+public abstract class OperationValue implements Comparator {
     public int prevX, prevY;
-    public boolean isFromPermanentArr;
     public int curX, curY;
-    public Operation operation;
+    public OperationEnum operationType;
+    public boolean isFromPermanentArr;
 
-    public OperationValue(int prevX, int prevY, boolean isFromPermanentArr, int curX, int curY, Operation operation) {
-        this.prevX = prevX;
-        this.prevY = prevY;
+//    public OperationValue(int prevX, int prevY, boolean isFromPermanentArr,
+//                          int curX, int curY, OperationEnum operationType) {
+//        this.prevX = prevX;
+//        this.prevY = prevY;
+//        this.isFromPermanentArr = isFromPermanentArr;
+//        this.curX = curX;
+//        this.curY = curY;
+//        this.operationType = operationType;
+//    }
+
+//    public OperationValue() {
+//        prevX = prevY = 0;
+//        curX = curY = 0;
+//        operationType = null;
+//        isFromPermanentArr = false;
+//    }
+
+    public void assign(int cx, int cy, boolean isFromPermanentArr) {
+        this.prevX = this.curX;
+        this.prevY = this.curY;
+        this.curX = cx;
+        this.curY = cy;
         this.isFromPermanentArr = isFromPermanentArr;
-        this.curX = curX;
-        this.curY = curY;
-        this.operation = operation;
     }
-
-    public OperationValue() {
-        prevX = prevY = 0;
-        curX = curY = 0;
-        operation = null;
-        isFromPermanentArr = false;
-    }
-
-//    public abstract void add(Operation op, int cx, int cy, boolean isFromPermanentArr);
-
-//    public abstract void add(OperationValue opv, int cx, int cy, boolean isFromPermanentArr);
 
     public abstract void assign(OperationValue opv, Node leftNode, Node rightNode,
-                                int cx, int cy,
-                                boolean isFromPermanentArr);
+                                int cx, int cy, boolean isFromPermanentArr);
 
-    public abstract void findMinAndAssign(int ci, int cj, Node leftNode, Node rightNode,
-                                          OperationValue ov1, OperationEnum op1,
-                                          OperationValue ov2, OperationEnum op2,
-                                          OperationValue ov3, OperationEnum op3,
-                                          OperationValue pov);
+    public abstract void assign(Operation op, int cx, int cy);
+
+    public abstract void findMinAndAssign(int cx, int cy, Operation... operations);
 
 }
