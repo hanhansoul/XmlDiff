@@ -44,6 +44,9 @@ public abstract class AbstractDiff {
      * 核心计算方法
      */
     private void compute(int left, int right) {
+        if (DEBUG) {
+            System.out.println(left + " " + right);
+        }
         Node leftNode = leftTree.nodeSequence[left];
         Node rightNode = rightTree.nodeSequence[right];
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
@@ -54,6 +57,13 @@ public abstract class AbstractDiff {
                 /* temporaryArr[i][0] = temporaryArr[i - 1][0] + operationType(DELETE, leftNode, null) */
                 temporaryArr[i][0].assign(temporaryArr[i - 1][0], leftNode, null, i, 0, false);
             }
+            if (DEBUG) {
+                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
+                        ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
+                        ((SimpleOperationValue) temporaryArr[i][0]).prevX + "][" +
+                        ((SimpleOperationValue) temporaryArr[i][0]).prevY + "] through " +
+                        ((SimpleOperationValue) temporaryArr[i][0]).operationType);
+            }
         }
 
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
@@ -63,6 +73,13 @@ public abstract class AbstractDiff {
             } else {
                 /* temporaryArr[0][j] = temporaryArr[0][j - 1] + operationType(ADD, null, rightNode) */
                 temporaryArr[0][j].assign(temporaryArr[0][j - 1], null, rightNode, 0, j, false);
+            }
+            if (DEBUG) {
+                System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
+                        ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
+                        ((SimpleOperationValue) temporaryArr[0][j]).prevX + "][" +
+                        ((SimpleOperationValue) temporaryArr[0][j]).prevY + "] through " +
+                        ((SimpleOperationValue) temporaryArr[0][j]).operationType);
             }
         }
 
@@ -87,11 +104,18 @@ public abstract class AbstractDiff {
                     temporaryArr[i][j].findMinAndAssign(i, j,
                             generateOperation(temporaryArr[ix][j], leftChildNode, null, OperationEnum.DELETE),
                             generateOperation(temporaryArr[i][jx], null, rightChildNode, OperationEnum.INSERT),
-                            generateOperation(temporaryArr[ix][jx], leftChildNode, rightChildNode, OperationEnum.CHANGE)
+                            generateOperation(temporaryArr[ix][jx], leftChildNode, rightChildNode, null)
                     );
                     permanentArr[i][j] = temporaryArr[i][j];
-
                     permanentNodePathTrace(permanentArr[i][j], i, j);
+
+                    if (DEBUG) {
+                        System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
+                                ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
+                                ((SimpleOperationValue) temporaryArr[i][j]).operationType);
+                    }
                 } else {
                     int ix = checkIndexMargin(i, leftNode);
                     int jx = checkIndexMargin(j, rightNode);
@@ -133,6 +157,9 @@ public abstract class AbstractDiff {
                     }
                 }
             }
+        }
+        if (DEBUG) {
+            System.out.println();
         }
     }
 

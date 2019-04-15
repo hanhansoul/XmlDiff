@@ -1,6 +1,8 @@
 package maindiff.simple.work;
 
-import maindiff.abs.work.*;
+import maindiff.abs.work.Node;
+import maindiff.abs.work.Operation;
+import maindiff.abs.work.OperationValue;
 import maindiff.util.OperationEnum;
 import org.dom4j.Element;
 
@@ -15,8 +17,8 @@ public class SimpleOperationValue extends OperationValue {
         if (leftNode == null && rightNode == null) {
             return;
         }
-        SimpleOperationValue sopv = (SimpleOperationValue) opv;
-        assign(cx, cy, isFromPermanentArr);
+
+        assign(cx, cy, opv);
         if (leftNode == null) {
             this.operationType = OperationEnum.INSERT;
         } else if (rightNode == null) {
@@ -30,7 +32,8 @@ public class SimpleOperationValue extends OperationValue {
                 this.operationType = OperationEnum.UNCHANGE;
             }
         }
-        this.value = sopv.value + (this.operationType == OperationEnum.UNCHANGE ? 0 : 1);
+        this.value = ((SimpleOperationValue) opv).value +
+                (this.operationType == OperationEnum.UNCHANGE ? 0 : 1);
     }
 
     /**
@@ -41,7 +44,7 @@ public class SimpleOperationValue extends OperationValue {
      */
     @Override
     public void assign(Operation op, int cx, int cy) {
-        assign(cx, cy, isFromPermanentArr);
+        super.assign(cx, cy, op);
         this.value = ((SimpleOperationValue) op.arrValue).value + (op.operationType == OperationEnum.UNCHANGE ? 0 : 1);
     }
 
@@ -59,15 +62,9 @@ public class SimpleOperationValue extends OperationValue {
     private int computeValue(Object o) {
         if (o instanceof SimpleGenericOperation) {
             SimpleGenericOperation op = (SimpleGenericOperation) o;
-            if (op.value == -1) {
-                op.value = this.operationType == OperationEnum.UNCHANGE ? 0 : 1;
-            }
             return op.value;
         } else if (o instanceof SimpleDerivedOperation) {
             SimpleDerivedOperation op = (SimpleDerivedOperation) o;
-            if (op.value == -1) {
-                op.value = op.permanentArrValue.value;
-            }
             return op.value;
         }
         return -1;
@@ -77,6 +74,8 @@ public class SimpleOperationValue extends OperationValue {
     public int compare(Object o1, Object o2) {
         int value1 = computeValue(o1);
         int value2 = computeValue(o2);
+//        int value1 = ((SimpleOperationValue) o1).value;
+//        int value2 = ((SimpleOperationValue) o2).value;
         return value1 - value2;
     }
 

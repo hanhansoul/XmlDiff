@@ -56,7 +56,7 @@ public class XmlDiff {
                     temporaryArr[0][0].add(opValue(null, rightNode), 0, j, false) :
                     temporaryArr[0][j - 1].add(opValue(null, rightNode), 0, j, false);
             if (DEBUG) {
-                System.out.println("2: temporaryArr[" + 0 + "][" + j + "] = " +
+                System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
                         ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
                         ((SimpleOperationValue) temporaryArr[0][j]).prevX + "][" +
                         ((SimpleOperationValue) temporaryArr[0][j]).prevY + "] through " +
@@ -136,38 +136,38 @@ public class XmlDiff {
                 compute(leftTree.keyRoots[i], rightTree.keyRoots[j]);
             }
         }
-        if (DEBUG) {
-            System.out.println();
-            for (int i = 1; i <= leftTree.size; i++) {
-                for (int j = 1; j <= rightTree.size; j++) {
-                    System.out.print(((SimpleOperationValue) permanentArr[i][j]).value + " ");
-                }
-                System.out.println();
-            }
-            System.out.println(leftTree.rootId + " " + rightTree.rootId + " " +
-                    ((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]).value);
-
-            System.out.println();
-        }
+//        if (DEBUG) {
+//            System.out.println();
+//            for (int i = 1; i <= leftTree.size; i++) {
+//                for (int j = 1; j <= rightTree.size; j++) {
+//                    System.out.print(((SimpleOperationValue) permanentArr[i][j]).value + " ");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println(leftTree.rootId + " " + rightTree.rootId + " " +
+//                    ((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]).value);
+//
+//            System.out.println();
+//        }
 
         backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
         findPath(operationPaths[leftTree.rootId][rightTree.rootId]);
 
-        if (DEBUG) {
-            for (Node node : leftTree.nodeSequence) {
-                if (node == null) {
-                    continue;
-                }
-                System.out.println(node.id + " " + node.op);
-            }
-            for (Node node : rightTree.nodeSequence) {
-                if (node == null) {
-                    continue;
-                }
-                System.out.println(node.id + " " + node.op);
-            }
-            System.out.println(totalPermanent);
-        }
+//        if (DEBUG) {
+//            for (Node node : leftTree.nodeSequence) {
+//                if (node == null) {
+//                    continue;
+//                }
+//                System.out.println(node.id + " " + node.op);
+//            }
+//            for (Node node : rightTree.nodeSequence) {
+//                if (node == null) {
+//                    continue;
+//                }
+//                System.out.println(node.id + " " + node.op);
+//            }
+//            System.out.println(totalPermanent);
+//        }
     }
 
     private void permanentNodePathTrace(OperationValue curNode, int nodeX, int nodeY) {

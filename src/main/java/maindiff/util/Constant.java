@@ -1,5 +1,5 @@
 package maindiff.util;
 
 public class Constant {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 }

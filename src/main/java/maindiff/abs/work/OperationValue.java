@@ -42,12 +42,22 @@ public abstract class OperationValue implements Comparator {
 //        isFromPermanentArr = false;
 //    }
 
-    public void assign(int cx, int cy, boolean isFromPermanentArr) {
-        this.prevX = this.curX;
-        this.prevY = this.curY;
+    public void assign(int cx, int cy, Operation op) {
+        this.prevX = op.arrValue.curX;
+        this.prevY = op.arrValue.curY;
         this.curX = cx;
         this.curY = cy;
-        this.isFromPermanentArr = isFromPermanentArr;
+        this.operationType = op.operationType;
+        this.isFromPermanentArr = op.isFromPermanentArr;
+    }
+
+    public void assign(int cx, int cy, OperationValue opv){
+        this.prevX = opv.curX;
+        this.prevY = opv.curY;
+        this.curX = cx;
+        this.curY = cy;
+        this.operationType = opv.operationType;
+        this.isFromPermanentArr = opv.isFromPermanentArr;
     }
 
     public abstract void assign(OperationValue opv, Node leftNode, Node rightNode,

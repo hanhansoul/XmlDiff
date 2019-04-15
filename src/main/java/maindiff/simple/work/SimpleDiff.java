@@ -1,11 +1,15 @@
 package maindiff.simple.work;
 
 import maindiff.abs.output.Path;
-import maindiff.abs.work.*;
+import maindiff.abs.work.AbstractDiff;
+import maindiff.abs.work.Node;
+import maindiff.abs.work.Operation;
+import maindiff.abs.work.OperationValue;
 import maindiff.simple.output.SimpleDiffOutput;
 import maindiff.util.OperationEnum;
 import maindiff.xml.work.XmlOperationValue;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
 
 import java.io.IOException;
 
@@ -33,13 +37,32 @@ public class SimpleDiff extends AbstractDiff {
 
     @Override
     public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum operationType) {
-        return new SimpleGenericOperation(arrValue, leftNode, rightNode, operationType, false);
+        if (operationType == null) {
+            if (leftNode == null) {
+                operationType = OperationEnum.INSERT;
+            } else if (rightNode == null) {
+                operationType = OperationEnum.DELETE;
+            } else {
+                Element leftElement = leftNode.element;
+                Element rightElement = rightNode.element;
+                if (!leftElement.getName().equals(rightElement.getName())) {
+                    operationType = OperationEnum.CHANGE;
+                } else {
+                    operationType = OperationEnum.UNCHANGE;
+                }
+            }
+        }
+        SimpleGenericOperation sgop = new SimpleGenericOperation(arrValue, leftNode, rightNode, operationType, false);
+        sgop.value = ((SimpleOperationValue) arrValue).value + (operationType == OperationEnum.UNCHANGE ? 0 : 1);
+        return sgop;
     }
 
     @Override
     public Operation generateOperation(OperationValue arrValue, OperationValue permanentArrValue) {
-        return new SimpleDerivedOperation(arrValue, (SimpleOperationValue) permanentArrValue,
+        SimpleDerivedOperation sdop = new SimpleDerivedOperation(arrValue, (SimpleOperationValue) permanentArrValue,
                 OperationEnum.UNCHANGE, true);
+        sdop.value = ((SimpleOperationValue) arrValue).value;
+        return sdop;
     }
 
     private void backtrace(SimpleOperationValue v) {
@@ -49,7 +72,7 @@ public class SimpleDiff extends AbstractDiff {
         System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
                 ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
                 ", operationType: " + v.operationType);
-        if (v == null || v.prevX == 0 && v.prevY == 0) {
+        if (v.prevX == 0 && v.prevY == 0) {
             return;
         }
         if (v.operationType == OperationEnum.INSERT) {
