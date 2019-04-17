@@ -20,12 +20,13 @@ public abstract class AbstractDiff {
     public AbstractDiff() {
     }
 
-    public abstract void initialize(String leftFileName, String rightFileName) throws DocumentException;
-
     /**
-     * permanentArr与temporaryArr数组初始化
+     * 数组初始化
+     * 1. 初始化XML树结构
+     * 2. 初始化递推方程数组permanentArr与temporaryArr，并创建对象
+     * 3. 初始化路径数组
      */
-    public abstract void initialize(int left, int right);
+    public abstract void initialize(String leftFileName, String rightFileName) throws DocumentException;
 
     /**
      * 生成中间操作对象进行比较，选取权值最小的赋值给转移方程。
@@ -183,7 +184,6 @@ public abstract class AbstractDiff {
      * 算法入口
      */
     public void solve() throws DocumentException {
-        initialize(leftTree.size, rightTree.size);
         for (int i = 1; i <= leftTree.keyRootsIndex; i++) {
             for (int j = 1; j <= rightTree.keyRootsIndex; j++) {
                 compute(leftTree.keyRoots[i], rightTree.keyRoots[j]);
@@ -205,36 +205,13 @@ public abstract class AbstractDiff {
         operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
     }
 
-    private void findPath(Path path) {
-        if (path == null) {
-            return;
-        }
-        for (PathNode node : path.nodes) {
-            if (node.isFromPermanent) {
-                findPath(operationPaths[node.curX][node.curY]);
-            } else {
-                if (node.operationType == OperationEnum.INSERT) {
-                    System.out.println("INSERT: " + node.curY);
-                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.INSERT;
-                } else if (node.operationType == OperationEnum.DELETE) {
-                    System.out.println("DELETE: " + node.curX);
-                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.DELETE;
-                } else if (node.operationType == OperationEnum.CHANGE) {
-                    System.out.println("CHANGE: " + node.curX + " " + node.curY);
-                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.CHANGE;
-                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.CHANGE;
-                }
-            }
-        }
-    }
-
     private void backtrace(OperationValue v) {
         if (v == null || v.prevX == 0 && v.prevY == 0) {
             return;
         }
-        System.out.println("current: " + v.curX + " " + v.curY + " " + ((SimpleOperationValue) v).value +
-                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
-                ", operationType: " + v.operationType);
+//        System.out.println("current: " + v.curX + " " + v.curY + " " + ((SimpleOperationValue) v).value +
+//                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
+//                ", operationType: " + v.operationType);
         if (v.operationType == OperationEnum.INSERT) {
             rightTree.nodeSequence[v.curY].operationType = OperationEnum.INSERT;
         } else if (v.operationType == OperationEnum.DELETE) {
@@ -246,4 +223,26 @@ public abstract class AbstractDiff {
         backtrace(temporaryArr[v.prevX][v.prevY]);
     }
 
+    private void findPath(Path path) {
+        if (path == null) {
+            return;
+        }
+        for (PathNode node : path.nodes) {
+            if (node.isFromPermanent) {
+                findPath(operationPaths[node.curX][node.curY]);
+            } else {
+                if (node.operationType == OperationEnum.INSERT) {
+//                    System.out.println("INSERT: " + node.curY);
+                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.INSERT;
+                } else if (node.operationType == OperationEnum.DELETE) {
+//                    System.out.println("DELETE: " + node.curX);
+                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.DELETE;
+                } else if (node.operationType == OperationEnum.CHANGE) {
+//                    System.out.println("CHANGE: " + node.curX + " " + node.curY);
+                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.CHANGE;
+                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.CHANGE;
+                }
+            }
+        }
+    }
 }

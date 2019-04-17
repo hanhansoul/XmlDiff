@@ -7,25 +7,20 @@ import maindiff.abs.work.Operation;
 import maindiff.abs.work.OperationValue;
 import maindiff.simple.output.SimpleDiffOutput;
 import maindiff.util.OperationEnum;
-import maindiff.xml.work.XmlOperationValue;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 
 import java.io.IOException;
 
 public class SimpleDiff extends AbstractDiff {
+
+
     @Override
     public void initialize(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new SimpleTree(leftFileName);
         rightTree = new SimpleTree(rightFileName);
-        permanentArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
-        temporaryArr = new OperationValue[leftTree.size + 1][rightTree.size + 1];
-        temporaryArr[0][0] = new XmlOperationValue();
-        operationPaths = new Path[leftTree.size + 1][rightTree.size + 1];
-    }
-
-    @Override
-    public void initialize(int left, int right) {
+        int left = leftTree.size;
+        int right = rightTree.size;
         temporaryArr = new SimpleOperationValue[left + 1][right + 1];
         permanentArr = new SimpleOperationValue[left + 1][right + 1];
         for (int i = 0; i <= left; i++) {
@@ -34,6 +29,7 @@ public class SimpleDiff extends AbstractDiff {
                 permanentArr[i][j] = new SimpleOperationValue();
             }
         }
+        operationPaths = new Path[left + 1][right + 1];
     }
 
     @Override
@@ -53,7 +49,8 @@ public class SimpleDiff extends AbstractDiff {
                 }
             }
         }
-        SimpleGenericOperation sgop = new SimpleGenericOperation(arrValue, leftNode, rightNode, operationType, false);
+        SimpleGenericOperation sgop = new SimpleGenericOperation(arrValue, leftNode, rightNode,
+                operationType, false);
         sgop.value = ((SimpleOperationValue) arrValue).value + (operationType == OperationEnum.UNCHANGE ? 0 : 1);
         return sgop;
     }
@@ -69,8 +66,7 @@ public class SimpleDiff extends AbstractDiff {
     public static void main(String[] args) throws DocumentException, IOException {
         long beginTime = System.currentTimeMillis();
         SimpleDiff simpleDiff = new SimpleDiff();
-        simpleDiff.initialize("data/left.xml", "data/right.xml");
-//        xmlDiff.initialization("data/left3.xml", "data/right3.xml");
+        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);

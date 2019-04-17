@@ -15,7 +15,8 @@ public class XmlDiff extends AbstractDiff {
     }
 
     @Override
-    public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum operationType) {
+    public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode,
+                                       OperationEnum operationType) {
         return null;
     }
 
@@ -33,31 +34,5 @@ public class XmlDiff extends AbstractDiff {
         temporaryArr[0][0] = new XmlOperationValue();
         operationPaths = new Path[leftTree.size + 1][rightTree.size + 1];
     }
-
-//    @Override
-//    protected Operation opValue(Node leftNode, Node rightNode) throws OpValueElementNullException {
-//        if (leftNode == null && rightNode == null) {
-//            throw new OpValueElementNullException();
-//        }
-//        if (leftNode == null) {
-//            return new XmlOperation();
-//        } else if (rightNode == null) {
-//            return new XmlOperation();
-//        }
-//    }
-//
-//    @Override
-//    protected OperationValue min(OperationValue... values) {
-//        OperationValue minValue = null;
-//        for (OperationValue value : values) {
-//            if (minValue == null) {
-//                minValue = value;
-//            } else if (minValue.compareTo(value) > 0) {
-//                minValue = value;
-//            }
-//        }
-//        return minValue;
-//    }
-
 
 }
