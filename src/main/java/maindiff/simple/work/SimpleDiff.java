@@ -31,6 +31,7 @@ public class SimpleDiff extends AbstractDiff {
         for (int i = 0; i <= left; i++) {
             for (int j = 0; j <= right; j++) {
                 temporaryArr[i][j] = new SimpleOperationValue();
+                permanentArr[i][j] = new SimpleOperationValue();
             }
         }
     }
@@ -61,29 +62,8 @@ public class SimpleDiff extends AbstractDiff {
     public Operation generateOperation(OperationValue arrValue, OperationValue permanentArrValue) {
         SimpleDerivedOperation sdop = new SimpleDerivedOperation(arrValue, (SimpleOperationValue) permanentArrValue,
                 OperationEnum.UNCHANGE, true);
-        sdop.value = ((SimpleOperationValue) arrValue).value;
+        sdop.value = ((SimpleOperationValue) arrValue).value + ((SimpleOperationValue) permanentArrValue).value;
         return sdop;
-    }
-
-    private void backtrace(SimpleOperationValue v) {
-        if (v == null) {
-            return;
-        }
-        System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
-                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
-                ", operationType: " + v.operationType);
-        if (v.prevX == 0 && v.prevY == 0) {
-            return;
-        }
-        if (v.operationType == OperationEnum.INSERT) {
-            rightTree.nodeSequence[v.curY].op = OperationEnum.INSERT;
-        } else if (v.operationType == OperationEnum.DELETE) {
-            leftTree.nodeSequence[v.curX].op = OperationEnum.DELETE;
-        } else if (v.operationType == OperationEnum.CHANGE) {
-            leftTree.nodeSequence[v.curX].op = OperationEnum.CHANGE;
-            rightTree.nodeSequence[v.curY].op = OperationEnum.CHANGE;
-        }
-        backtrace((SimpleOperationValue) temporaryArr[v.prevX][v.prevY]);
     }
 
     public static void main(String[] args) throws DocumentException, IOException {
@@ -92,7 +72,6 @@ public class SimpleDiff extends AbstractDiff {
         simpleDiff.initialize("data/left.xml", "data/right.xml");
 //        xmlDiff.initialization("data/left3.xml", "data/right3.xml");
         simpleDiff.solve();
-        simpleDiff.backtrace((SimpleOperationValue) simpleDiff.permanentArr[simpleDiff.leftTree.rootId][simpleDiff.rightTree.rootId]);
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);
         new SimpleDiffOutput(simpleDiff.leftTree, simpleDiff.rightTree).resultOutput();

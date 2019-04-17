@@ -25,24 +25,18 @@ public abstract class OperationValue implements Comparator {
     public OperationEnum operationType;
     public boolean isFromPermanentArr;
 
-//    public OperationValue(int prevX, int prevY, boolean isFromPermanentArr,
-//                          int curX, int curY, OperationEnum operationType) {
-//        this.prevX = prevX;
-//        this.prevY = prevY;
-//        this.isFromPermanentArr = isFromPermanentArr;
-//        this.curX = curX;
-//        this.curY = curY;
-//        this.operationType = operationType;
-//    }
+    public abstract void assign(OperationValue opv);
 
-//    public OperationValue() {
-//        prevX = prevY = 0;
-//        curX = curY = 0;
-//        operationType = null;
-//        isFromPermanentArr = false;
-//    }
+    public abstract void assign(int cx, int cy, GenericOperation op);
 
-    public void assign(int cx, int cy, Operation op) {
+    public abstract void assign(int cx, int cy, DerivedOperation op);
+
+    public abstract void assign(OperationValue opv, Node leftNode, Node rightNode,
+                                int cx, int cy, boolean isFromPermanentArr);
+
+    public abstract void findMinAndAssign(int cx, int cy, Operation... operations);
+
+    public void commonAssign(int cx, int cy, Operation op) {
         this.prevX = op.arrValue.curX;
         this.prevY = op.arrValue.curY;
         this.curX = cx;
@@ -51,7 +45,7 @@ public abstract class OperationValue implements Comparator {
         this.isFromPermanentArr = op.isFromPermanentArr;
     }
 
-    public void assign(int cx, int cy, OperationValue opv){
+    public void commonAssign(int cx, int cy, OperationValue opv) {
         this.prevX = opv.curX;
         this.prevY = opv.curY;
         this.curX = cx;
@@ -60,11 +54,19 @@ public abstract class OperationValue implements Comparator {
         this.isFromPermanentArr = opv.isFromPermanentArr;
     }
 
-    public abstract void assign(OperationValue opv, Node leftNode, Node rightNode,
-                                int cx, int cy, boolean isFromPermanentArr);
-
-    public abstract void assign(Operation op, int cx, int cy);
-
-    public abstract void findMinAndAssign(int cx, int cy, Operation... operations);
+    /**
+     * public int prevX, prevY;
+     * public int curX, curY;
+     * public OperationEnum operationType;
+     * public boolean isFromPermanentArr;
+     */
+    public void commonAssign(OperationValue opv) {
+        this.prevX = opv.prevX;
+        this.prevY = opv.prevY;
+        this.curX = opv.curX;
+        this.curY = opv.curY;
+        this.operationType = opv.operationType;
+        this.isFromPermanentArr = opv.isFromPermanentArr;
+    }
 
 }

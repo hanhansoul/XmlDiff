@@ -1,11 +1,12 @@
 package maindiff.abs.output;
 
+import java.util.LinkedList;
 import java.util.List;
 
-public abstract class Path {
+public class Path {
     public List<PathNode> nodes;
 
-    public Path(List<PathNode> nodes) {
-        this.nodes = nodes;
+    public Path() {
+        this.nodes = new LinkedList<>();
     }
 }

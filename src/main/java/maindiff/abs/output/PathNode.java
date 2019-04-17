@@ -5,7 +5,7 @@ import maindiff.abs.work.OperationValue;
 import maindiff.util.OperationEnum;
 
 public abstract class PathNode {
-    public OperationEnum op;
+    public OperationEnum operationType;
     public boolean isFromPermanent;
     public int curX, curY;
 
@@ -13,6 +13,6 @@ public abstract class PathNode {
         this.isFromPermanent = opv.isFromPermanentArr;
         this.curX = opv.curX;
         this.curY = opv.curY;
-        this.op = opv.operationType;
+        this.operationType = opv.operationType;
     }
 }

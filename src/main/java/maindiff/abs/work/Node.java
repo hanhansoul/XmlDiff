@@ -15,7 +15,7 @@ public abstract class Node {
      * 用于记录xml相关元素内容
      */
     public Element element;
-    public OperationEnum op;
+    public OperationEnum operationType;
 
     /**
      * 用于回溯路径

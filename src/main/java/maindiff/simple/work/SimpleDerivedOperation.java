@@ -11,6 +11,6 @@ public class SimpleDerivedOperation extends DerivedOperation {
                                   OperationEnum op, boolean isFromPermanentArr) {
         super(arrValue, op, isFromPermanentArr);
         this.permanentArrValue = permanentArrValue;
-        this.value = -1;
+        this.value = 0;
     }
 }

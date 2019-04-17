@@ -1,8 +1,6 @@
 package maindiff.xml.work;
 
-import maindiff.abs.work.Node;
-import maindiff.abs.work.Operation;
-import maindiff.abs.work.OperationValue;
+import maindiff.abs.work.*;
 import maindiff.util.OperationEnum;
 
 // TODO
@@ -27,6 +25,22 @@ public class XmlOperationValue extends OperationValue {
 //        this.elementTextDiffValue = elementTextDiffValue;
 //    }
 
+    @Override
+    public void assign(OperationValue opv) {
+
+    }
+
+    @Override
+    public void assign(int cx, int cy, GenericOperation op) {
+
+    }
+
+    @Override
+    public void assign(int cx, int cy, DerivedOperation op) {
+
+    }
+
+
     /**
      * 将opv内容赋值给当前XmlOperationValue
      * opv + opValue(leftNode, rightNode)
@@ -34,11 +48,6 @@ public class XmlOperationValue extends OperationValue {
     @Override
     public void assign(OperationValue opv, Node leftNode, Node rightNode,
                        int cx, int cy, boolean isFromPermanentArr) {
-
-    }
-
-    @Override
-    public void assign(Operation op, int cx, int cy) {
 
     }
 

@@ -191,10 +191,13 @@ public class XmlDiff {
                 findPath(operationPaths[node.curX][node.curY]);
             } else {
                 if (node.op == OperationEnum.INSERT) {
+                    System.out.println("INSERT: " + node.curY);
                     rightTree.nodeSequence[node.curY].op = OperationEnum.INSERT;
                 } else if (node.op == OperationEnum.DELETE) {
+                    System.out.println("DELETE: " + node.curX);
                     leftTree.nodeSequence[node.curX].op = OperationEnum.DELETE;
                 } else if (node.op == OperationEnum.CHANGE) {
+                    System.out.println("CHANGE: " + node.curX + " " + node.curY);
                     leftTree.nodeSequence[node.curX].op = OperationEnum.CHANGE;
                     rightTree.nodeSequence[node.curY].op = OperationEnum.CHANGE;
                 }
@@ -203,15 +206,12 @@ public class XmlDiff {
     }
 
     private void backtrace(SimpleOperationValue v) {
-        if (v == null) {
+        if (v == null || v.prevX == 0 && v.prevY == 0) {
             return;
         }
         System.out.println("current: " + v.curX + " " + v.curY + " " + v.value +
                 ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
                 ", operationType: " + v.operation.op);
-        if (v == null || v.prevX == 0 && v.prevY == 0) {
-            return;
-        }
         if (v.operation.op == OperationEnum.INSERT) {
             rightTree.nodeSequence[v.curY].op = OperationEnum.INSERT;
         } else if (v.operation.op == OperationEnum.DELETE) {

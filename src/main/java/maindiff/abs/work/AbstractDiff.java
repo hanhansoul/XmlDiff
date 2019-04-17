@@ -1,6 +1,8 @@
 package maindiff.abs.work;
 
 import maindiff.abs.output.Path;
+import maindiff.abs.output.PathNode;
+import maindiff.simple.output.SimplePathNode;
 import maindiff.simple.work.SimpleOperationValue;
 import maindiff.util.OperationEnum;
 import org.dom4j.DocumentException;
@@ -106,7 +108,7 @@ public abstract class AbstractDiff {
                             generateOperation(temporaryArr[i][jx], null, rightChildNode, OperationEnum.INSERT),
                             generateOperation(temporaryArr[ix][jx], leftChildNode, rightChildNode, null)
                     );
-                    permanentArr[i][j] = temporaryArr[i][j];
+                    permanentArr[i][j].assign(temporaryArr[i][j]);
                     permanentNodePathTrace(permanentArr[i][j], i, j);
 
                     if (DEBUG) {
@@ -187,7 +189,7 @@ public abstract class AbstractDiff {
                 compute(leftTree.keyRoots[i], rightTree.keyRoots[j]);
             }
         }
-//        backtrace((SimpleOperationValue) permanentArr[leftTree.rootId][rightTree.rootId]);
+        backtrace(permanentArr[leftTree.rootId][rightTree.rootId]);
         findPath(operationPaths[leftTree.rootId][rightTree.rootId]);
     }
 
@@ -198,48 +200,50 @@ public abstract class AbstractDiff {
         OperationValue prevNode = temporaryArr[curNode.prevX][curNode.prevY];
         permanentNodePathTrace(prevNode, nodeX, nodeY);
         if (operationPaths[nodeX][nodeY] == null) {
-//            operationPaths[nodeX][nodeY] = new Path();
+            operationPaths[nodeX][nodeY] = new Path();
         }
-//        operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
+        operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
     }
 
     private void findPath(Path path) {
-//        if (path == null) {
-//            return;
-//        }
-//        for (PathNode node : path.nodes) {
-//            if (node.isFromPermanent) {
-//                findPath(operationPaths[node.curX][node.curY]);
-//            } else {
-//                if (node.operationType == OperationEnum.INSERT) {
-//                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.INSERT;
-//                } else if (node.operationType == OperationEnum.DELETE) {
-//                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.DELETE;
-//                } else if (node.operationType == OperationEnum.CHANGE) {
-//                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.CHANGE;
-//                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.CHANGE;
-//                }
-//            }
-//        }
+        if (path == null) {
+            return;
+        }
+        for (PathNode node : path.nodes) {
+            if (node.isFromPermanent) {
+                findPath(operationPaths[node.curX][node.curY]);
+            } else {
+                if (node.operationType == OperationEnum.INSERT) {
+                    System.out.println("INSERT: " + node.curY);
+                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.INSERT;
+                } else if (node.operationType == OperationEnum.DELETE) {
+                    System.out.println("DELETE: " + node.curX);
+                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.DELETE;
+                } else if (node.operationType == OperationEnum.CHANGE) {
+                    System.out.println("CHANGE: " + node.curX + " " + node.curY);
+                    leftTree.nodeSequence[node.curX].operationType = OperationEnum.CHANGE;
+                    rightTree.nodeSequence[node.curY].operationType = OperationEnum.CHANGE;
+                }
+            }
+        }
     }
 
-    /*
-    public static void main(String[] args) throws DocumentException, OpValueElementNullException, IOException {
-        long beginTime = System.currentTimeMillis();
-        AbstractDiff xmlDiff = new AbstractDiff();
-        xmlDiff.initialization("data/left.xml",
-                "data/right.xml");
-//        xmlDiff.initialization("data/left3.xml", "data/right3.xml");
-        xmlDiff.solve();
-//        xmlDiff.preOrderOutput();
-        long solveTime = System.currentTimeMillis();
-        System.out.println((solveTime - beginTime) / 1000);
-        new SimpleDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree).resultOutput();
-//        System.out.println(xmlDiff.leftOutput);
-//        System.out.println(xmlDiff.rightOutput);
-//        xmlDiff.resultOutput();
-        long endTime = System.currentTimeMillis();
-        System.out.println((endTime - solveTime) / 1000);
+    private void backtrace(OperationValue v) {
+        if (v == null || v.prevX == 0 && v.prevY == 0) {
+            return;
+        }
+        System.out.println("current: " + v.curX + " " + v.curY + " " + ((SimpleOperationValue) v).value +
+                ", prev: " + v.prevX + " " + v.prevY + (v.isFromPermanentArr ? " PermanentArr" : " TemporaryArr") +
+                ", operationType: " + v.operationType);
+        if (v.operationType == OperationEnum.INSERT) {
+            rightTree.nodeSequence[v.curY].operationType = OperationEnum.INSERT;
+        } else if (v.operationType == OperationEnum.DELETE) {
+            leftTree.nodeSequence[v.curX].operationType = OperationEnum.DELETE;
+        } else if (v.operationType == OperationEnum.CHANGE) {
+            leftTree.nodeSequence[v.curX].operationType = OperationEnum.CHANGE;
+            rightTree.nodeSequence[v.curY].operationType = OperationEnum.CHANGE;
+        }
+        backtrace(temporaryArr[v.prevX][v.prevY]);
     }
-    */
+
 }

@@ -1,13 +1,36 @@
 package maindiff.simple.work;
 
-import maindiff.abs.work.Node;
-import maindiff.abs.work.Operation;
-import maindiff.abs.work.OperationValue;
+import maindiff.abs.work.*;
 import maindiff.util.OperationEnum;
 import org.dom4j.Element;
 
 public class SimpleOperationValue extends OperationValue {
     public int value;
+
+    @Override
+    public void assign(OperationValue opv) {
+        commonAssign(opv);
+        SimpleOperationValue sopv = (SimpleOperationValue) opv;
+        this.value = sopv.value;
+    }
+
+    /**
+     * public OperationValue arrValue;
+     * public OperationEnum operationType;
+     * public boolean isFromPermanentArr;
+     * 用于在findMinAndAssign()将最优值赋值给当前对象
+     */
+    @Override
+    public void assign(int cx, int cy, GenericOperation op) {
+        commonAssign(cx, cy, op);
+        this.value = ((SimpleOperationValue) op.arrValue).value + (op.operationType == OperationEnum.UNCHANGE ? 0 : 1);
+    }
+
+    @Override
+    public void assign(int cx, int cy, DerivedOperation op) {
+        commonAssign(cx, cy, op);
+        this.value = ((SimpleDerivedOperation) op).value + (op.operationType == OperationEnum.UNCHANGE ? 0 : 1);
+    }
 
     /**
      * 用于递推方程每次递推的初始化赋值
@@ -18,7 +41,7 @@ public class SimpleOperationValue extends OperationValue {
             return;
         }
 
-        assign(cx, cy, opv);
+        commonAssign(cx, cy, opv);
         if (leftNode == null) {
             this.operationType = OperationEnum.INSERT;
         } else if (rightNode == null) {
@@ -36,18 +59,6 @@ public class SimpleOperationValue extends OperationValue {
                 (this.operationType == OperationEnum.UNCHANGE ? 0 : 1);
     }
 
-    /**
-     * public OperationValue arrValue;
-     * public OperationEnum operationType;
-     * public boolean isFromPermanentArr;
-     * 用于在findMinAndAssign()将最优值赋值给当前对象
-     */
-    @Override
-    public void assign(Operation op, int cx, int cy) {
-        super.assign(cx, cy, op);
-        this.value = ((SimpleOperationValue) op.arrValue).value + (op.operationType == OperationEnum.UNCHANGE ? 0 : 1);
-    }
-
     @Override
     public void findMinAndAssign(int cx, int cy, Operation... operations) {
         Operation optimalOperation = null;
@@ -56,7 +67,21 @@ public class SimpleOperationValue extends OperationValue {
                 optimalOperation = op;
             }
         }
-        assign(optimalOperation, cx, cy);
+        if (optimalOperation instanceof GenericOperation) {
+            assign(cx, cy, (GenericOperation) optimalOperation);
+        } else if (optimalOperation instanceof DerivedOperation) {
+            assign(cx, cy, (DerivedOperation) optimalOperation);
+        }
+    }
+
+    /**
+     * findMinAndAssign()用于比较
+     */
+    @Override
+    public int compare(Object o1, Object o2) {
+        int value1 = computeValue(o1);
+        int value2 = computeValue(o2);
+        return value1 - value2;
     }
 
     private int computeValue(Object o) {
@@ -69,14 +94,4 @@ public class SimpleOperationValue extends OperationValue {
         }
         return -1;
     }
-
-    @Override
-    public int compare(Object o1, Object o2) {
-        int value1 = computeValue(o1);
-        int value2 = computeValue(o2);
-//        int value1 = ((SimpleOperationValue) o1).value;
-//        int value2 = ((SimpleOperationValue) o2).value;
-        return value1 - value2;
-    }
-
 }

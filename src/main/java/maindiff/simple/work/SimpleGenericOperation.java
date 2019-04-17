@@ -9,6 +9,6 @@ public class SimpleGenericOperation extends GenericOperation {
     public int value;
     public SimpleGenericOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum op, boolean isFromPermanentArr) {
         super(arrValue, leftNode, rightNode, op, isFromPermanentArr);
-        this.value = -1;
+        this.value = 0;
     }
 }

@@ -139,26 +139,26 @@ public class SimpleDiffOutput extends DiffOutput {
                 rightOutputNode = rightIterator.next();
                 rightNode = rightOutputNode.node;
             }
-            if ((leftNode.op == null || leftNode.op == OperationEnum.UNCHANGE) &&
-                    (rightNode.op == null || rightNode.op == OperationEnum.UNCHANGE)) {
+            if ((leftNode.operationType == null || leftNode.operationType == OperationEnum.UNCHANGE) &&
+                    (rightNode.operationType == null || rightNode.operationType == OperationEnum.UNCHANGE)) {
                 elementOutput(leftOutput, leftOutputNode, OperationEnum.UNCHANGE);
                 elementOutput(rightOutput, rightOutputNode, OperationEnum.UNCHANGE);
                 leftNext = rightNext = true;
                 leftIndex++;
                 rightIndex++;
-            } else if (leftNode.op == OperationEnum.DELETE) {
+            } else if (leftNode.operationType == OperationEnum.DELETE) {
                 elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
                 elementOutput(rightOutput, null, OperationEnum.DELETE);
                 leftNext = true;
                 rightNext = false;
                 leftIndex++;
-            } else if (rightNode.op == OperationEnum.INSERT) {
+            } else if (rightNode.operationType == OperationEnum.INSERT) {
                 elementOutput(leftOutput, null, OperationEnum.INSERT);
                 elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
                 leftNext = false;
                 rightNext = true;
                 rightIndex++;
-            } else if (leftNode.op == OperationEnum.CHANGE && rightNode.op == OperationEnum.CHANGE) {
+            } else if (leftNode.operationType == OperationEnum.CHANGE && rightNode.operationType == OperationEnum.CHANGE) {
                 elementOutput(leftOutput, leftOutputNode, OperationEnum.CHANGE);
                 elementOutput(rightOutput, rightOutputNode, OperationEnum.CHANGE);
                 leftNext = rightNext = true;
@@ -174,11 +174,11 @@ public class SimpleDiffOutput extends DiffOutput {
         output();
         leftOutput.append(OUTPUT_END);
         rightOutput.append(OUTPUT_END);
-        FileWriter writer = new FileWriter("data/output1.html");
+        FileWriter writer = new FileWriter("data/output10.html");
         writer.write(String.valueOf(leftOutput));
         writer.flush();
         writer.close();
-        writer = new FileWriter("data/output2.html");
+        writer = new FileWriter("data/output20.html");
         writer.write(String.valueOf(rightOutput));
         writer.flush();
         writer.close();
