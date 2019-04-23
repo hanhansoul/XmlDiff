@@ -7,7 +7,9 @@ import maindiff.util.OperationEnum;
 
 public class SimpleGenericOperation extends GenericOperation {
     public int value;
-    public SimpleGenericOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum op, boolean isFromPermanentArr) {
+
+    public SimpleGenericOperation(OperationValue arrValue, Node leftNode, Node rightNode,
+                                  OperationEnum op, boolean isFromPermanentArr) {
         super(arrValue, leftNode, rightNode, op, isFromPermanentArr);
         this.value = 0;
     }

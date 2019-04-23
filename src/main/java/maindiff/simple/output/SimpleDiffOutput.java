@@ -64,14 +64,14 @@ public class SimpleDiffOutput extends DiffOutput {
             sb.append(INDENTS[depth]);
             sb.append("&lt;");
             sb.append(element.getQualifiedName());
-            if (node.attributesMap != null) {
-                for (Map.Entry<String, String> entry : node.attributesMap.entrySet()) {
-                    sb.append(" ");
-                    sb.append(entry.getKey());
-                    sb.append("=");
-                    sb.append(entry.getValue());
-                }
-            }
+//            if (node.attributesMap != null) {
+//                for (Map.Entry<String, String> entry : node.attributesMap.entrySet()) {
+//                    sb.append(" ");
+//                    sb.append(entry.getKey());
+//                    sb.append("=");
+//                    sb.append(entry.getValue());
+//                }
+//            }
             sb.append("&gt;");
             sb.append(SPAN_END);
         }

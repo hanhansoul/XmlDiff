@@ -12,7 +12,7 @@ public abstract class Operation {
 
     public Operation(OperationValue arrValue, OperationEnum operationType, boolean isFromPermanentArr) {
         this.arrValue = arrValue;
-        this.operationType = operationType; // TODO 选择permanentArr时操作类型？
+        this.operationType = operationType;
         this.isFromPermanentArr = isFromPermanentArr;
     }
 
