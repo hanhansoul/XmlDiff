@@ -63,9 +63,9 @@ public abstract class AbstractDiff {
             if (DEBUG) {
                 System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
                         ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
-                        ((SimpleOperationValue) temporaryArr[i][0]).prevX + "][" +
-                        ((SimpleOperationValue) temporaryArr[i][0]).prevY + "] through " +
-                        ((SimpleOperationValue) temporaryArr[i][0]).operationType);
+                        temporaryArr[i][0].prevX + "][" +
+                        temporaryArr[i][0].prevY + "] through " +
+                        temporaryArr[i][0].operationType);
             }
         }
 

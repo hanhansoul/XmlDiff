@@ -33,7 +33,8 @@ public class SimpleDiff extends AbstractDiff {
     }
 
     @Override
-    public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode, OperationEnum operationType) {
+    public Operation generateOperation(OperationValue arrValue, Node leftNode, Node rightNode,
+                                       OperationEnum operationType) {
         if (operationType == null) {
             if (leftNode == null) {
                 operationType = OperationEnum.INSERT;

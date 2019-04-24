@@ -5,23 +5,11 @@ import maindiff.util.OperationEnum;
 import java.util.EnumMap;
 
 public class TextDiff {
-    private final String[] textLeft;
-    private final String[] textRight;
 
-    private int MAXLINES;
-    private int ORIGIN;
-    private int[] lastD;
-    private Edit[] editScript;
-
-    private int lengthLeft;
-    private int lengthRight;
-
-    class Edit {
-        public OperationEnum operationType;
-        public int indexLeft;
-        public int indexRight;
-        public Edit prev;
-        public Edit next;
+    static class Edit {
+        int indexLeft, indexRight;
+        Edit prev, next;
+        OperationEnum operationType;
     }
 
     enum ResultIdentifier {
@@ -29,32 +17,33 @@ public class TextDiff {
         RIGHT
     }
 
-    public TextDiff(String[] textLeft, String[] textRight) {
-        this.textLeft = textLeft;
-        this.textRight = textRight;
-        this.lengthLeft = textLeft.length;
-        this.lengthRight = textRight.length;
-        ORIGIN = MAXLINES = Math.max(lengthLeft, lengthRight);
-    }
+    private static final String INSERT_TAG_BEGIN = "<span style='background-color:green;display:inline-block;'>";
+    private static final String DELETE_TAG_BEGIN = "<span style='background-color:red;display:inline-block;'>";
+    private static final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
+    private static final String TAG_END = "</span>";
+    private static final String SPACE = " ";
 
-    public double textDiffAndGenerateEditScript(boolean generatingEditScript) {
-        int maxD;
+    public static double textDiffCompute(final String[] textLeft, final String[] textRight, boolean generatingEditScript) {
+        int lengthLeft = textLeft.length;
+        int lengthRight = textRight.length;
+        int MAX_LINES, ORIGIN;
+        Edit[] editScript = null;
         int row, col;
-        int lower, upper;
+
+        ORIGIN = MAX_LINES = Math.max(lengthLeft, lengthRight);
         if (generatingEditScript) {
-            editScript = new Edit[MAXLINES * 2 + 1];
+            editScript = new Edit[MAX_LINES * 2 + 1];
             editScript[ORIGIN] = null;
         }
         for (row = 0; row < lengthLeft && row < lengthRight && textLeft[row].equals(textRight[row]); row++)
             ;
-        lastD = new int[MAXLINES * 2 + 1];
+        int[] lastD = new int[MAX_LINES * 2 + 1];
         lastD[ORIGIN] = row;
-        maxD = 2 * MAXLINES;
-        lower = row == lengthLeft ? ORIGIN + 1 : ORIGIN - 1;
-        upper = row == lengthRight ? ORIGIN - 1 : ORIGIN + 1;
+        int maxD = 2 * MAX_LINES;
+        int lower = row == lengthLeft ? ORIGIN + 1 : ORIGIN - 1;
+        int upper = row == lengthRight ? ORIGIN - 1 : ORIGIN + 1;
 
         if (lower > upper) {
-            System.out.println("identical.");
             return 1;
         }
 
@@ -89,8 +78,8 @@ public class TextDiff {
                 if (row == lengthLeft && col == lengthRight) {
                     System.out.println(d);
                     if (generatingEditScript) {
-                        editScriptPrint(editScript[k]);
-                        EnumMap res = editScriptOutput(editScript[k]);
+                        editScriptPrint(editScript[k], textLeft, textRight);
+                        EnumMap res = editScriptOutput(editScript[k], textLeft, textRight);
                         System.out.println(res.get(ResultIdentifier.LEFT));
                         System.out.println(res.get(ResultIdentifier.RIGHT));
                     }
@@ -109,13 +98,7 @@ public class TextDiff {
         return 0;
     }
 
-    private final String INSERT_TAG_BEGIN = "<span style='background-color:green;display:inline-block;'>";
-    private final String DELETE_TAG_BEGIN = "<span style='background-color:red;display:inline-block;'>";
-    private final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
-    private final String TAG_END = "</span>";
-    private final String SPACE = " ";
-
-    public EnumMap<ResultIdentifier, StringBuilder> editScriptOutput(Edit start) {
+    private static EnumMap<ResultIdentifier, StringBuilder> editScriptOutput(Edit start, final String[] textLeft, final String[] textRight) {
         Edit head = start;
         Edit current = null;
         StringBuilder textOutputLeft = new StringBuilder();
@@ -252,7 +235,7 @@ public class TextDiff {
         return resultMap;
     }
 
-    public void editScriptPrint(Edit start) {
+    private static void editScriptPrint(Edit start, final String[] textLeft, final String[] textRight) {
         System.out.println("indexLeft\tindexRight");
         Edit head = start;
         Edit current = null;
@@ -309,17 +292,6 @@ public class TextDiff {
      * 确定匹配的字符串后，在输出结果的时候再次计算出匹配项，并生成输出结果。
      */
 
-    public double textDiffCompute() {
-        return 0;
-    }
-
-    /**
-     * 根据textDiffCompute()结果生成输出字符串结果
-     */
-    public void textDiffOutputBuild() {
-
-    }
-
     /**
      * a b c a b b a
      * 1 2 3 4 5 6 7
@@ -329,10 +301,10 @@ public class TextDiff {
      * c b a b a c
      */
     public static void main(String[] args) {
-        String s1 = "a b c a b b a";
-        String s2 = "c b a b a c";
-        System.out.println(s1);
-        System.out.println(s2);
-        new TextDiff(s1.split("\\s+"), s2.split("\\s+")).textDiffAndGenerateEditScript(true);
+//        String s1 = "a b c a b b a";
+//        String s2 = "c b a b a c";
+//        System.out.println(s1);
+//        System.out.println(s2);
+//        new TextDiff(s1.split("\\s+"), s2.split("\\s+")).textDiffAndGenerateEditScript(true);
     }
 }

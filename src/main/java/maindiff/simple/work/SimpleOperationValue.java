@@ -59,20 +59,20 @@ public class SimpleOperationValue extends OperationValue {
                 (this.operationType == OperationEnum.UNCHANGE ? 0 : 1);
     }
 
-    @Override
-    public void findMinAndAssign(int cx, int cy, Operation... operations) {
-        Operation optimalOperation = null;
-        for (Operation op : operations) {
-            if (optimalOperation == null || compare(optimalOperation, op) > 0) {
-                optimalOperation = op;
-            }
-        }
-        if (optimalOperation instanceof GenericOperation) {
-            assign(cx, cy, (GenericOperation) optimalOperation);
-        } else if (optimalOperation instanceof DerivedOperation) {
-            assign(cx, cy, (DerivedOperation) optimalOperation);
-        }
-    }
+//    @Override
+//    public void findMinAndAssign(int cx, int cy, Operation... operations) {
+//        Operation optimalOperation = null;
+//        for (Operation op : operations) {
+//            if (optimalOperation == null || compare(optimalOperation, op) > 0) {
+//                optimalOperation = op;
+//            }
+//        }
+//        if (optimalOperation instanceof GenericOperation) {
+//            assign(cx, cy, (GenericOperation) optimalOperation);
+//        } else if (optimalOperation instanceof DerivedOperation) {
+//            assign(cx, cy, (DerivedOperation) optimalOperation);
+//        }
+//    }
 
     /**
      * findMinAndAssign()用于比较

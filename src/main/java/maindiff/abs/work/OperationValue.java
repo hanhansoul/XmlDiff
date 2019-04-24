@@ -34,7 +34,19 @@ public abstract class OperationValue implements Comparator {
     public abstract void assign(OperationValue opv, Node leftNode, Node rightNode,
                                 int cx, int cy, boolean isFromPermanentArr);
 
-    public abstract void findMinAndAssign(int cx, int cy, Operation... operations);
+    public void findMinAndAssign(int cx, int cy, Operation... operations) {
+        Operation optimalOperation = null;
+        for (Operation op : operations) {
+            if (optimalOperation == null || compare(optimalOperation, op) > 0) {
+                optimalOperation = op;
+            }
+        }
+        if (optimalOperation instanceof GenericOperation) {
+            assign(cx, cy, (GenericOperation) optimalOperation);
+        } else if (optimalOperation instanceof DerivedOperation) {
+            assign(cx, cy, (DerivedOperation) optimalOperation);
+        }
+    }
 
     public void commonAssign(int cx, int cy, Operation op) {
         this.prevX = op.arrValue.curX;
