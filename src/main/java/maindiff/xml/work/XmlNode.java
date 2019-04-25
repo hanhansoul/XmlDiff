@@ -17,9 +17,11 @@ public class XmlNode extends Node {
      **/
     public Map<String, String> attributesMap;
     /**
-     * 标签文本内容
+     * 标签文本内容数组
      **/
-    public String[] text;
+    public String[] textArr;
+
+    public String text;
 
     public XmlNode(Element element) {
         super(element);
@@ -27,6 +29,7 @@ public class XmlNode extends Node {
         for (Attribute attribute : element.attributes()) {
             attributesMap.put(attribute.getName(), attribute.getValue());
         }
-        text = element.getText().split("\\s+");
+        text = element.getText().replaceAll("\n", "").trim();
+        textArr = text.split("\\s+");
     }
 }

@@ -2,10 +2,12 @@ package maindiff.xml.work;
 
 import maindiff.abs.output.Path;
 import maindiff.abs.work.*;
-import maindiff.util.OpValueElementNullException;
 import maindiff.util.OperationEnum;
+import maindiff.xml.output.XmlDiffOutput;
 import maindiff.xml.textdiff.TextDiff;
 import org.dom4j.DocumentException;
+
+import java.io.IOException;
 
 import static maindiff.util.Constant.RATIO_SHREHOLD;
 
@@ -21,26 +23,26 @@ public class XmlDiff extends AbstractDiff {
         double elementTextDiffValue;
         if (xmlLeftNode == null) {
             elementNameDiffValue = xopv.elementNameDiffValue + 1;
-            elementTextDiffValue = xopv.elementTextDiffValue + xmlRightNode.text.length;
+            elementTextDiffValue = xopv.elementTextDiffValue + xmlRightNode.textArr.length;
             operationType = OperationEnum.INSERT;
         } else if (xmlRightNode == null) {
             elementNameDiffValue = xopv.elementNameDiffValue + 1;
-            elementTextDiffValue = xopv.elementTextDiffValue + xmlLeftNode.text.length;
+            elementTextDiffValue = xopv.elementTextDiffValue + xmlLeftNode.textArr.length;
             operationType = OperationEnum.DELETE;
         } else {
             double diffRatio;
             int totalLength = 0;
             if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
-                if (xmlLeftNode.text != null && xmlRightNode.text != null) {
-                    double similarRatio = TextDiff.textDiffCompute(xmlLeftNode.text, xmlRightNode.text, false);
+                if (xmlLeftNode.textArr != null && xmlRightNode.textArr != null) {
+                    double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
                     diffRatio = similarRatio <= RATIO_SHREHOLD ? 1 : 1 - similarRatio;
-                    totalLength = xmlLeftNode.text.length + xmlRightNode.text.length;
+                    totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
-                    if (xmlLeftNode.text != null) {
-                        totalLength += xmlLeftNode.text.length;
+                    if (xmlLeftNode.textArr != null) {
+                        totalLength += xmlLeftNode.textArr.length;
                     }
-                    if (xmlRightNode.text != null) {
-                        totalLength += xmlRightNode.text.length;
+                    if (xmlRightNode.textArr != null) {
+                        totalLength += xmlRightNode.textArr.length;
                     }
                     diffRatio = 1;
                 }
@@ -49,11 +51,11 @@ public class XmlDiff extends AbstractDiff {
                 operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
             } else {
                 elementNameDiffValue = xopv.elementNameDiffValue + 1;
-                if (xmlLeftNode.text != null) {
-                    totalLength += xmlLeftNode.text.length;
+                if (xmlLeftNode.textArr != null) {
+                    totalLength += xmlLeftNode.textArr.length;
                 }
-                if (xmlRightNode.text != null) {
-                    totalLength += xmlRightNode.text.length;
+                if (xmlRightNode.textArr != null) {
+                    totalLength += xmlRightNode.textArr.length;
                 }
                 elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength / 2;
                 operationType = OperationEnum.CHANGE;
@@ -93,6 +95,19 @@ public class XmlDiff extends AbstractDiff {
             }
         }
         operationPaths = new Path[left + 1][right + 1];
+    }
+
+    public static void main(String[] args) throws DocumentException, IOException {
+        long beginTime = System.currentTimeMillis();
+        XmlDiff simpleDiff = new XmlDiff();
+//        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
+        simpleDiff.initialize("data/left3.xml", "data/right3.xml");
+        simpleDiff.solve();
+        long solveTime = System.currentTimeMillis();
+        System.out.println((solveTime - beginTime) / 1000);
+        new XmlDiffOutput(simpleDiff.leftTree, simpleDiff.rightTree).resultOutput();
+        long endTime = System.currentTimeMillis();
+        System.out.println((endTime - solveTime) / 1000);
     }
 
 }

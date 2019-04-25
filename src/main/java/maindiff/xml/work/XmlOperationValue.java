@@ -57,26 +57,26 @@ public class XmlOperationValue extends OperationValue {
         XmlNode xmlRightNode = (XmlNode) rightNode;
         if (xmlLeftNode == null) {
             this.elementNameDiffValue = xopv.elementNameDiffValue + 1;
-            this.elementTextDiffValue = xopv.elementTextDiffValue + xmlRightNode.text.length;
+            this.elementTextDiffValue = xopv.elementTextDiffValue + xmlRightNode.textArr.length;
             this.operationType = OperationEnum.INSERT;
         } else if (xmlRightNode == null) {
             this.elementNameDiffValue = xopv.elementNameDiffValue + 1;
-            this.elementTextDiffValue = xopv.elementTextDiffValue + xmlLeftNode.text.length;
+            this.elementTextDiffValue = xopv.elementTextDiffValue + xmlLeftNode.textArr.length;
             this.operationType = OperationEnum.DELETE;
         } else {
             double diffRatio;
             int totalLength = 0;
             if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
-                if (xmlLeftNode.text != null && xmlRightNode.text != null) {
-                    double similarRatio = TextDiff.textDiffCompute(xmlLeftNode.text, xmlRightNode.text, false);
+                if (xmlLeftNode.textArr != null && xmlRightNode.textArr != null) {
+                    double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
                     diffRatio = similarRatio <= RATIO_SHREHOLD ? 1 : 1 - similarRatio;
-                    totalLength = xmlLeftNode.text.length + xmlRightNode.text.length;
+                    totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
-                    if (xmlLeftNode.text != null) {
-                        totalLength += xmlLeftNode.text.length;
+                    if (xmlLeftNode.textArr != null) {
+                        totalLength += xmlLeftNode.textArr.length;
                     }
-                    if (xmlRightNode.text != null) {
-                        totalLength += xmlRightNode.text.length;
+                    if (xmlRightNode.textArr != null) {
+                        totalLength += xmlRightNode.textArr.length;
                     }
                     diffRatio = 1;
                 }
@@ -84,11 +84,11 @@ public class XmlOperationValue extends OperationValue {
                 this.operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
             } else {
                 this.elementNameDiffValue = xopv.elementNameDiffValue + 1;
-                if (xmlLeftNode.text != null) {
-                    totalLength += xmlLeftNode.text.length;
+                if (xmlLeftNode.textArr != null) {
+                    totalLength += xmlLeftNode.textArr.length;
                 }
-                if (xmlRightNode.text != null) {
-                    totalLength += xmlRightNode.text.length;
+                if (xmlRightNode.textArr != null) {
+                    totalLength += xmlRightNode.textArr.length;
                 }
                 this.elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength / 2;
                 this.operationType = OperationEnum.CHANGE;

@@ -2,8 +2,6 @@ package maindiff.xml.textdiff;
 
 import maindiff.util.OperationEnum;
 
-import java.util.EnumMap;
-
 public class TextDiff {
 
     static class Edit {
@@ -12,18 +10,24 @@ public class TextDiff {
         OperationEnum operationType;
     }
 
-    enum ResultIdentifier {
-        LEFT,
-        RIGHT
-    }
-
     private static final String INSERT_TAG_BEGIN = "<span style='background-color:green;display:inline-block;'>";
     private static final String DELETE_TAG_BEGIN = "<span style='background-color:red;display:inline-block;'>";
     private static final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
     private static final String TAG_END = "</span>";
     private static final String SPACE = " ";
 
-    public static double textDiffCompute(final String[] textLeft, final String[] textRight, boolean generatingEditScript) {
+    public static void textDiffTextOutput(final String[] textLeft, final String[] textRight,
+                                          StringBuilder textOutputLeft, StringBuilder textOutputRight) {
+        textDiffCompute(textLeft, textRight, true, textOutputLeft, textOutputRight);
+    }
+
+    public static double textDiffRatioCompute(final String[] textLeft, final String[] textRight) {
+        return textDiffCompute(textLeft, textRight, false, null, null);
+    }
+
+    private static double textDiffCompute(final String[] textLeft, final String[] textRight,
+                                              boolean generatingEditScript,
+                                              StringBuilder textOutputLeft, StringBuilder textOutputRight) {
         int lengthLeft = textLeft.length;
         int lengthRight = textRight.length;
         int MAX_LINES, ORIGIN;
@@ -76,12 +80,8 @@ public class TextDiff {
                 lastD[k] = row;
 
                 if (row == lengthLeft && col == lengthRight) {
-                    System.out.println(d);
                     if (generatingEditScript) {
-                        editScriptPrint(editScript[k], textLeft, textRight);
-                        EnumMap res = editScriptOutput(editScript[k], textLeft, textRight);
-                        System.out.println(res.get(ResultIdentifier.LEFT));
-                        System.out.println(res.get(ResultIdentifier.RIGHT));
+                        editScriptOutput(editScript[k], textLeft, textRight, textOutputLeft, textOutputRight);
                     }
                     return d * 2 / (lengthLeft + lengthRight);
                 }
@@ -98,16 +98,17 @@ public class TextDiff {
         return 0;
     }
 
-    private static EnumMap<ResultIdentifier, StringBuilder> editScriptOutput(Edit start, final String[] textLeft, final String[] textRight) {
+    private static void editScriptOutput(Edit start, final String[] textLeft, final String[] textRight,
+                                         StringBuilder textOutputLeft, StringBuilder textOutputRight) {
         Edit head = start;
         Edit current = null;
-        StringBuilder textOutputLeft = new StringBuilder();
-        StringBuilder textOutputRight = new StringBuilder();
-        EnumMap<ResultIdentifier, StringBuilder> resultMap = new EnumMap<>(ResultIdentifier.class);
-        resultMap.put(ResultIdentifier.LEFT, textOutputLeft);
-        resultMap.put(ResultIdentifier.RIGHT, textOutputRight);
-        textOutputLeft.append("<pre>");
-        textOutputRight.append("<pre>");
+//        StringBuilder textOutputLeft = new StringBuilder();
+//        StringBuilder textOutputRight = new StringBuilder();
+//        EnumMap<ResultIdentifier, StringBuilder> resultMap = new EnumMap<>(ResultIdentifier.class);
+//        resultMap.put(ResultIdentifier.LEFT, textOutputLeft);
+//        resultMap.put(ResultIdentifier.RIGHT, textOutputRight);
+//        textOutputLeft.append("<pre>");
+//        textOutputRight.append("<pre>");
         while (head != null) {
             current = head;
             head = head.prev;
@@ -230,11 +231,17 @@ public class TextDiff {
                 }
             }
         }
-        textOutputLeft.append("</pre>");
-        textOutputRight.append("</pre>");
-        return resultMap;
+//        textOutputLeft.append("</pre>");
+//        textOutputRight.append("</pre>");
     }
 
+    /**
+     * TEST
+     *
+     * @param start
+     * @param textLeft
+     * @param textRight
+     */
     private static void editScriptPrint(Edit start, final String[] textLeft, final String[] textRight) {
         System.out.println("indexLeft\tindexRight");
         Edit head = start;

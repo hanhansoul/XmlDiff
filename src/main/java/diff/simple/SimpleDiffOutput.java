@@ -334,17 +334,6 @@ public class SimpleDiffOutput {
                 leftIndex++;
                 rightIndex++;
             }
-//            if (leftIterator.hasNext() && rightIterator.hasNext()) {
-//
-//            } else if (leftIterator.hasNext()) {
-//                leftOutputNode = leftIterator.next();
-//                elementOutput(leftOutput, leftOutputNode, OperationEnum.DELETE);
-//            } else if (rightIterator.hasNext()) {
-//                rightOutputNode = rightIterator.next();
-//                elementOutput(rightOutput, rightOutputNode, OperationEnum.INSERT);
-//            } else {
-//                return;
-//            }
         }
     }
 

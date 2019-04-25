@@ -67,7 +67,8 @@ public class SimpleDiff extends AbstractDiff {
     public static void main(String[] args) throws DocumentException, IOException {
         long beginTime = System.currentTimeMillis();
         SimpleDiff simpleDiff = new SimpleDiff();
-        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
+//        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
+        simpleDiff.initialize("data/left3.xml", "data/right3.xml");
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);
