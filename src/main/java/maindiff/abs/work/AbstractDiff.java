@@ -5,6 +5,7 @@ import maindiff.abs.output.PathNode;
 import maindiff.simple.output.SimplePathNode;
 import maindiff.simple.work.SimpleOperationValue;
 import maindiff.util.OperationEnum;
+import maindiff.xml.work.XmlOperationValue;
 import org.dom4j.DocumentException;
 
 import static maindiff.util.Constant.DEBUG;
@@ -61,11 +62,16 @@ public abstract class AbstractDiff {
                 temporaryArr[i][0].assign(temporaryArr[i - 1][0], leftNode, null, i, 0, false);
             }
             if (DEBUG) {
-                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
-                        ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
-                        temporaryArr[i][0].prevX + "][" +
-                        temporaryArr[i][0].prevY + "] through " +
-                        temporaryArr[i][0].operationType);
+//                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
+//                        ((XmlOperationValue) temporaryArr[i][0]).elementNameDiffValue + " from temporaryArr[" +
+//                        temporaryArr[i][0].prevX + "][" +
+//                        temporaryArr[i][0].prevY + "] through " +
+//                        temporaryArr[i][0].operationType);
+//                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
+//                        ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
+//                        temporaryArr[i][0].prevX + "][" +
+//                        temporaryArr[i][0].prevY + "] through " +
+//                        temporaryArr[i][0].operationType);
             }
         }
 
@@ -79,10 +85,15 @@ public abstract class AbstractDiff {
             }
             if (DEBUG) {
                 System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
-                        ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
-                        ((SimpleOperationValue) temporaryArr[0][j]).prevX + "][" +
-                        ((SimpleOperationValue) temporaryArr[0][j]).prevY + "] through " +
-                        ((SimpleOperationValue) temporaryArr[0][j]).operationType);
+                        ((XmlOperationValue) temporaryArr[0][j]).elementNameDiffValue + " from temporaryArr[" +
+                        temporaryArr[0][j].prevX + "][" +
+                        temporaryArr[0][j].prevY + "] through " +
+                        temporaryArr[0][j].operationType);
+//                System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
+//                        ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
+//                        temporaryArr[0][j].prevX + "][" +
+//                        temporaryArr[0][j].prevY + "] through " +
+//                        temporaryArr[0][j].operationType);
             }
         }
 
@@ -114,10 +125,15 @@ public abstract class AbstractDiff {
 
                     if (DEBUG) {
                         System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
-                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
-                                ((SimpleOperationValue) temporaryArr[i][j]).prevX + "][" +
-                                ((SimpleOperationValue) temporaryArr[i][j]).prevY + "] through " +
-                                ((SimpleOperationValue) temporaryArr[i][j]).operationType);
+                                ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
+                                temporaryArr[i][j].prevX + "][" +
+                                temporaryArr[i][j].prevY + "] through " +
+                                temporaryArr[i][j].operationType);
+//                        System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
+//                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
+//                                temporaryArr[i][j].prevX + "][" +
+//                                temporaryArr[i][j].prevY + "] through " +
+//                                temporaryArr[i][j].operationType);
                     }
                 } else {
                     int ix = checkIndexMargin(i, leftNode);
@@ -142,14 +158,29 @@ public abstract class AbstractDiff {
                             generateOperation(temporaryArr[iy][jy], permanentArr[i][j])
                     );
                     if (DEBUG) {
+//                        if (temporaryArr[i][j].isFromPermanentArr) {
+//                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+//                                    ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
+//                                    temporaryArr[i][j].prevX + "][" +
+//                                    temporaryArr[i][j].prevY + "] through " +
+//                                    temporaryArr[i][j].operationType +
+//                                    " is from permanentArr[" + i + "][" + j + "] = " +
+//                                    ((XmlOperationValue) permanentArr[i][j]).elementNameDiffValue);
+//                        } else {
+//                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
+//                                    ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
+//                                    temporaryArr[i][j].prevX + "][" +
+//                                    temporaryArr[i][j].prevY + "] through " +
+//                                    temporaryArr[i][j].operationType);
+//                        }
                         if (temporaryArr[i][j].isFromPermanentArr) {
                             System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
                                     ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
                                     temporaryArr[i][j].prevX + "][" +
                                     temporaryArr[i][j].prevY + "] through " +
                                     temporaryArr[i][j].operationType +
-                                    " is from permanentArr[" + i + "][" + j + "] = " + ((SimpleOperationValue) permanentArr[i][j]).value)
-                            ;
+                                    " is from permanentArr[" + i + "][" + j + "] = " +
+                                    ((SimpleOperationValue) permanentArr[i][j]).value);
                         } else {
                             System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
                                     ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +

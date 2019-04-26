@@ -83,7 +83,7 @@ public class TextDiff {
                     if (generatingEditScript) {
                         editScriptOutput(editScript[k], textLeft, textRight, textOutputLeft, textOutputRight);
                     }
-                    return d * 2 / (lengthLeft + lengthRight);
+                    return 1.0 * (lengthLeft + lengthRight - d) / (lengthLeft + lengthRight);
                 }
                 if (row == lengthLeft) {
                     lower = k + 2;

@@ -70,16 +70,16 @@ public class XmlDiffOutput extends DiffOutput {
 
         StringBuilder textOutputLeft = null;
         StringBuilder textOutputRight = null;
-        if (operationType == OperationEnum.CHANGE &&
+        if (operationType == OperationEnum.CHANGE && leftNode != null && rightNode != null &&
                 leftNode.tagName.equals(rightNode.tagName)) {
             textOutputLeft = new StringBuilder();
             textOutputRight = new StringBuilder();
             TextDiff.textDiffTextOutput(leftNode.textArr, rightNode.textArr, textOutputLeft, textOutputRight);
-        } else if (operationType == OperationEnum.DELETE) {
+        } else if (operationType == OperationEnum.DELETE && leftNode != null) {
             textOutputLeft = new StringBuilder(leftNode.text);
-        } else if (operationType == OperationEnum.INSERT) {
+        } else if (operationType == OperationEnum.INSERT && rightNode != null) {
             textOutputRight = new StringBuilder(rightNode.text);
-        } else {
+        } else if (leftNode != null && rightNode != null) {
             textOutputLeft = new StringBuilder(leftNode.text);
             textOutputRight = new StringBuilder(rightNode.text);
         }

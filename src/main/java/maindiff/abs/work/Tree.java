@@ -77,4 +77,11 @@ public abstract class Tree {
 
     protected abstract void buildNodeOutputSequence(Node root, int depth);
 
+
+    public void sequenceTraversal() {
+        for (int i = 1; i < nodeSequence.length; i++) {
+            System.out.println(nodeSequence[i].id + ": " + nodeSequence[i].element.getName());
+        }
+    }
+
 }

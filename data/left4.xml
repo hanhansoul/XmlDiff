@@ -1,10 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<F>
-    <D>
-        <A></A>
-        <C>
-            <B></B>
-        </C>
-    </D>
-    <E></E>
-</F>
+<cir>
+    <circategory>
+        <issueInfo inWork="00" issueNumber="002" issueType="changed"/>
+        <issueDate day="01" month="03" year="2018"/>
+        <referencedApplicGroupRef>
+            <applicRef applicIdentValue="apA350-35-3X-XX-02001-310A-A" id="applic_cep"/>
+            <applicRef applicIdentValue="ap353XXX02001310Admr019D0579" id="ap353XXX02001310Admr019D0579">
+                <applic id="ap0000003N5">
+                    <displayText>
+                        <simplePara>ON A/C ALL</simplePara>
+                    </displayText>
+                    <assert applicPropertyIdent="msnbr" applicPropertyType="prodattr"
+                            applicPropertyValues="0052|0055|0060|0281" applicDisplayClass="all"/>
+                </applic>
+            </applicRef>
+            <applicRef applicIdentValue="ap353XXX02001310Admr019D0579" id="ap353XXX02001310Admr019D0579">
+                <applic id="ap0000003N5">
+                    <displayText>
+                        <simplePara>ON A/C ALL</simplePara>
+                    </displayText>
+                    <assert applicPropertyIdent="msnbr" applicPropertyType="prodattr"
+                            applicPropertyValues="0052|0055|0060|0281" applicDisplayClass="all"/>
+                </applic>
+            </applicRef>
+            <applicRef applicIdentValue="ap353XXX02001310Admr019D0579" id="ap353XXX02001310Admr019D0579">
+                <applic id="ap0000003N5">
+                    <displayText>
+                        <simplePara>ON A/C ALL</simplePara>
+                    </displayText>
+                    <assert applicPropertyIdent="msnbr" applicPropertyType="prodattr"
+                            applicPropertyValues="0052|0055|0060|0281" applicDisplayClass="all"/>
+                </applic>
+            </applicRef>
+        </referencedApplicGroupRef>
+    </circategory>
+</cir>

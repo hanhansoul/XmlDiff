@@ -67,29 +67,19 @@ public class XmlOperationValue extends OperationValue {
             double diffRatio;
             int totalLength = 0;
             if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
-                if (xmlLeftNode.textArr != null && xmlRightNode.textArr != null) {
+                if (xmlLeftNode.textArr.length > 0 || xmlLeftNode.textArr.length > 0) {
                     double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
                     diffRatio = similarRatio <= RATIO_SHREHOLD ? 1 : 1 - similarRatio;
                     totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
-                    if (xmlLeftNode.textArr != null) {
-                        totalLength += xmlLeftNode.textArr.length;
-                    }
-                    if (xmlRightNode.textArr != null) {
-                        totalLength += xmlRightNode.textArr.length;
-                    }
+                    totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                     diffRatio = 1;
                 }
                 this.elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength * diffRatio / 2;
                 this.operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
             } else {
                 this.elementNameDiffValue = xopv.elementNameDiffValue + 1;
-                if (xmlLeftNode.textArr != null) {
-                    totalLength += xmlLeftNode.textArr.length;
-                }
-                if (xmlRightNode.textArr != null) {
-                    totalLength += xmlRightNode.textArr.length;
-                }
+                totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 this.elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength / 2;
                 this.operationType = OperationEnum.CHANGE;
             }
@@ -117,16 +107,17 @@ public class XmlOperationValue extends OperationValue {
             elementNameDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTagNameDiffValue;
             elementTextDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTextDiffValue;
         }
-        if (elementNameDiffValue1 != elementNameDiffValue2) {
-            return elementNameDiffValue1 - elementNameDiffValue2;
-        } else {
-            if (elementTextDiffValue1 - elementTextDiffValue2 > 0.001) {
-                return 1;
-            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -0.001) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
+        return elementNameDiffValue1 - elementNameDiffValue2;
+//        if (elementNameDiffValue1 != elementNameDiffValue2) {
+//            return elementNameDiffValue1 - elementNameDiffValue2;
+//        } else {
+//            if (elementTextDiffValue1 - elementTextDiffValue2 > 0.001) {
+//                return 1;
+//            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -0.001) {
+//                return -1;
+//            } else {
+//                return 0;
+//            }
+//        }
     }
 }
