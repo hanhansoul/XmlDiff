@@ -118,6 +118,8 @@ public class TextDiff {
         }
         int previousLeft, previousRight;
         previousLeft = previousRight = 0;
+        int textPositionLeft = 0;
+        int textPositionRight = 0;
         while (current != null) {
             Edit a, b = current;
             for (int i = previousLeft + 1;
@@ -127,6 +129,7 @@ public class TextDiff {
                     textOutputLeft.append(SPACE);
                 }
                 textOutputLeft.append(textLeft[i - 1]);
+                textPositionLeft++;
             }
             for (int i = previousRight + 1;
                  current.operationType == OperationEnum.INSERT && i < current.indexRight ||
@@ -135,6 +138,7 @@ public class TextDiff {
                     textOutputRight.append(SPACE);
                 }
                 textOutputRight.append(textRight[i - 1]);
+                textPositionRight++;
             }
             if (current.operationType == OperationEnum.INSERT) {
                 if (current.indexLeft - 1 > 0) {
@@ -151,9 +155,11 @@ public class TextDiff {
                         textOutputLeft.append(SPACE);
                         textOutputRight.append(SPACE);
                     }
-                    for (int i = 0; i < textRight[current.indexRight - 1].length(); i++)
+                    for (int i = 0; i < textRight[current.indexRight - 1].length(); i++) {
                         textOutputLeft.append(SPACE);
+                    }
                     textOutputRight.append(textRight[current.indexRight - 1]);
+                    textPositionRight++;
                     beginSpace = true;
                     previousLeft = current.indexLeft;
                     previousRight = current.indexRight;
@@ -183,6 +189,7 @@ public class TextDiff {
                             textOutputLeft.append(SPACE);
                         }
                         textOutputLeft.append(textLeft[current.indexLeft - 1]);
+                        textPositionLeft++;
                         beginSpace = true;
                         previousLeft = current.indexLeft;
                         previousRight = current.indexRight;
@@ -195,6 +202,7 @@ public class TextDiff {
                             textOutputRight.append(SPACE);
                         }
                         textOutputRight.append(textRight[current.indexRight - 1]);
+                        textPositionRight++;
                         beginSpace = true;
                         previousLeft = current.indexLeft;
                         previousRight = current.indexRight;
@@ -219,8 +227,10 @@ public class TextDiff {
                             textOutputRight.append(SPACE);
                         }
                         textOutputLeft.append(textLeft[current.indexLeft - 1]);
-                        for (int i = 0; i < textLeft[current.indexLeft - 1].length(); i++)
+                        textPositionLeft++;
+                        for (int i = 0; i < textLeft[current.indexLeft - 1].length(); i++) {
                             textOutputRight.append(SPACE);
+                        }
                         beginSpace = true;
                         previousLeft = current.indexLeft;
                         previousRight = current.indexRight;
@@ -230,6 +240,18 @@ public class TextDiff {
                     textOutputRight.append(TAG_END);
                 }
             }
+        }
+        for (int i = textPositionLeft; i < textLeft.length; i++) {
+            if (i > 0) {
+                textOutputLeft.append(SPACE);
+            }
+            textOutputLeft.append(textLeft[i]);
+        }
+        for (int i = textPositionRight; i < textRight.length; i++) {
+            if (i > 0) {
+                textOutputRight.append(SPACE);
+            }
+            textOutputRight.append(textRight[i]);
         }
 //        textOutputLeft.append("</pre>");
 //        textOutputRight.append("</pre>");
@@ -311,7 +333,7 @@ public class TextDiff {
         String s1 = "Usable Oxygen Volume in 4.25 Cuft Oxygen Cylinder (L" +
                 "            Normal-Temperature Pressure Dry)";
         String s2 = "Usable Oxygen Volume in 4.25 Cuft Oxygen" +
-                "            Cylinder (Liter Normal-Temperature Pressure Dry";
+                "            Cylinder (Liter Normal-Temperature Pressure Dry)";
 //        System.out.println(s1);
 //        System.out.println(s2);
         StringBuilder output1 = new StringBuilder();
