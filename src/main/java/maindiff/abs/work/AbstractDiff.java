@@ -16,6 +16,8 @@ public abstract class AbstractDiff {
     protected OperationValue[][] permanentArr;
     protected OperationValue[][] temporaryArr;
 
+//    protected OperationValue permanentWatchpoint;
+
     protected Path[][] operationPaths;
 
     public AbstractDiff() {
@@ -44,6 +46,9 @@ public abstract class AbstractDiff {
     public abstract Operation generateOperation(OperationValue arrValue,
                                                 OperationValue permanentArrValue);
 
+    public void bugInspect(int number, int x, int y, OperationValue opv, boolean isFromPermanentArr) {
+    }
+
     /**
      * 核心计算方法
      */
@@ -62,16 +67,7 @@ public abstract class AbstractDiff {
                 temporaryArr[i][0].assign(temporaryArr[i - 1][0], leftNode, null, i, 0, false);
             }
             if (DEBUG) {
-//                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
-//                        ((XmlOperationValue) temporaryArr[i][0]).elementNameDiffValue + " from temporaryArr[" +
-//                        temporaryArr[i][0].prevX + "][" +
-//                        temporaryArr[i][0].prevY + "] through " +
-//                        temporaryArr[i][0].operationType);
-//                System.out.println("0: temporaryArr[" + i + "][" + 0 + "] = " +
-//                        ((SimpleOperationValue) temporaryArr[i][0]).value + " from temporaryArr[" +
-//                        temporaryArr[i][0].prevX + "][" +
-//                        temporaryArr[i][0].prevY + "] through " +
-//                        temporaryArr[i][0].operationType);
+                bugInspect(0, i, 0, temporaryArr[i][0], false);
             }
         }
 
@@ -84,16 +80,7 @@ public abstract class AbstractDiff {
                 temporaryArr[0][j].assign(temporaryArr[0][j - 1], null, rightNode, 0, j, false);
             }
             if (DEBUG) {
-                System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
-                        ((XmlOperationValue) temporaryArr[0][j]).elementNameDiffValue + " from temporaryArr[" +
-                        temporaryArr[0][j].prevX + "][" +
-                        temporaryArr[0][j].prevY + "] through " +
-                        temporaryArr[0][j].operationType);
-//                System.out.println("0: temporaryArr[" + 0 + "][" + j + "] = " +
-//                        ((SimpleOperationValue) temporaryArr[0][j]).value + " from temporaryArr[" +
-//                        temporaryArr[0][j].prevX + "][" +
-//                        temporaryArr[0][j].prevY + "] through " +
-//                        temporaryArr[0][j].operationType);
+                bugInspect(0, 0, j, temporaryArr[0][j], false);
             }
         }
 
@@ -124,16 +111,7 @@ public abstract class AbstractDiff {
                     permanentNodePathTrace(permanentArr[i][j], i, j);
 
                     if (DEBUG) {
-                        System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
-                                ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
-                                temporaryArr[i][j].prevX + "][" +
-                                temporaryArr[i][j].prevY + "] through " +
-                                temporaryArr[i][j].operationType);
-//                        System.out.println("1: permanentArr[" + i + "][" + j + "] = " +
-//                                ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
-//                                temporaryArr[i][j].prevX + "][" +
-//                                temporaryArr[i][j].prevY + "] through " +
-//                                temporaryArr[i][j].operationType);
+                        bugInspect(1, i, j, temporaryArr[i][j], false);
                     }
                 } else {
                     int ix = checkIndexMargin(i, leftNode);
@@ -158,35 +136,10 @@ public abstract class AbstractDiff {
                             generateOperation(temporaryArr[iy][jy], permanentArr[i][j])
                     );
                     if (DEBUG) {
-//                        if (temporaryArr[i][j].isFromPermanentArr) {
-//                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
-//                                    ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
-//                                    temporaryArr[i][j].prevX + "][" +
-//                                    temporaryArr[i][j].prevY + "] through " +
-//                                    temporaryArr[i][j].operationType +
-//                                    " is from permanentArr[" + i + "][" + j + "] = " +
-//                                    ((XmlOperationValue) permanentArr[i][j]).elementNameDiffValue);
-//                        } else {
-//                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
-//                                    ((XmlOperationValue) temporaryArr[i][j]).elementNameDiffValue + " from temporaryArr[" +
-//                                    temporaryArr[i][j].prevX + "][" +
-//                                    temporaryArr[i][j].prevY + "] through " +
-//                                    temporaryArr[i][j].operationType);
-//                        }
                         if (temporaryArr[i][j].isFromPermanentArr) {
-                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
-                                    ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
-                                    temporaryArr[i][j].prevX + "][" +
-                                    temporaryArr[i][j].prevY + "] through " +
-                                    temporaryArr[i][j].operationType +
-                                    " is from permanentArr[" + i + "][" + j + "] = " +
-                                    ((SimpleOperationValue) permanentArr[i][j]).value);
+                            bugInspect(2, i, j, temporaryArr[i][j], true);
                         } else {
-                            System.out.println("2: temporaryArr[" + i + "][" + j + "] = " +
-                                    ((SimpleOperationValue) temporaryArr[i][j]).value + " from temporaryArr[" +
-                                    temporaryArr[i][j].prevX + "][" +
-                                    temporaryArr[i][j].prevY + "] through " +
-                                    temporaryArr[i][j].operationType);
+                            bugInspect(2, i, j, temporaryArr[i][j], false);
                         }
                     }
                 }
@@ -224,7 +177,7 @@ public abstract class AbstractDiff {
         findPath(operationPaths[leftTree.rootId][rightTree.rootId]);
     }
 
-    private void permanentNodePathTrace(OperationValue curNode, int nodeX, int nodeY) {
+    public void permanentNodePathTrace(OperationValue curNode, int nodeX, int nodeY) {
         if (curNode.curX == 0 && curNode.curY == 0) {
             return;
         }
@@ -233,7 +186,7 @@ public abstract class AbstractDiff {
         if (operationPaths[nodeX][nodeY] == null) {
             operationPaths[nodeX][nodeY] = new Path();
         }
-        operationPaths[nodeX][nodeY].nodes.add(new SimplePathNode(curNode));
+        operationPaths[nodeX][nodeY].nodes.add(new PathNode(curNode));
     }
 
     private void backtrace(OperationValue v) {

@@ -9,7 +9,7 @@ import org.dom4j.DocumentException;
 
 import java.io.IOException;
 
-import static maindiff.util.Constant.RATIO_SHREHOLD;
+import static maindiff.util.Constant.RATIO_THRESHOLD;
 
 public class XmlDiff extends AbstractDiff {
 
@@ -21,19 +21,23 @@ public class XmlDiff extends AbstractDiff {
         XmlNode xmlRightNode = (XmlNode) rightNode;
         int elementNameDiffValue = 0;
         double elementTextDiffValue = 0;
-        if(operationType == null){
+        if (operationType == null) {
             double diffRatio;
             int totalLength = 0;
             if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
-                if (xmlLeftNode.textArr.length > 0 || xmlLeftNode.textArr.length > 0) {
+                if (xmlLeftNode.textArr.length > 0 && xmlRightNode.textArr.length > 0) {
                     double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
-                    diffRatio = similarRatio <= RATIO_SHREHOLD ? 1 : 1 - similarRatio;
+                    diffRatio = similarRatio <= RATIO_THRESHOLD ? 1 : 1 - similarRatio;
                     totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
                     totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
-                    diffRatio = 1;
+                    if(xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0) {
+                        diffRatio = 0;
+                    } else {
+                        diffRatio = 1;
+                    }
                 }
-                elementNameDiffValue = 0;
+                elementNameDiffValue = xopv.elementNameDiffValue;
                 elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength * diffRatio / 2;
                 operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
             } else {
@@ -69,6 +73,25 @@ public class XmlDiff extends AbstractDiff {
     }
 
     @Override
+    public void bugInspect(int number, int x, int y, OperationValue opv, boolean isFromPermanentArr) {
+        if (!isFromPermanentArr) {
+            System.out.println(number + ": temporaryArr[" + x + "][" + y + "] = " +
+                    ((XmlOperationValue) opv).elementNameDiffValue + " from temporaryArr[" +
+                    opv.prevX + "][" +
+                    opv.prevY + "] through " +
+                    opv.operationType);
+        } else {
+            System.out.println(number + ": temporaryArr[" + x + "][" + y + "] = " +
+                    ((XmlOperationValue) opv).elementNameDiffValue + " from temporaryArr[" +
+                    opv.prevX + "][" +
+                    opv.prevY + "] through " +
+                    opv.operationType +
+                    " is from permanentArr[" + x + "][" + y + "] = " +
+                    ((XmlOperationValue) opv).elementNameDiffValue);
+        }
+    }
+
+    @Override
     public void initialize(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new XmlTree(leftFileName);
         rightTree = new XmlTree(rightFileName);
@@ -92,7 +115,7 @@ public class XmlDiff extends AbstractDiff {
         long beginTime = System.currentTimeMillis();
         XmlDiff simpleDiff = new XmlDiff();
 //        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
-        simpleDiff.initialize("data/left4.xml", "data/right4.xml");
+        simpleDiff.initialize("data/left1.xml", "data/right1.xml");
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);

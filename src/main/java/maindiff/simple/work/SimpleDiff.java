@@ -14,7 +14,6 @@ import java.io.IOException;
 
 public class SimpleDiff extends AbstractDiff {
 
-
     @Override
     public void initialize(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new SimpleTree(leftFileName);
@@ -23,6 +22,7 @@ public class SimpleDiff extends AbstractDiff {
         int right = rightTree.size;
         temporaryArr = new SimpleOperationValue[left + 1][right + 1];
         permanentArr = new SimpleOperationValue[left + 1][right + 1];
+//        permanentWatchpoint = permanentArr[2][2];
         for (int i = 0; i <= left; i++) {
             for (int j = 0; j <= right; j++) {
                 temporaryArr[i][j] = new SimpleOperationValue();
@@ -62,6 +62,25 @@ public class SimpleDiff extends AbstractDiff {
                 OperationEnum.UNCHANGE, true);
         sdop.value = ((SimpleOperationValue) arrValue).value + ((SimpleOperationValue) permanentArrValue).value;
         return sdop;
+    }
+
+    @Override
+    public void bugInspect(int number, int x, int y, OperationValue opv, boolean isFromPermanentArr) {
+        if (!isFromPermanentArr) {
+            System.out.println(number + ": temporaryArr[" + x + "][" + y + "] = " +
+                    ((SimpleOperationValue) opv).value + " from temporaryArr[" +
+                    opv.prevX + "][" +
+                    opv.prevY + "] through " +
+                    opv.operationType);
+        } else {
+            System.out.println(number + ": temporaryArr[" + x + "][" + y + "] = " +
+                    ((SimpleOperationValue) temporaryArr[x][y]).value + " from temporaryArr[" +
+                    opv.prevX + "][" +
+                    opv.prevY + "] through " +
+                    opv.operationType +
+                    " is from permanentArr[" + x + "][" + y + "] = " +
+                    ((SimpleOperationValue) opv).value);
+        }
     }
 
     public static void main(String[] args) throws DocumentException, IOException {

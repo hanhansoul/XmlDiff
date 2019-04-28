@@ -4,7 +4,7 @@ import maindiff.abs.work.*;
 import maindiff.util.OperationEnum;
 import maindiff.xml.textdiff.TextDiff;
 
-import static maindiff.util.Constant.RATIO_SHREHOLD;
+import static maindiff.util.Constant.RATIO_THRESHOLD;
 
 public class XmlOperationValue extends OperationValue {
 
@@ -25,18 +25,22 @@ public class XmlOperationValue extends OperationValue {
     public void assign(int cx, int cy, GenericOperation op) {
         commonAssign(cx, cy, op);
         XmlGenericOperation xgop = (XmlGenericOperation) op;
-        XmlOperationValue xopv = (XmlOperationValue) xgop.arrValue;
-        this.elementNameDiffValue = xopv.elementNameDiffValue + xgop.xmlOperationTagNameDiffValue;
-        this.elementTextDiffValue = xopv.elementTextDiffValue + xgop.xmlOperationTextDiffValue;
+//        XmlOperationValue xopv = (XmlOperationValue) xgop.arrValue;
+//        this.elementNameDiffValue = xopv.elementNameDiffValue + xgop.xmlOperationTagNameDiffValue;
+//        this.elementTextDiffValue = xopv.elementTextDiffValue + xgop.xmlOperationTextDiffValue;
+        this.elementNameDiffValue = xgop.xmlOperationTagNameDiffValue;
+        this.elementTextDiffValue = xgop.xmlOperationTextDiffValue;
     }
 
     @Override
     public void assign(int cx, int cy, DerivedOperation op) {
         commonAssign(cx, cy, op);
         XmlDerivedOperation xgop = (XmlDerivedOperation) op;
-        XmlOperationValue xopv = (XmlOperationValue) xgop.arrValue;
-        this.elementNameDiffValue = xopv.elementNameDiffValue + xgop.xmlOperationTagNameDiffValue;
-        this.elementTextDiffValue = xopv.elementTextDiffValue + xgop.xmlOperationTextDiffValue;
+//        XmlOperationValue xopv = (XmlOperationValue) xgop.arrValue;
+//        this.elementNameDiffValue = xopv.elementNameDiffValue + xgop.xmlOperationTagNameDiffValue;
+//        this.elementTextDiffValue = xopv.elementTextDiffValue + xgop.xmlOperationTextDiffValue;
+        this.elementNameDiffValue = xgop.xmlOperationTagNameDiffValue;
+        this.elementTextDiffValue = xgop.xmlOperationTextDiffValue;
     }
 
     /**
@@ -67,13 +71,17 @@ public class XmlOperationValue extends OperationValue {
             double diffRatio;
             int totalLength = 0;
             if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
-                if (xmlLeftNode.textArr.length > 0 || xmlLeftNode.textArr.length > 0) {
+                if (xmlLeftNode.textArr.length > 0 && xmlRightNode.textArr.length > 0) {
                     double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
-                    diffRatio = similarRatio <= RATIO_SHREHOLD ? 1 : 1 - similarRatio;
+                    diffRatio = similarRatio <= RATIO_THRESHOLD ? 1 : 1 - similarRatio;
                     totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
                     totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
-                    diffRatio = 1;
+                    if(xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0) {
+                        diffRatio = 0;
+                    } else {
+                        diffRatio = 1;
+                    }
                 }
                 this.elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength * diffRatio / 2;
                 this.operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
@@ -107,17 +115,17 @@ public class XmlOperationValue extends OperationValue {
             elementNameDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTagNameDiffValue;
             elementTextDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTextDiffValue;
         }
-        return elementNameDiffValue1 - elementNameDiffValue2;
-//        if (elementNameDiffValue1 != elementNameDiffValue2) {
-//            return elementNameDiffValue1 - elementNameDiffValue2;
-//        } else {
-//            if (elementTextDiffValue1 - elementTextDiffValue2 > 0.001) {
-//                return 1;
-//            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -0.001) {
-//                return -1;
-//            } else {
-//                return 0;
-//            }
-//        }
+//        return elementNameDiffValue1 - elementNameDiffValue2;
+        if (elementNameDiffValue1 != elementNameDiffValue2) {
+            return elementNameDiffValue1 - elementNameDiffValue2;
+        } else {
+            if (elementTextDiffValue1 - elementTextDiffValue2 > 0.001) {
+                return 1;
+            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -0.001) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
     }
 }

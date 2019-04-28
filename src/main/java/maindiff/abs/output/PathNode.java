@@ -4,7 +4,7 @@ package maindiff.abs.output;
 import maindiff.abs.work.OperationValue;
 import maindiff.util.OperationEnum;
 
-public abstract class PathNode {
+public class PathNode {
     public OperationEnum operationType;
     public boolean isFromPermanent;
     public int curX, curY;

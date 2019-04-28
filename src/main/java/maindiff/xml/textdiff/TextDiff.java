@@ -26,8 +26,8 @@ public class TextDiff {
     }
 
     private static double textDiffCompute(final String[] textLeft, final String[] textRight,
-                                              boolean generatingEditScript,
-                                              StringBuilder textOutputLeft, StringBuilder textOutputRight) {
+                                          boolean generatingEditScript,
+                                          StringBuilder textOutputLeft, StringBuilder textOutputRight) {
         int lengthLeft = textLeft.length;
         int lengthRight = textRight.length;
         int MAX_LINES, ORIGIN;
@@ -308,10 +308,17 @@ public class TextDiff {
      * c b a b a c
      */
     public static void main(String[] args) {
-//        String s1 = "a b c a b b a";
-//        String s2 = "c b a b a c";
+        String s1 = "Usable Oxygen Volume in 4.25 Cuft Oxygen Cylinder (L" +
+                "            Normal-Temperature Pressure Dry)";
+        String s2 = "Usable Oxygen Volume in 4.25 Cuft Oxygen" +
+                "            Cylinder (Liter Normal-Temperature Pressure Dry";
 //        System.out.println(s1);
 //        System.out.println(s2);
-//        new TextDiff(s1.split("\\s+"), s2.split("\\s+")).textDiffAndGenerateEditScript(true);
+        StringBuilder output1 = new StringBuilder();
+        StringBuilder output2 = new StringBuilder();
+        TextDiff.textDiffCompute(s1.split("\\s+"), s2.split("\\s+"),
+                true, output1, output2);
+        System.out.println(output1);
+        System.out.println(output2);
     }
 }
