@@ -1,21 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<row>
-    <entry align="center" valign="top">
-        <para>Actual Pressure (Psig)</para>
-    </entry>
-    <entry align="center" valign="top">
-        <para changeMark="1">Usable Oxygen Volume in 4.25 Cuft Oxygen
-            Cylinder (Liter Normal-Temperature Pressure Dry)
-        </para>
-    </entry>
-    <entry align="center" valign="top">
-        <para changeMark="1">Usable Oxygen Volume in 7.15 Cuft Oxygen
-            Cylinder (Liter Normal-Temperature Pressure Dry)
-        </para>
-    </entry>
-    <entry align="center" valign="top">
-        <para changeMark="1">Usable Oxygen Volume in 11 Cuft Oxygen Cylinder
-            (Liter Normal-Temperature Pressure Dry)
-        </para>
-    </entry>
-</row>
+<proceduralStep id="ID00025">
+    <para>Make sure that this quantity of oxygen agrees with the regulations applicable to this
+        aircraft:
+    </para>
+    <note id="N00008">
+        <notePara>You can find the applicable pressure related to the local regulations in the
+            chart "Filling Ratio as a Function of Portable Cylinder Pressure and Temperature
+            (Nominal Portable Cylinder Pressure 1850 psig)”.
+        </notePara>
+    </note>
+    <proceduralStep>
+        <para>If the total quantity does not agree with the applicable regulations:</para>
+        <proceduralStep>
+            <para>Remove the portable oxygen cylinder
+                <dmRef>
+                    <dmRefIdent>
+                        <dmCode assyCode="61" disassyCode="01" disassyCodeVariant="ZZZ"
+                                infoCode="520" infoCodeVariant="Z" itemLocationCode="A"
+                                modelIdentCode="A350" subSubSystemCode="2" subSystemCode="3"
+                                systemCode="35" systemDiffCode="A"/>
+                    </dmRefIdent>
+                    <dmRefAddressItems>
+                        <dmTitle>
+                            <techName>MP</techName>
+                            <infoName>Removal of the Portable Oxygen-Cylinder Assembly
+                            </infoName>
+                        </dmTitle>
+                    </dmRefAddressItems>
+                </dmRef>
+                .
+            </para>
+        </proceduralStep>
+        <proceduralStep>
+            <para changeMark="1">Send the portable oxygen cylinder to the workshop to refill the
+                oxygen.
+            </para>
+        </proceduralStep>
+        <proceduralStep>
+            <para>Install a new portable oxygen cylinder which has the quantity of oxygen that
+                obeys the regulation(s)
+                <dmRef>
+                    <dmRefIdent>
+                        <dmCode assyCode="61" disassyCode="01" disassyCodeVariant="ZZZ"
+                                infoCode="720" infoCodeVariant="Z" itemLocationCode="A"
+                                modelIdentCode="A350" subSubSystemCode="2" subSystemCode="3"
+                                systemCode="35" systemDiffCode="A"/>
+                    </dmRefIdent>
+                    <dmRefAddressItems>
+                        <dmTitle>
+                            <techName>MP</techName>
+                            <infoName>Installation of the Portable Oxygen-Cylinder Assembly
+                            </infoName>
+                        </dmTitle>
+                    </dmRefAddressItems>
+                </dmRef>
+                .
+            </para>
+        </proceduralStep>
+    </proceduralStep>
+    <proceduralStep>
+        <para>If the total quantity obeys the regulation(s):</para>
+        <proceduralStep>
+            <para>Do the close-up.</para>
+        </proceduralStep>
+    </proceduralStep>
+</proceduralStep>

@@ -1,13 +1,14 @@
-package maindiff.xml.output;
+package maindiff.xml.v1.output;
 
 import maindiff.abs.output.DiffOutput;
 import maindiff.abs.output.OutputNode;
 import maindiff.abs.work.Node;
 import maindiff.abs.work.Tree;
 import maindiff.util.OperationEnum;
-import maindiff.xml.textdiff.TextDiff;
-import maindiff.xml.work.XmlNode;
-import maindiff.xml.work.XmlTree;
+import maindiff.xml.v1.textdiff.TextDiff;
+import maindiff.xml.v1.work.XmlTree;
+import maindiff.xml.v1.work.XmlNode;
+import org.dom4j.Element;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,13 +17,20 @@ public class XmlDiffOutput extends DiffOutput {
     private XmlTree leftTree;
     private XmlTree rightTree;
 
+    public final String[] OP_SPAN_START = {
+            "<span style='background-color:green;display:inline-block;'>",
+            "<span style='background-color:red;display:inline-block;'>",
+            "<span style='background-color:blue;display:inline-block;'>",
+            "<span style='display:inline-block;'>"
+    };
+    public String SPAN_START = "<span style='display:inline-block;'>";
+
     public XmlDiffOutput(Tree leftTree, Tree rightTree) {
         this.leftTree = (XmlTree) leftTree;
         this.rightTree = (XmlTree) rightTree;
     }
 
     public void elementTextOutput(StringBuilder sb, Node node, StringBuilder text, OperationEnum operationType) {
-
         int depth = node.depth;
         if (text == null || text.length() == 0) {
             return;
@@ -30,14 +38,14 @@ public class XmlDiffOutput extends DiffOutput {
         if (operationType == OperationEnum.INSERT || operationType == OperationEnum.DELETE) {
             int opIndex = operationType.ordinal();
             sb.append(BR);
-            sb.append(OP_SPAN_START[opIndex]);
             sb.append(INDENTS[depth]);
+            sb.append(OP_SPAN_START[opIndex]);
             sb.append(text);
             sb.append(SPAN_END);
-        } else if (operationType == OperationEnum.CHANGE) {
+        } else if (operationType == OperationEnum.CHANGE || operationType == OperationEnum.UNCHANGE) {
             sb.append(BR);
-            sb.append(SPAN_START);
             sb.append(INDENTS[depth]);
+            sb.append(SPAN_START);
             sb.append(text);
             sb.append(SPAN_END);
         }
@@ -54,6 +62,32 @@ public class XmlDiffOutput extends DiffOutput {
         } else {
             elementEndOutput(sb, outputNode.node, op);
         }
+    }
+
+    public void elementStartOutputWithoutAttributes(StringBuilder sb, Node node, OperationEnum op) {
+        int opIndex = op != null ? op.ordinal() : 3;
+        int depth = node.depth;
+        Element element = node.element;
+        sb.append(BR);
+        sb.append(INDENTS[depth]);
+        sb.append(OP_SPAN_START[opIndex]);
+        sb.append("&lt;");
+        sb.append(element.getQualifiedName());
+        sb.append("&gt;");
+        sb.append(SPAN_END);
+    }
+
+    public void elementEndOutput(StringBuilder sb, Node node, OperationEnum op) {
+        int opIndex = op != null ? op.ordinal() : 3;
+        int depth = node.depth;
+        Element element = node.element;
+        sb.append(BR);
+        sb.append(INDENTS[depth]);
+        sb.append(OP_SPAN_START[opIndex]);
+        sb.append("&lt;/");
+        sb.append(element.getQualifiedName());
+        sb.append("&gt;");
+        sb.append(SPAN_END);
     }
 
     public void nodesElementOutput(StringBuilder leftSb, StringBuilder rightSb,
@@ -87,17 +121,17 @@ public class XmlDiffOutput extends DiffOutput {
         elementOutput(rightOutput, rightOutputNode, textOutputRight, operationType);
     }
 
-    public void resultOutput() throws IOException {
+    public void resultOutput(String leftFileName, String rightFileName) throws IOException {
         leftOutput.append(OUTPUT_START);
         rightOutput.append(OUTPUT_START);
         output(leftTree.nodeOutputSequence, rightTree.nodeOutputSequence);
         leftOutput.append(OUTPUT_END);
         rightOutput.append(OUTPUT_END);
-        FileWriter writer = new FileWriter("data/output11.html");
+        FileWriter writer = new FileWriter(leftFileName);
         writer.write(String.valueOf(leftOutput));
         writer.flush();
         writer.close();
-        writer = new FileWriter("data/output22.html");
+        writer = new FileWriter(rightFileName);
         writer.write(String.valueOf(rightOutput));
         writer.flush();
         writer.close();

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<proceduralStep> 
+  <para changeMark="1">Use the corrected pressure value in step (1) (c) and
+    <internalRef internalRefId="ID00046" internalRefTargetType="irtt02"/>to identify the quantity of oxygen in the portable oxygen cylinder.
+  </para>  
+  <note id="N00013"> 
+    <notePara>For example, for a cylinder with a capacity of 4.25 cuft, at 1000 psig, the related capacity is 57 l (normal-temperature pressure dry).</notePara> 
+  </note> 
+</proceduralStep>

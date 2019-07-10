@@ -1,9 +1,8 @@
-package maindiff.xml.work;
+package maindiff.xml.v1.work;
 
 import maindiff.abs.work.Node;
 import maindiff.abs.work.Tree;
-import maindiff.simple.output.SimpleOutputNode;
-import maindiff.xml.output.XmlOutputNode;
+import maindiff.xml.v1.output.XmlOutputNode;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 

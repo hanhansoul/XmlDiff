@@ -2,11 +2,10 @@ package maindiff.abs.work;
 
 import maindiff.abs.output.Path;
 import maindiff.abs.output.PathNode;
-import maindiff.simple.output.SimplePathNode;
-import maindiff.simple.work.SimpleOperationValue;
 import maindiff.util.OperationEnum;
-import maindiff.xml.work.XmlOperationValue;
 import org.dom4j.DocumentException;
+
+import java.util.logging.Logger;
 
 import static maindiff.util.Constant.DEBUG;
 

@@ -1,4 +1,4 @@
-package maindiff.xml.textdiff;
+package maindiff.xml.v2.textdiff;
 
 import maindiff.util.OperationEnum;
 
@@ -48,6 +48,9 @@ public class TextDiff {
         int upper = row == lengthRight ? ORIGIN - 1 : ORIGIN + 1;
 
         if (lower > upper) {
+//            if (generatingEditScript) {
+//                editScriptOutput(null, textLeft, textRight, textOutputLeft, textOutputRight);
+//            }
             return 1;
         }
 
@@ -330,10 +333,16 @@ public class TextDiff {
      * c b a b a c
      */
     public static void main(String[] args) {
-        String s1 = "Usable Oxygen Volume in 4.25 Cuft Oxygen Cylinder (L" +
-                "            Normal-Temperature Pressure Dry)";
-        String s2 = "Usable Oxygen Volume in 4.25 Cuft Oxygen" +
-                "            Cylinder (Liter Normal-Temperature Pressure Dry)";
+//        String s1 = "Usable Oxygen Volume in 4.25 Cuft Oxygen Cylinder (L" +
+//                "            Normal-Temperature Pressure Dry)";
+//        String s2 = "Usable Oxygen Volume in 4.25 Cuft Oxygen" +
+//                "            Cylinder (Liter Normal-Temperature Pressure Dry)";
+        String s1 = "<notePara>You can find the applicable pressure related to the local regulations in the" +
+                "            chart \"Filling Ratio as a Function of Portable Cylinder Pressure and Temperature" +
+                "            (Nominal Portable Cylinder Pressure 1850 psig)”.";
+        String s2 = "You can find the applicable pressure related to the local regulations in the" +
+                "            chart \"Filling Ratio as a Function of Portable Cylinder Pressure and Temperature" +
+                "            (Nominal Portable Cylinder Pressure 1850 psig)”.";
 //        System.out.println(s1);
 //        System.out.println(s2);
         StringBuilder output1 = new StringBuilder();

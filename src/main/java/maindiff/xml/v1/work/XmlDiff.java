@@ -1,10 +1,10 @@
-package maindiff.xml.work;
+package maindiff.xml.v1.work;
 
 import maindiff.abs.output.Path;
 import maindiff.abs.work.*;
 import maindiff.util.OperationEnum;
-import maindiff.xml.output.XmlDiffOutput;
-import maindiff.xml.textdiff.TextDiff;
+import maindiff.xml.v1.output.XmlDiffOutput;
+import maindiff.xml.v1.textdiff.TextDiff;
 import org.dom4j.DocumentException;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class XmlDiff extends AbstractDiff {
                     totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
                     totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
-                    if(xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0) {
+                    if (xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0) {
                         diffRatio = 0;
                     } else {
                         diffRatio = 1;
@@ -95,9 +95,6 @@ public class XmlDiff extends AbstractDiff {
     public void initialize(String leftFileName, String rightFileName) throws DocumentException {
         leftTree = new XmlTree(leftFileName);
         rightTree = new XmlTree(rightFileName);
-//        leftTree.sequenceTraversal();
-//        System.out.println();
-//        rightTree.sequenceTraversal();
         int left = leftTree.size;
         int right = rightTree.size;
         permanentArr = new XmlOperationValue[left + 1][right + 1];
@@ -119,7 +116,8 @@ public class XmlDiff extends AbstractDiff {
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);
-        new XmlDiffOutput(simpleDiff.leftTree, simpleDiff.rightTree).resultOutput();
+        new XmlDiffOutput(simpleDiff.leftTree, simpleDiff.rightTree)
+                .resultOutput("data/output01.html", "data/output02.html");
         long endTime = System.currentTimeMillis();
         System.out.println((endTime - solveTime) / 1000);
     }

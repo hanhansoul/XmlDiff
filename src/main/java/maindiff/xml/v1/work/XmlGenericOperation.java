@@ -1,4 +1,4 @@
-package maindiff.xml.work;
+package maindiff.xml.v1.work;
 
 import maindiff.abs.work.GenericOperation;
 import maindiff.abs.work.Node;

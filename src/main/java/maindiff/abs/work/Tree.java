@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Tree {
+public class Tree {
     protected Document document;
 
     public Node rootNode;
@@ -53,7 +53,11 @@ public abstract class Tree {
         return res;
     }
 
-    protected abstract void buildTree(Node root);
+    protected void buildTree(Node root) {
+    }
+
+    protected void buildTree(Node root, int depth) {
+    }
 
     protected void buildPostOrderSequence(Node root) {
         List<Node> nodeList = root.children;
@@ -75,8 +79,9 @@ public abstract class Tree {
         }
     }
 
-    protected abstract void buildNodeOutputSequence(Node root, int depth);
+    protected void buildNodeOutputSequence(Node root, int depth) {}
 
+    protected void buildNodeOutputSequence(Node root) {}
 
     public void sequenceTraversal() {
         for (int i = 1; i < nodeSequence.length; i++) {

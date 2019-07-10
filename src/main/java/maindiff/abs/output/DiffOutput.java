@@ -11,14 +11,14 @@ public abstract class DiffOutput {
     public StringBuilder leftOutput;
     public StringBuilder rightOutput;
 
-    public final String[] INDENTS = new String[50];
-    public final String OUTPUT_START = "<pre>";
-    public final String OUTPUT_END = "</pre>";
-    public final String SPAN_START = "<span style='display:inline-block;min-width:100%;'>";
-    public final String SPAN_END = "</span>";
-    public final String BR = "<br />";
+    public String[] INDENTS = new String[50];
+    public String OUTPUT_START = "<pre>";
+    public String OUTPUT_END = "</pre>";
+    public String SPAN_START = "<span style='display:inline-block;min-width:100%;'>";
+    public String SPAN_END = "</span>";
+    public String BR = "<br />";
 
-    public final String[] OP_SPAN_START = {
+    public String[] OP_SPAN_START = {
             "<span style='background-color:green;display:inline-block;min-width:100%;'>",
             "<span style='background-color:red;display:inline-block;min-width:100%;'>",
             "<span style='background-color:blue;display:inline-block;min-width:100%;'>",

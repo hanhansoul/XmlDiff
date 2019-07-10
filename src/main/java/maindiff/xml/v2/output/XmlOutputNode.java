@@ -1,7 +1,7 @@
-package maindiff.xml.output;
+package maindiff.xml.v2.output;
 
-import maindiff.abs.work.Node;
 import maindiff.abs.output.OutputNode;
+import maindiff.abs.work.Node;
 
 public class XmlOutputNode extends OutputNode {
 

@@ -1,12 +1,17 @@
-package maindiff.xml.work;
+package maindiff.xml.v2.work;
 
-import maindiff.abs.work.*;
+import maindiff.abs.work.DerivedOperation;
+import maindiff.abs.work.GenericOperation;
+import maindiff.abs.work.Node;
+import maindiff.abs.work.OperationValue;
 import maindiff.util.OperationEnum;
-import maindiff.xml.textdiff.TextDiff;
+import maindiff.xml.v2.textdiff.TextDiff;
 
 import static maindiff.util.Constant.RATIO_THRESHOLD;
 
 public class XmlOperationValue extends OperationValue {
+
+    static final double DELTA = 0.0000001;
 
     public int elementNameDiffValue;
     public int elementAttributesDiffValue;
@@ -70,21 +75,17 @@ public class XmlOperationValue extends OperationValue {
         } else {
             double diffRatio;
             int totalLength = 0;
-            if (xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
+            if (xmlLeftNode.depth == xmlRightNode.depth && xmlLeftNode.tagName.equals(xmlRightNode.tagName)) {
                 if (xmlLeftNode.textArr.length > 0 && xmlRightNode.textArr.length > 0) {
                     double similarRatio = TextDiff.textDiffRatioCompute(xmlLeftNode.textArr, xmlRightNode.textArr);
                     diffRatio = similarRatio <= RATIO_THRESHOLD ? 1 : 1 - similarRatio;
                     totalLength = xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
                 } else {
                     totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
-                    if(xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0) {
-                        diffRatio = 0;
-                    } else {
-                        diffRatio = 1;
-                    }
+                    diffRatio = xmlLeftNode.textArr.length == 0 && xmlRightNode.textArr.length == 0 ? 0 : 1;
                 }
                 this.elementTextDiffValue = xopv.elementTextDiffValue + 1.0 * totalLength * diffRatio / 2;
-                this.operationType = diffRatio <= 0.001 ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
+                this.operationType = diffRatio <= DELTA ? OperationEnum.UNCHANGE : OperationEnum.CHANGE;
             } else {
                 this.elementNameDiffValue = xopv.elementNameDiffValue + 1;
                 totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
@@ -92,7 +93,6 @@ public class XmlOperationValue extends OperationValue {
                 this.operationType = OperationEnum.CHANGE;
             }
         }
-
     }
 
     @Override
@@ -115,13 +115,12 @@ public class XmlOperationValue extends OperationValue {
             elementNameDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTagNameDiffValue;
             elementTextDiffValue2 = ((XmlDerivedOperation) o2).xmlOperationTextDiffValue;
         }
-//        return elementNameDiffValue1 - elementNameDiffValue2;
         if (elementNameDiffValue1 != elementNameDiffValue2) {
             return elementNameDiffValue1 - elementNameDiffValue2;
         } else {
-            if (elementTextDiffValue1 - elementTextDiffValue2 > 0.001) {
+            if (elementTextDiffValue1 - elementTextDiffValue2 > DELTA) {
                 return 1;
-            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -0.001) {
+            } else if (elementTextDiffValue1 - elementTextDiffValue2 < -1 * DELTA) {
                 return -1;
             } else {
                 return 0;

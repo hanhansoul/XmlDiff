@@ -1,4 +1,4 @@
-package maindiff.xml.output;
+package maindiff.xml.v1.output;
 
 import maindiff.abs.output.PathNode;
 import maindiff.abs.work.OperationValue;

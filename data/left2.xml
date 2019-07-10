@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proceduralStep>
+    <para>Use the corrected pressure value in step (1) (c) and Table 2 to identify the
+        quantity of oxygen in the portable oxygen cylinder.
+    </para>
+    <note id="N00007">
+        <notePara>Normal-temperature pressure dry is an atmospheric pressure condition
+            where:
+            <attentionRandomList>
+                <attentionRandomListItem>
+                    <attentionListItemPara changeMark="1">Temperature is21.11 deg.C (70.0
+                        deg.F).
+                    </attentionListItemPara>
+                </attentionRandomListItem>
+                <attentionRandomListItem>
+                    <attentionListItemPara>The partial pressure of water in the oxygen is 0
+                        mmHg.
+                    </attentionListItemPara>
+                </attentionRandomListItem>
+            </attentionRandomList>
+        </notePara>
+    </note>
+    <note id="N00013">
+        <notePara>For example, for a cylinder with a capacity of 4.25 cuft, at 1000 psig,
+            the related capacity is 57 l (normal-temperature pressure dry).
+        </notePara>
+    </note>
+</proceduralStep>

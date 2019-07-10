@@ -1,4 +1,4 @@
-package maindiff.xml.work;
+package maindiff.xml.v1.work;
 
 import maindiff.abs.work.Node;
 import org.dom4j.Attribute;
@@ -27,12 +27,12 @@ public class XmlNode extends Node {
     public XmlNode(Element element) {
         super(element);
         tagName = element.getName();
-        if (element.attributes() != null) {
-            attributesMap = new HashMap<>();
-            for (Attribute attribute : element.attributes()) {
-                attributesMap.put(attribute.getName(), attribute.getValue());
-            }
-        }
+//        if (element.attributes() != null) {
+//            attributesMap = new HashMap<>();
+//            for (Attribute attribute : element.attributes()) {
+//                attributesMap.put(attribute.getName(), attribute.getValue());
+//            }
+//        }
         text = element.getText().replaceAll("\n", "").trim();
         if (text.length() > 0) {
             textArr = text.split("\\s+");
@@ -41,7 +41,4 @@ public class XmlNode extends Node {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
 }
