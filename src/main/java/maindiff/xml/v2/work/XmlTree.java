@@ -22,9 +22,6 @@ public class XmlTree extends Tree {
 
         buildPostOrderSequence(rootNode);
         rootId = keyRoots[++keyRootsIndex] = rootNode.id;
-
-        nodeOutputSequence = new LinkedList<>();
-        buildNodeOutputSequence(rootNode);
     }
 
     @Override
@@ -42,14 +39,4 @@ public class XmlTree extends Tree {
         }
     }
 
-    @Override
-    protected void buildNodeOutputSequence(Node root) {
-        nodeOutputSequence.add(new XmlOutputNode(root, false));
-        if (root.children != null) {
-            for (Node node : root.children) {
-                buildNodeOutputSequence(node);
-            }
-        }
-        nodeOutputSequence.add(new XmlOutputNode(root, true));
-    }
 }

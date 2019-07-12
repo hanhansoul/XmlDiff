@@ -111,8 +111,8 @@ public class XmlDiff extends AbstractDiff {
     public static void main(String[] args) throws DocumentException, IOException {
         long beginTime = System.currentTimeMillis();
         XmlDiff simpleDiff = new XmlDiff();
-        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
-//        simpleDiff.initialize("data/left1.xml", "data/right1.xml");
+//        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
+        simpleDiff.initialize("data/left1.xml", "data/right1.xml");
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);

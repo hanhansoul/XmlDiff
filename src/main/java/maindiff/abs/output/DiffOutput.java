@@ -35,7 +35,8 @@ public abstract class DiffOutput {
         }
     }
 
-    public void elementTextOutput(StringBuilder sb, Node node, StringBuilder text, OperationEnum operationType) {
+    public void elementTextOutput(StringBuilder sb, Node node,
+                                  StringBuilder text, OperationEnum operationType) {
     }
 
     public void elementAttributeOutput(StringBuilder sb, Node node, OperationEnum operationType) {

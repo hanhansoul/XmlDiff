@@ -1,8 +1,18 @@
 package maindiff.xml.v2.textdiff;
 
 import maindiff.util.OperationEnum;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
-public class TextDiff {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import static maindiff.xml.v2.textdiff.TextDiff4DomHelper.*;
+
+public class TextDiff4Dom {
 
     static class Edit {
         int indexLeft, indexRight;
@@ -10,37 +20,14 @@ public class TextDiff {
         OperationEnum operationType;
     }
 
-    private static final String INSERT_TAG_BEGIN = "<span style='background-color:green;display:inline-block;'>";
-    private static final String DELETE_TAG_BEGIN = "<span style='background-color:red;display:inline-block;'>";
-    private static final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
-    private static final String TAG_END = "</span>";
-    private static final String SPACE = " ";
-
-    /**
-     * 返回经过差异处理后的文本。
-     * @param textLeft
-     * @param textRight
-     * @param textOutputLeft
-     * @param textOutputRight
-     */
-    public static void textDiffTextOutput(final String[] textLeft, final String[] textRight,
-                                          StringBuilder textOutputLeft, StringBuilder textOutputRight) {
-        textDiffCompute(textLeft, textRight, true, textOutputLeft, textOutputRight);
-    }
-
-    /**
-     * 计算文本差异率，返回差异率的数值。
-     * @param textLeft
-     * @param textRight
-     * @return
-     */
-    public static double textDiffRatioCompute(final String[] textLeft, final String[] textRight) {
-        return textDiffCompute(textLeft, textRight, false, null, null);
-    }
+    //    private static final String INSERT_TAG_BEGIN = "<span style='background-color:green;display:inline-block;'>";
+//    private static final String DELETE_TAG_BEGIN = "<span style='background-color:red;display:inline-block;'>";
+//    private static final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
+//    private static final String TAG_END = "</span>";
 
     private static double textDiffCompute(final String[] textLeft, final String[] textRight,
                                           boolean generatingEditScript,
-                                          StringBuilder textOutputLeft, StringBuilder textOutputRight) {
+                                          Element elementOutputLeft, Element elementOutputRight) {
         int lengthLeft = textLeft.length;
         int lengthRight = textRight.length;
         int MAX_LINES, ORIGIN;
@@ -97,7 +84,7 @@ public class TextDiff {
 
                 if (row == lengthLeft && col == lengthRight) {
                     if (generatingEditScript) {
-                        editScriptOutput(editScript[k], textLeft, textRight, textOutputLeft, textOutputRight);
+                        editScriptOutput(editScript[k], textLeft, textRight, elementOutputLeft, elementOutputRight);
                     }
                     return 1.0 * (lengthLeft + lengthRight - d) / (lengthLeft + lengthRight);
                 }
@@ -114,17 +101,11 @@ public class TextDiff {
         return 0;
     }
 
+
     private static void editScriptOutput(Edit start, final String[] textLeft, final String[] textRight,
-                                         StringBuilder textOutputLeft, StringBuilder textOutputRight) {
+                                         Element elementOutputLeft, Element elementOutputRight) {
         Edit head = start;
         Edit current = null;
-//        StringBuilder textOutputLeft = new StringBuilder();
-//        StringBuilder textOutputRight = new StringBuilder();
-//        EnumMap<ResultIdentifier, StringBuilder> resultMap = new EnumMap<>(ResultIdentifier.class);
-//        resultMap.put(ResultIdentifier.LEFT, textOutputLeft);
-//        resultMap.put(ResultIdentifier.RIGHT, textOutputRight);
-//        textOutputLeft.append("<pre>");
-//        textOutputRight.append("<pre>");
         while (head != null) {
             current = head;
             head = head.prev;
@@ -136,45 +117,61 @@ public class TextDiff {
         previousLeft = previousRight = 0;
         int textPositionLeft = 0;
         int textPositionRight = 0;
+        StringBuilder sbLeft, sbRight;
+        Element elementLeft, elementRight;
+
         while (current != null) {
             Edit a, b = current;
+
+            sbLeft = new StringBuilder();
             for (int i = previousLeft + 1;
                  current.operationType == OperationEnum.DELETE && i < current.indexLeft ||
                          current.operationType == OperationEnum.INSERT && i <= current.indexLeft; i++) {
                 if (i > 0) {
-                    textOutputLeft.append(SPACE);
+                    sbLeft.append(SPACE);
                 }
-                textOutputLeft.append(textLeft[i - 1]);
+                sbLeft.append(textLeft[i - 1]);
                 textPositionLeft++;
             }
+            elementOutputLeft.addText(sbLeft.toString());
+
+            sbRight = new StringBuilder();
             for (int i = previousRight + 1;
                  current.operationType == OperationEnum.INSERT && i < current.indexRight ||
                          current.operationType == OperationEnum.DELETE && i <= current.indexRight; i++) {
                 if (i > 0) {
-                    textOutputRight.append(SPACE);
+                    sbRight.append(SPACE);
                 }
-                textOutputRight.append(textRight[i - 1]);
+                sbRight.append(textRight[i - 1]);
                 textPositionRight++;
             }
+            elementOutputRight.addText(sbRight.toString());
+
             if (current.operationType == OperationEnum.INSERT) {
+
                 if (current.indexLeft - 1 > 0) {
-                    textOutputLeft.append(SPACE);
+                    elementOutputLeft.addText(SPACE);
                 }
-                textOutputLeft.append(INSERT_TAG_BEGIN);
+                elementLeft = addInsertSpanElement(elementOutputLeft);
+
                 if (current.indexRight - 1 > 0) {
-                    textOutputRight.append(SPACE);
+                    elementOutputRight.addText(SPACE);
                 }
-                textOutputRight.append(INSERT_TAG_BEGIN);
+                elementRight = addInsertSpanElement(elementOutputRight);
+
                 boolean beginSpace = false;
+                sbLeft = new StringBuilder();
+                sbRight = new StringBuilder();
                 do {
                     if (beginSpace) {
-                        textOutputLeft.append(SPACE);
-                        textOutputRight.append(SPACE);
+                        sbLeft.append(SPACE);
+                        sbRight.append(SPACE);
                     }
-                    for (int i = 0; i < textRight[current.indexRight - 1].length(); i++) {
-                        textOutputLeft.append(SPACE);
-                    }
-                    textOutputRight.append(textRight[current.indexRight - 1]);
+//                    // 插入操作，left补齐空白项
+//                    for (int i = 0; i < textRight[current.indexRight - 1].length(); i++) {
+//                        sbLeft.append(SPACE);
+//                    }
+                    sbRight.append(textRight[current.indexRight - 1]);
                     textPositionRight++;
                     beginSpace = true;
                     previousLeft = current.indexLeft;
@@ -182,8 +179,9 @@ public class TextDiff {
                     current = current.next;
                 }
                 while (current != null && current.operationType == OperationEnum.INSERT && current.indexLeft == b.indexLeft);
-                textOutputLeft.append(TAG_END);
-                textOutputRight.append(TAG_END);
+
+                elementLeft.addText(sbLeft.toString());
+                elementRight.addText(sbRight.toString());
             } else {
                 do {
                     a = b;
@@ -191,33 +189,36 @@ public class TextDiff {
                 } while (b != null && b.operationType == OperationEnum.DELETE && b.indexLeft == a.indexLeft + 1);
                 boolean change = (b != null && b.operationType == OperationEnum.INSERT && b.indexLeft == a.indexLeft);
                 if (change) {
+
                     if (current.indexLeft - 1 > 0) {
-                        textOutputLeft.append(SPACE);
+                        elementOutputLeft.addText(SPACE);
                     }
-                    textOutputLeft.append(CHANGE_TAG_BEGIN);
+                    elementLeft = addChangeSpanElement(elementOutputLeft);
+
                     if (current.indexRight - 1 > 0) {
-                        textOutputRight.append(SPACE);
+                        elementOutputRight.addText(SPACE);
                     }
-                    textOutputRight.append(CHANGE_TAG_BEGIN);
+                    elementRight = addChangeSpanElement(elementOutputRight);
+
                     boolean beginSpace = false;
+                    sbLeft = new StringBuilder();
                     do {
                         if (beginSpace) {
-                            textOutputLeft.append(SPACE);
+                            sbLeft.append(SPACE);
                         }
-                        textOutputLeft.append(textLeft[current.indexLeft - 1]);
+                        sbLeft.append(textLeft[current.indexLeft - 1]);
                         textPositionLeft++;
                         beginSpace = true;
-                        previousLeft = current.indexLeft;
-                        previousRight = current.indexRight;
                         current = current.next;
                     } while (current != b);
 
                     beginSpace = false;
+                    sbRight = new StringBuilder();
                     do {
                         if (beginSpace) {
-                            textOutputRight.append(SPACE);
+                            sbRight.append(SPACE);
                         }
-                        textOutputRight.append(textRight[current.indexRight - 1]);
+                        sbRight.append(textRight[current.indexRight - 1]);
                         textPositionRight++;
                         beginSpace = true;
                         previousLeft = current.indexLeft;
@@ -225,132 +226,66 @@ public class TextDiff {
                         current = current.next;
                     }
                     while (current != null && current.operationType == OperationEnum.INSERT && current.indexLeft == b.indexLeft);
-                    textOutputLeft.append(TAG_END);
-                    textOutputRight.append(TAG_END);
+                    elementLeft.addText(sbLeft.toString());
+                    elementRight.addText(sbRight.toString());
                 } else {
                     if (current.indexLeft - 1 > 0) {
-                        textOutputLeft.append(SPACE);
+                        elementOutputLeft.addText(SPACE);
                     }
-                    textOutputLeft.append(DELETE_TAG_BEGIN);
+                    elementLeft = addDeleteSpanElement(elementOutputLeft);
+
                     if (current.indexRight - 1 > 0) {
-                        textOutputRight.append(SPACE);
+                        elementOutputRight.addText(SPACE);
                     }
-                    textOutputRight.append(DELETE_TAG_BEGIN);
+                    elementRight = addDeleteSpanElement(elementOutputRight);
+
                     boolean beginSpace = false;
+                    sbLeft = new StringBuilder();
+                    sbRight = new StringBuilder();
                     do {
                         if (beginSpace) {
-                            textOutputLeft.append(SPACE);
-                            textOutputRight.append(SPACE);
+                            sbLeft.append(SPACE);
+                            sbRight.append(SPACE);
                         }
-                        textOutputLeft.append(textLeft[current.indexLeft - 1]);
+                        sbLeft.append(textLeft[current.indexLeft - 1]);
                         textPositionLeft++;
                         for (int i = 0; i < textLeft[current.indexLeft - 1].length(); i++) {
-                            textOutputRight.append(SPACE);
+                            sbRight.append(SPACE);
                         }
                         beginSpace = true;
                         previousLeft = current.indexLeft;
                         previousRight = current.indexRight;
                         current = current.next;
                     } while (current != b);
-                    textOutputLeft.append(TAG_END);
-                    textOutputRight.append(TAG_END);
+                    elementLeft.addText(sbLeft.toString());
+                    elementRight.addText(sbRight.toString());
                 }
             }
         }
+        sbLeft = new StringBuilder();
+        sbRight = new StringBuilder();
         for (int i = textPositionLeft; i < textLeft.length; i++) {
             if (i > 0) {
-                textOutputLeft.append(SPACE);
+                sbLeft.append(SPACE);
             }
-            textOutputLeft.append(textLeft[i]);
+            sbLeft.append(textLeft[i]);
         }
         for (int i = textPositionRight; i < textRight.length; i++) {
             if (i > 0) {
-                textOutputRight.append(SPACE);
+                sbRight.append(SPACE);
             }
-            textOutputRight.append(textRight[i]);
+            sbRight.append(textRight[i]);
         }
-//        textOutputLeft.append("</pre>");
-//        textOutputRight.append("</pre>");
+        elementOutputLeft.addText(sbLeft.toString());
+        elementOutputRight.addText(sbRight.toString());
     }
 
-    /**
-     * TEST
-     *
-     * @param start
-     * @param textLeft
-     * @param textRight
-     */
-    private static void editScriptPrint(Edit start, final String[] textLeft, final String[] textRight) {
-        System.out.println("indexLeft\tindexRight");
-        Edit head = start;
-        Edit current = null;
-        while (head != null) {
-            current = head;
-            System.out.println(current.indexLeft + "\t" + current.indexRight);
-            head = head.prev;
-            if (head != null) {
-                head.next = current;
-            }
-        }
-        while (current != null) {
-            Edit a;
-            Edit b = current;
-            if (current.operationType == OperationEnum.INSERT) {
-                System.out.println("inserted after line " + current.indexLeft + ": ");
-            } else {
-                do {
-                    a = b;
-                    b = b.next;
-                } while (b != null && b.operationType == OperationEnum.DELETE && b.indexLeft == a.indexLeft + 1);
-                boolean change = (b != null && b.operationType == OperationEnum.INSERT && b.indexLeft == a.indexLeft);
-                if (change) {
-                    System.out.print("Changed ");
-                } else {
-                    System.out.print("Deleted ");
-                }
-                if (a == current) {
-                    System.out.println("line " + current.indexLeft + ": ");
-                } else {
-                    System.out.println("lines " + current.indexLeft + "-" + a.indexLeft + ": ");
-                }
-                do {
-                    System.out.println("\t" + textLeft[current.indexLeft - 1]);
-                    current = current.next;
-                } while (current != b);
-                if (!change) {
-                    continue;
-                }
-                System.out.println("To:");
-            }
-            do {
-                System.out.println("\t" + textRight[current.indexRight - 1]);
-                current = current.next;
-            }
-            while (current != null && current.operationType == OperationEnum.INSERT && current.indexLeft == b.indexLeft);
-        }
-    }
-
-    /**
-     * 输入：textLeft和textRight字符串数组
-     * 输出：匹配率的百分比： 2 * lcs.length / (textLeft.length + textRight.length)
-     * <p>
-     * 确定匹配的字符串后，在输出结果的时候再次计算出匹配项，并生成输出结果。
-     */
-
-    /**
-     * a b c a b b a
-     * 1 2 3 4 5 6 7
-     * c a b b a
-     * c b a b b a
-     * c b a b a
-     * c b a b a c
-     */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String s1 = "Usable Oxygen Volume in 4.25 Cuft Oxygen Cylinder (L" +
                 "            Normal-Temperature Pressure Dry)";
-        String s2 = "Usable Oxygen Volumes in 4.55 Cuft Oxygen" +
+        String s2 = "Usable Oxygen Volumes in 4.55 Cuft Oxygen OZZZZZ" +
                 "            Cylinder (Liter Normal-Temperature Dry)";
-//        String s1 = "<notePara>You can find the applicable pressure related to the local regulations in the" +
+//        String s1 = "You can find the applicable pressure related to the local regulations in the" +
 //                "            chart \"Filling Ratio as a Function of Portable Cylinder Pressure and Temperature" +
 //                "            (Nominal Portable Cylinder Pressure 1850 psig)”.";
 //        String s2 = "You can find the applicable pressure related to the local regulations in the" +
@@ -358,11 +293,22 @@ public class TextDiff {
 //                "            (Nominal Portable Cylinder Pressure 1850 psig)”.";
 //        System.out.println(s1);
 //        System.out.println(s2);
-        StringBuilder output1 = new StringBuilder();
-        StringBuilder output2 = new StringBuilder();
-        TextDiff.textDiffCompute(s1.split("\\s+"), s2.split("\\s+"),
+        Element output1 = DocumentHelper.createElement("root");
+        Element output2 = DocumentHelper.createElement("root");
+        TextDiff4Dom.textDiffCompute(s1.split("\\s+"), s2.split("\\s+"),
                 true, output1, output2);
-        System.out.println(output1);
-        System.out.println(output2);
+
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding("UTF-8");
+        File file = new File("data/dom4j/diff1.html");
+        XMLWriter writer = new XMLWriter(new FileOutputStream(file), format);
+        writer.write(output1);
+        writer.close();
+
+        file = new File("data/dom4j/diff2.html");
+        writer = new XMLWriter(new FileOutputStream(file), format);
+        writer.write(output2);
+        writer.close();
     }
+
 }
