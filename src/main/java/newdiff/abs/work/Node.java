@@ -1,4 +1,4 @@
-package newdiff.abs;
+package newdiff.abs.work;
 
 import org.dom4j.Element;
 

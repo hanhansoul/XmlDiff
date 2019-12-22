@@ -31,5 +31,4 @@ public class Node {
     public Node(Element element) {
         this.element = element;
     }
-
 }

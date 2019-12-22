@@ -1,4 +1,8 @@
-package newdiff.abs;
+package newdiff.abs.work;
+
+import newdiff.abs.output.Path;
+import newdiff.abs.output.PathNode;
+import org.dom4j.DocumentException;
 
 public abstract class AbstractDiff {
 
@@ -12,18 +16,18 @@ public abstract class AbstractDiff {
     /**
      * 初始化
      */
-    public abstract void initialization(String leftFileName, String rightFileName);
+    public abstract void initialize(String leftFileName, String rightFileName) throws DocumentException;
 
     /**
      * generateOperationMove()用于生成OperationMove
      * 根据leftNode和rightNode生成OperationMove
      */
-    public abstract OperationMove generateOperationMove(Node leftNode, Node rightNode);
+    public abstract OperationMove generateOperationMove(Node leftNode, Node rightNode, OperationValue operationValue);
 
     /**
      * 根据permanentOperationValue生成OperationMove
      */
-    public abstract OperationMove generateOperationMove(OperationValue permanentOperationValue);
+    public abstract OperationMove generateOperationMove(OperationValue permanentOperationValue, OperationValue operationValue);
 
     /**
      * generateOperationValue()用于更新OperationValue[index]中的数据
@@ -45,17 +49,17 @@ public abstract class AbstractDiff {
         Node rightNode = rightTree.nodeSequence[right];
         for (int i = leftNode.leftMostNodeId; i <= left; i++) {
             if (i - 1 < leftNode.leftMostNodeId) {
-                temporaryArr[i][0].addAndAssign(temporaryArr[0][0], generateOperationMove(leftNode, null), i, 0);
+                temporaryArr[i][0].addAndAssign(temporaryArr[0][0], generateOperationMove(leftNode, null, temporaryArr[0][0]));
             } else {
-                temporaryArr[i][0].addAndAssign(temporaryArr[i - 1][0], generateOperationMove(leftNode, null), i, 0);
+                temporaryArr[i][0].addAndAssign(temporaryArr[i - 1][0], generateOperationMove(leftNode, null, temporaryArr[i - 1][0]));
             }
         }
 
         for (int j = rightNode.leftMostNodeId; j <= right; j++) {
             if (j - 1 < rightNode.leftMostNodeId) {
-                temporaryArr[0][j].addAndAssign(temporaryArr[0][0], generateOperationMove(null, rightNode), 0, j);
+                temporaryArr[0][j].addAndAssign(temporaryArr[0][0], generateOperationMove(null, rightNode, temporaryArr[0][0]));
             } else {
-                temporaryArr[0][j].addAndAssign(temporaryArr[0][j - 1], generateOperationMove(null, rightNode), 0, j);
+                temporaryArr[0][j].addAndAssign(temporaryArr[0][j - 1], generateOperationMove(null, rightNode, temporaryArr[0][j - 1]));
             }
         }
 
@@ -67,10 +71,10 @@ public abstract class AbstractDiff {
                     int jx = checkIndexMargin(j, rightNode);
                     Node leftChildNode = leftTree.nodeSequence[i];
                     Node rightChildNode = rightTree.nodeSequence[j];
-                    generateOperationValueForOperationValueArray(0, temporaryArr[ix][j], generateOperationMove(leftChildNode, null));
-                    generateOperationValueForOperationValueArray(1, temporaryArr[i][jx], generateOperationMove(null, rightChildNode));
-                    generateOperationValueForOperationValueArray(2, temporaryArr[ix][jx], generateOperationMove(leftChildNode, rightChildNode));
-                    temporaryArr[i][j].findOptimalOperationValueAndAssign(operationValues, i, j);
+                    generateOperationValueForOperationValueArray(0, temporaryArr[ix][j], generateOperationMove(leftChildNode, null, temporaryArr[ix][j]));
+                    generateOperationValueForOperationValueArray(1, temporaryArr[i][jx], generateOperationMove(null, rightChildNode, temporaryArr[i][jx]));
+                    generateOperationValueForOperationValueArray(2, temporaryArr[ix][jx], generateOperationMove(leftChildNode, rightChildNode, temporaryArr[ix][jx]));
+                    temporaryArr[i][j].findOptimalOperationValueAndAssign(operationValues);
                     permanentArr[i][j].assign(temporaryArr[i][j]);
                     permanentNodePathTrace(permanentArr[i][j], i, j);
                 } else {
@@ -80,10 +84,10 @@ public abstract class AbstractDiff {
                     Node rightChildNode = rightTree.nodeSequence[j];
                     int iy = checkNodeIndexMargin(leftChildNode, leftNode);
                     int jy = checkNodeIndexMargin(rightChildNode, rightNode);
-                    generateOperationValueForOperationValueArray(0, temporaryArr[ix][j], generateOperationMove(leftChildNode, null));
-                    generateOperationValueForOperationValueArray(1, temporaryArr[i][jx], generateOperationMove(null, rightChildNode));
-                    generateOperationValueForOperationValueArray(2, temporaryArr[iy][jy], generateOperationMove(permanentArr[i][j]));
-                    temporaryArr[i][j].findOptimalOperationValueAndAssign(operationValues, i, j);
+                    generateOperationValueForOperationValueArray(0, temporaryArr[ix][j], generateOperationMove(leftChildNode, null, temporaryArr[ix][j]));
+                    generateOperationValueForOperationValueArray(1, temporaryArr[i][jx], generateOperationMove(null, rightChildNode, temporaryArr[i][jx]));
+                    generateOperationValueForOperationValueArray(2, temporaryArr[iy][jy], generateOperationMove(permanentArr[i][j], temporaryArr[iy][jy]));
+                    temporaryArr[i][j].findOptimalOperationValueAndAssign(operationValues);
                 }
             }
         }
@@ -122,8 +126,12 @@ public abstract class AbstractDiff {
         } else if (operationValue.operationMoveType == OperationMoveType.CHANGE) {
             leftTree.nodeSequence[operationValue.curX].operationMoveType = OperationMoveType.CHANGE;
             rightTree.nodeSequence[operationValue.curY].operationMoveType = OperationMoveType.CHANGE;
+        } else {
+            leftTree.nodeSequence[operationValue.curX].operationMoveType = OperationMoveType.UNCHANGE;
+            rightTree.nodeSequence[operationValue.curY].operationMoveType = OperationMoveType.UNCHANGE;
         }
-        backtrace(temporaryArr[operationValue.prevX][operationValue.prevY]);
+//        backtrace(temporaryArr[operationValue.prevX][operationValue.prevY]);
+        backtrace(permanentArr[operationValue.prevX][operationValue.prevY]);
     }
 
     private void findPath(Path path) {

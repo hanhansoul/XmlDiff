@@ -1,5 +1,6 @@
-package newdiff.abs;
+package newdiff.abs.work;
 
+import newdiff.abs.work.Node;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

@@ -1,4 +1,7 @@
-package newdiff.abs;
+package newdiff.abs.output;
+
+import newdiff.abs.work.OperationMoveType;
+import newdiff.abs.work.OperationValue;
 
 public class PathNode {
     public OperationMoveType operationMoveType;

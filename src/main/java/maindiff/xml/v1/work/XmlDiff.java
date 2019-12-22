@@ -111,15 +111,15 @@ public class XmlDiff extends AbstractDiff {
     public static void main(String[] args) throws DocumentException, IOException {
         long beginTime = System.currentTimeMillis();
         XmlDiff simpleDiff = new XmlDiff();
-//        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
-        simpleDiff.initialize("data/left1.xml", "data/right1.xml");
+        simpleDiff.initialize("data/CSC1.xml", "data/CSC2.xml");
+//        simpleDiff.initialize("data/left5.xml", "data/right5.xml");
         simpleDiff.solve();
         long solveTime = System.currentTimeMillis();
-        System.out.println((solveTime - beginTime) / 1000);
+        System.out.println(solveTime - beginTime);
         new XmlDiffOutput(simpleDiff.leftTree, simpleDiff.rightTree)
-                .resultOutput("data/output01.html", "data/output02.html");
+                .resultOutput("data/outputLeft.html", "data/outputRight.html");
         long endTime = System.currentTimeMillis();
-        System.out.println((endTime - solveTime) / 1000);
+        System.out.println(endTime - solveTime);
     }
 
 }

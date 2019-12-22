@@ -60,17 +60,17 @@ public class SimpleOperationValue extends OperationValue {
     }
 
 //    @Override
-//    public void findMinAndAssign(int cx, int cy, Operation... operations) {
-//        Operation optimalOperation = null;
-//        for (Operation op : operations) {
+//    public void findMinAndAssign(int cx, int cy, OperationMove... operations) {
+//        OperationMove optimalOperation = null;
+//        for (OperationMove op : operations) {
 //            if (optimalOperation == null || compare(optimalOperation, op) > 0) {
 //                optimalOperation = op;
 //            }
 //        }
-//        if (optimalOperation instanceof GenericOperation) {
-//            assign(cx, cy, (GenericOperation) optimalOperation);
-//        } else if (optimalOperation instanceof DerivedOperation) {
-//            assign(cx, cy, (DerivedOperation) optimalOperation);
+//        if (optimalOperation instanceof GenericOperationMove) {
+//            assign(cx, cy, (GenericOperationMove) optimalOperation);
+//        } else if (optimalOperation instanceof DerivedOperationMove) {
+//            assign(cx, cy, (DerivedOperationMove) optimalOperation);
 //        }
 //    }
 

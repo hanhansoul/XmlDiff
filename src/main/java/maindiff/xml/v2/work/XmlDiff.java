@@ -6,7 +6,7 @@ import maindiff.abs.work.Node;
 import maindiff.abs.work.Operation;
 import maindiff.abs.work.OperationValue;
 import maindiff.util.OperationEnum;
-import maindiff.xml.v2.output.XmlDiffOutput;
+import maindiff.xml.v2.output.XmlDiffTextOutput;
 import maindiff.xml.v2.textdiff.TextDiff;
 import org.dom4j.DocumentException;
 
@@ -117,7 +117,7 @@ public class XmlDiff extends AbstractDiff {
         xmlDiff.solve();
         long solveTime = System.currentTimeMillis();
         System.out.println((solveTime - beginTime) / 1000);
-        new XmlDiffOutput(xmlDiff.leftTree, xmlDiff.rightTree)
+        new XmlDiffTextOutput(xmlDiff.leftTree, xmlDiff.rightTree)
                 .resultOutput("data/output11.html", "data/output22.html");
         long endTime = System.currentTimeMillis();
         System.out.println((endTime - solveTime) / 1000);

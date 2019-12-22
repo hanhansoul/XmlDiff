@@ -1,13 +1,16 @@
-package newdiff.xml;
+package newdiff.xml.work;
 
-import maindiff.abs.work.Tree;
+import newdiff.abs.work.Node;
+import newdiff.abs.work.Tree;
+import newdiff.xml.output.XmlOutputNode;
 import org.dom4j.DocumentException;
+import org.dom4j.Element;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class XmlTree extends Tree {
-
-    public XmlTree(String fileName) throws DocumentException {
-        super(fileName);
-    }
 
     public List<XmlOutputNode> nodeOutputSequence;
 

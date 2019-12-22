@@ -1,6 +1,6 @@
-package newdiff.xml;
+package newdiff.xml.work;
 
-import newdiff.abs.Node;
+import newdiff.abs.work.Node;
 import org.dom4j.Element;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ public class XmlNode extends Node {
 //                attributesMap.put(attribute.getName(), attribute.getValue());
 //            }
 //        }
-        text = element.getTextTrim().replaceAll("\n", "").trim();
+        text = element.getText().replaceAll("\n", "").trim();
         if (text.length() > 0) {
             textArr = text.split("\\s+");
         } else {

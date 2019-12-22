@@ -1,15 +1,11 @@
-package maindiff.xml.v2.output;
+package newdiff.xml.output;
 
-import maindiff.abs.v2.output.OutputNode;
-import maindiff.abs.work.Node;
+import newdiff.abs.work.Node;
+import newdiff.abs.output.OutputNode;
 
 public class XmlOutputNode extends OutputNode {
-
-    public XmlOutputNode() {
-    }
 
     public XmlOutputNode(Node node, boolean isEndTag) {
         super(node, isEndTag);
     }
-
 }

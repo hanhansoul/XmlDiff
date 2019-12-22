@@ -1,6 +1,6 @@
-package newdiff.abs;
+package newdiff.abs.output;
 
-import newdiff.xml.XmlOutputNode;
+import newdiff.abs.work.Node;
 
 public abstract class OutputNode {
     public Node node;

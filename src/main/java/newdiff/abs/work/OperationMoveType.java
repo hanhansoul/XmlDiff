@@ -1,4 +1,4 @@
-package newdiff.abs;
+package newdiff.abs.work;
 
 public enum OperationMoveType {
     INSERT,

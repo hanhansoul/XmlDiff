@@ -54,6 +54,4 @@ public class XmlTree extends Tree {
         nodeOutputSequence.add(new XmlOutputNode(root, true));
     }
 
-
-
 }

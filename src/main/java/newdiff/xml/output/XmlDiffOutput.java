@@ -1,18 +1,21 @@
-package maindiff.xml.v2.output;
+package newdiff.xml.output;
 
-import maindiff.abs.output.DiffOutput;
-import maindiff.abs.output.OutputNode;
-import maindiff.abs.work.Node;
-import maindiff.abs.work.Tree;
-import maindiff.util.OperationEnum;
-import maindiff.xml.v2.textdiff.TextDiff;
-import maindiff.xml.v2.work.XmlNode;
-import maindiff.xml.v2.work.XmlTree;
+import newdiff.abs.output.DiffOutput;
+import newdiff.abs.output.OutputNode;
+import newdiff.abs.work.Node;
+import newdiff.abs.work.OperationMoveType;
+import newdiff.abs.work.Tree;
+import newdiff.xml.text.TextDiff;
+import newdiff.xml.work.XmlNode;
+import newdiff.xml.work.XmlTree;
 import org.dom4j.Element;
 
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Created by Administrator on 2019/12/21 0021.
+ */
 public class XmlDiffOutput extends DiffOutput {
     private XmlTree leftTree;
     private XmlTree rightTree;
@@ -30,19 +33,19 @@ public class XmlDiffOutput extends DiffOutput {
         this.rightTree = (XmlTree) rightTree;
     }
 
-    public void elementTextOutput(StringBuilder sb, Node node, StringBuilder text, OperationEnum operationType) {
+    public void elementTextOutput(StringBuilder sb, Node node, StringBuilder text, OperationMoveType operationType) {
         int depth = node.depth;
         if (text == null || text.length() == 0) {
             return;
         }
-        if (operationType == OperationEnum.INSERT || operationType == OperationEnum.DELETE) {
+        if (operationType == OperationMoveType.INSERT || operationType == OperationMoveType.DELETE) {
             int opIndex = operationType.ordinal();
             sb.append(BR);
             sb.append(INDENTS[depth]);
             sb.append(OP_SPAN_START[opIndex]);
             sb.append(text);
             sb.append(SPAN_END);
-        } else if (operationType == OperationEnum.CHANGE || operationType == OperationEnum.UNCHANGE) {
+        } else if (operationType == OperationMoveType.CHANGE || operationType == OperationMoveType.UNCHANGE) {
             sb.append(BR);
             sb.append(INDENTS[depth]);
             sb.append(SPAN_START);
@@ -51,7 +54,7 @@ public class XmlDiffOutput extends DiffOutput {
         }
     }
 
-    public void elementOutput(StringBuilder sb, OutputNode outputNode, StringBuilder text, OperationEnum op) {
+    public void elementOutput(StringBuilder sb, OutputNode outputNode, StringBuilder text, OperationMoveType op) {
         if (outputNode == null) {
             elementVoidOutput(sb, null, op);
             return;
@@ -64,7 +67,7 @@ public class XmlDiffOutput extends DiffOutput {
         }
     }
 
-    public void elementStartOutputWithoutAttributes(StringBuilder sb, Node node, OperationEnum op) {
+    public void elementStartOutputWithoutAttributes(StringBuilder sb, Node node, OperationMoveType op) {
         int opIndex = op != null ? op.ordinal() : 3;
         int depth = node.depth;
         Element element = node.element;
@@ -77,7 +80,7 @@ public class XmlDiffOutput extends DiffOutput {
         sb.append(SPAN_END);
     }
 
-    public void elementEndOutput(StringBuilder sb, Node node, OperationEnum op) {
+    public void elementEndOutput(StringBuilder sb, Node node, OperationMoveType op) {
         int opIndex = op != null ? op.ordinal() : 3;
         int depth = node.depth;
         Element element = node.element;
@@ -92,7 +95,7 @@ public class XmlDiffOutput extends DiffOutput {
 
     public void nodesElementOutput(StringBuilder leftSb, StringBuilder rightSb,
                                    OutputNode leftOutputNode, OutputNode rightOutputNode,
-                                   OperationEnum operationType) {
+                                   OperationMoveType operationType) {
         XmlNode leftNode = null;
         XmlNode rightNode = null;
         if (leftOutputNode != null) {
@@ -104,14 +107,14 @@ public class XmlDiffOutput extends DiffOutput {
 
         StringBuilder textOutputLeft = null;
         StringBuilder textOutputRight = null;
-        if (operationType == OperationEnum.CHANGE && leftNode != null && rightNode != null &&
+        if (operationType == OperationMoveType.CHANGE && leftNode != null && rightNode != null &&
                 leftNode.tagName.equals(rightNode.tagName)) {
             textOutputLeft = new StringBuilder();
             textOutputRight = new StringBuilder();
             TextDiff.textDiffTextOutput(leftNode.textArr, rightNode.textArr, textOutputLeft, textOutputRight);
-        } else if (operationType == OperationEnum.DELETE && leftNode != null) {
+        } else if (operationType == OperationMoveType.DELETE && leftNode != null) {
             textOutputLeft = new StringBuilder(leftNode.text);
-        } else if (operationType == OperationEnum.INSERT && rightNode != null) {
+        } else if (operationType == OperationMoveType.INSERT && rightNode != null) {
             textOutputRight = new StringBuilder(rightNode.text);
         } else if (leftNode != null && rightNode != null) {
             textOutputLeft = new StringBuilder(leftNode.text);

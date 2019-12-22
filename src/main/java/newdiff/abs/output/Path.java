@@ -1,4 +1,4 @@
-package newdiff.abs;
+package newdiff.abs.output;
 
 import java.util.LinkedList;
 import java.util.List;

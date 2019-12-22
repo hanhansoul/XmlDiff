@@ -25,6 +25,15 @@ public class TextDiff4Dom {
 //    private static final String CHANGE_TAG_BEGIN = "<span style='background-color:blue;display:inline-block;'>";
 //    private static final String TAG_END = "</span>";
 
+    public static void textDiffTextOutput(final String[] textLeft, final String[] textRight,
+                                          Element elementOutputLeft, Element elementOutputRight) {
+        textDiffCompute(textLeft, textRight, true, elementOutputLeft, elementOutputRight);
+    }
+
+    public static double textDiffRatioCompute(final String[] textLeft, final String[] textRight) {
+        return textDiffCompute(textLeft, textRight, false, null, null);
+    }
+
     private static double textDiffCompute(final String[] textLeft, final String[] textRight,
                                           boolean generatingEditScript,
                                           Element elementOutputLeft, Element elementOutputRight) {

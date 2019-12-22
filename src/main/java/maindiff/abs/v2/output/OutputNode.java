@@ -1,8 +1,8 @@
-package maindiff.abs.output;
+package maindiff.abs.v2.output;
 
 import maindiff.abs.work.Node;
 
-public abstract class OutputNode {
+public class OutputNode {
     public Node node;
     public boolean isEndTag;
 
