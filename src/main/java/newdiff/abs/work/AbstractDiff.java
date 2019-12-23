@@ -130,7 +130,6 @@ public abstract class AbstractDiff {
             leftTree.nodeSequence[operationValue.curX].operationMoveType = OperationMoveType.UNCHANGE;
             rightTree.nodeSequence[operationValue.curY].operationMoveType = OperationMoveType.UNCHANGE;
         }
-//        backtrace(temporaryArr[operationValue.prevX][operationValue.prevY]);
         backtrace(permanentArr[operationValue.prevX][operationValue.prevY]);
     }
 

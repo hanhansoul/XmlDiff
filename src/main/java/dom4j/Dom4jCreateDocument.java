@@ -74,4 +74,8 @@ public class Dom4jCreateDocument {
         writer.write(rootElement);
         writer.close();
     }
+
+    public static void test3() {
+        Document document = DocumentHelper.createDocument();
+    }
 }

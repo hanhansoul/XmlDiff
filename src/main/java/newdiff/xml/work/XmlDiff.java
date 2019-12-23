@@ -80,12 +80,12 @@ public class XmlDiff extends AbstractDiff {
                     }
                 }
                 elementNameDiffValue = 0;
-                elementTextDiffValue = 1.0 * totalLength * diffRatio / 2;
+                elementTextDiffValue = 1.0 * totalLength * diffRatio;
                 operationMoveType = diffRatio <= 0.001 ? OperationMoveType.UNCHANGE : OperationMoveType.CHANGE;
             } else {
                 elementNameDiffValue = 1;
                 totalLength += xmlLeftNode.textArr.length + xmlRightNode.textArr.length;
-                elementTextDiffValue = 1.0 * totalLength / 2;
+                elementTextDiffValue = 1.0 * totalLength;
                 operationMoveType = OperationMoveType.CHANGE;
             }
             return XmlOperationMove.updateInstance(operationValue.curX,

@@ -36,6 +36,16 @@ public class Dom4jReaderDemo {
         return document;
     }
 
+    public static void domRead(Node root) {
+//        Document document = load("data/left5.xml");
+//        Element root = document.getRootElement();
+//        Iterator<Node> iterator = root.nodeIterator();
+//        while(iterator.hasNext()) {
+//            Node node = iterator.next();
+//
+//        }
+    }
+
     public static void main(String[] args) {
         Document document = load("data/left5.xml");
         Element root = document.getRootElement();
